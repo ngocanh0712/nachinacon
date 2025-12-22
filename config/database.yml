@@ -54,11 +54,4 @@ test:
 # for a full overview on how database connection configuration can be specified.
 #
 production:
-  adapter: mysql2
-  encoding: utf8mb4
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  host: <%= ENV.fetch("MYSQLHOST", "localhost") %>
-  port: <%= ENV.fetch("MYSQLPORT", 3306) %>
-  database: <%= ENV.fetch("MYSQLDATABASE", "railway") %>
-  username: <%= ENV.fetch("MYSQLUSER", "root") %>
-  password: <%= ENV.fetch("MYSQLPASSWORD", "") %>
+  url: <%= ENV["DATABASE_URL"] %>
