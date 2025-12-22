@@ -187,10 +187,10 @@
         ['#F5D0FE', '#D946EF']
       ] %>
 
-      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 md:gap-6">
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 md:gap-6 mb-4">
         <% @memories.each_with_index do |memory, index| %>
           <% colors = card_colors[index % card_colors.length] %>
-          <div class="memory-card group bg-white rounded-2xl overflow-hidden shadow-xl cursor-pointer border border-gray-100">
+          <div class="memory-card group bg-white rounded-2xl overflow-hidden shadow-xl cursor-pointer">
             <div class="aspect-square overflow-hidden relative">
               <% if memory.media.attached? %>
                 <%= image_tag memory.media.variant(resize_to_fill: [400, 400]), class: "w-full h-full object-cover" %>
