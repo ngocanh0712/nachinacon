@@ -1,0 +1,273 @@
+<!-- Hero Section -->
+<section class="pt-8 pb-16 md:pt-16 md:pb-24 px-4 md:px-6 lg:px-8 relative overflow-hidden">
+  <!-- Decorative blobs -->
+  <div class="absolute top-20 -left-32 w-64 h-64 rounded-full blur-3xl animate-pulse-soft" style="background-color: rgba(193, 221, 216, 0.4);"></div>
+  <div class="absolute bottom-0 -right-32 w-80 h-80 rounded-full blur-3xl animate-pulse-soft" style="background-color: rgba(242, 194, 194, 0.4); animation-delay: 1s;"></div>
+  <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full blur-3xl animate-pulse-soft" style="background-color: rgba(192, 223, 208, 0.3); animation-delay: 2s;"></div>
+
+  <div class="max-w-6xl mx-auto relative z-10">
+    <div class="flex flex-col lg:flex-row items-center gap-12">
+      <!-- Text Content -->
+      <div class="flex-1 text-center lg:text-left animate-fade-in-up">
+        <p class="font-accent text-2xl md:text-3xl mb-6" style="color: #E8B0B0;">Chào mừng đến với</p>
+        <h1 class="font-heading font-bold text-4xl md:text-5xl lg:text-6xl text-gray-800 mb-8 leading-tight">
+          Nhật ký của<br>
+          <span class="gradient-text animate-gradient-shift">NaChiNaCon</span>
+        </h1>
+
+        <!-- Age Display -->
+        <div class="inline-flex items-center gap-3 glass rounded-2xl px-6 py-4 shadow-soft-lg mb-8 animate-glow">
+          <div class="w-12 h-12 rounded-full flex items-center justify-center" style="background-color: #C1DDD8;">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-gray-700">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 8.25v-1.5m0 1.5c-1.355 0-2.697.056-4.024.166C6.845 8.51 6 9.473 6 10.608v2.513m6-4.87c1.355 0 2.697.055 4.024.165C17.155 8.51 18 9.473 18 10.608v2.513m-3-4.87v-1.5m-6 1.5v-1.5m12 9.75l-1.5.75a3.354 3.354 0 01-3 0 3.354 3.354 0 00-3 0 3.354 3.354 0 01-3 0 3.354 3.354 0 00-3 0 3.354 3.354 0 01-3 0L3 16.5m15-3.38a48.474 48.474 0 00-6-.37c-2.032 0-4.034.125-6 .37m12 0c.39.049.777.102 1.163.16 1.07.16 1.837 1.094 1.837 2.175v5.17c0 .62-.504 1.124-1.125 1.124H4.125A1.125 1.125 0 013 20.625v-5.17c0-1.08.768-2.014 1.837-2.174A47.78 47.78 0 016 13.12M12 12.75h.008v.008H12v-.008z" />
+            </svg>
+          </div>
+          <div>
+            <p class="font-body text-sm text-gray-500">Tuổi hiện tại</p>
+            <p class="font-heading font-bold text-2xl text-gray-800">1 năm, 3 tháng</p>
+          </div>
+        </div>
+
+        <p class="font-body text-lg text-gray-600 mb-8 max-w-lg mx-auto lg:mx-0">
+          Ghi lại từng khoảnh khắc quý giá của hoàng tử nhỏ. Từ nụ cười đầu tiên đến bước chân đầu tiên, mỗi kỷ niệm đều là báu vật.
+        </p>
+
+        <!-- CTA Buttons -->
+        <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+          <%= link_to timeline_path, class: "inline-flex items-center justify-center gap-2 font-heading font-semibold px-8 py-4 rounded-xl btn-hover shadow-soft-lg", style: "background-color: #C1DDD8; color: #333;" do %>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Xem Timeline
+          <% end %>
+          <%= link_to milestones_path, class: "inline-flex items-center justify-center gap-2 font-heading font-semibold px-8 py-4 rounded-xl btn-hover shadow-soft-lg border-2", style: "background-color: white; color: #333; border-color: #F2C2C2;" do %>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
+            </svg>
+            Milestones
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Hero Image/Avatar -->
+      <div class="flex-1 flex justify-center animate-slide-in-right" style="animation-delay: 0.3s;">
+        <div class="relative">
+          <!-- Main photo frame -->
+          <div class="w-72 h-72 md:w-80 md:h-80 lg:w-96 lg:h-96 rounded-full p-4 shadow-soft-lg animate-float" style="background: linear-gradient(135deg, #E0EEEB 0%, #F8D8D8 100%);">
+            <div class="w-full h-full bg-white rounded-full flex items-center justify-center overflow-hidden">
+              <div class="w-full h-full flex items-center justify-center" style="background: linear-gradient(135deg, rgba(193, 221, 216, 0.3) 0%, rgba(242, 194, 194, 0.3) 100%);">
+                <div class="text-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="w-20 h-20 text-gray-300 mx-auto mb-2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z" />
+                  </svg>
+                  <p class="font-body text-gray-400 text-sm">Ảnh bé yêu</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Decorative elements -->
+          <div class="absolute -top-4 -right-4 w-16 h-16 rounded-full flex items-center justify-center shadow-soft-lg animate-float-delayed animate-heartbeat" style="background-color: #F2C2C2;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8 text-white">
+              <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
+            </svg>
+          </div>
+
+          <div class="absolute -bottom-2 -left-6 w-12 h-12 rounded-full flex items-center justify-center shadow-soft-lg animate-float" style="background-color: #C0DFD0; animation-delay: 1s;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-white">
+              <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
+            </svg>
+          </div>
+
+          <div class="absolute top-1/2 -left-8 w-10 h-10 rounded-full shadow-soft-lg animate-float-delayed" style="background-color: #C1DDD8;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Stats Section -->
+<section class="py-8 px-4 md:px-6 lg:px-8">
+  <div class="max-w-4xl mx-auto">
+    <div class="grid grid-cols-3 gap-4 stagger-children">
+      <div class="glass rounded-2xl p-6 text-center card-hover shadow-soft">
+        <div class="w-12 h-12 rounded-full mx-auto mb-3 flex items-center justify-center" style="background-color: #E0EEEB;">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-gray-700">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+          </svg>
+        </div>
+        <p class="font-heading font-bold text-3xl text-gray-800"><%= @memory_count %></p>
+        <p class="font-body text-sm text-gray-500">Kỷ niệm</p>
+      </div>
+      <div class="glass rounded-2xl p-6 text-center card-hover shadow-soft">
+        <div class="w-12 h-12 rounded-full mx-auto mb-3 flex items-center justify-center" style="background-color: #F8D8D8;">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-gray-700">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
+          </svg>
+        </div>
+        <p class="font-heading font-bold text-3xl text-gray-800"><%= @milestone_count %></p>
+        <p class="font-body text-sm text-gray-500">Milestones</p>
+      </div>
+      <div class="glass rounded-2xl p-6 text-center card-hover shadow-soft">
+        <div class="w-12 h-12 rounded-full mx-auto mb-3 flex items-center justify-center" style="background-color: rgba(192, 223, 208, 0.5);">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-gray-700">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" />
+          </svg>
+        </div>
+        <p class="font-heading font-bold text-3xl text-gray-800"><%= @album_count %></p>
+        <p class="font-body text-sm text-gray-500">Albums</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Quick Links Section -->
+<section class="py-16 px-4 md:px-6 lg:px-8">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-12">
+      <p class="font-accent text-xl mb-2" style="color: #E8B0B0;">Khám phá</p>
+      <h2 class="font-heading font-bold text-3xl md:text-4xl text-gray-800">Những Khoảnh Khắc Quý Giá</h2>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 stagger-children">
+      <!-- Timeline Card -->
+      <%= link_to timeline_path, class: "group bg-white rounded-2xl p-8 shadow-soft card-hover border-2 border-transparent hover:border-[#C1DDD8]" do %>
+        <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-6 transition-colors duration-300" style="background-color: #E0EEEB;">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-gray-700">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+        <h3 class="font-heading font-bold text-xl text-gray-800 mb-3">Timeline</h3>
+        <p class="font-body text-gray-600 mb-4">Hành trình từng khoảnh khắc, được sắp xếp theo từng giai đoạn tuổi.</p>
+        <div class="flex items-center gap-2 font-heading font-semibold link-arrow" style="color: #A8CEC8;">
+          <span>Xem Timeline</span>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+          </svg>
+        </div>
+      <% end %>
+
+      <!-- Milestones Card -->
+      <%= link_to milestones_path, class: "group bg-white rounded-2xl p-8 shadow-soft card-hover border-2 border-transparent hover:border-[#F2C2C2]" do %>
+        <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-6 transition-colors duration-300" style="background-color: #F8D8D8;">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-gray-700">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
+          </svg>
+        </div>
+        <h3 class="font-heading font-bold text-xl text-gray-800 mb-3">Milestones</h3>
+        <p class="font-body text-gray-600 mb-4">Những mốc quan trọng - nụ cười đầu tiên, từ đầu tiên, bước đi đầu tiên.</p>
+        <div class="flex items-center gap-2 font-heading font-semibold link-arrow" style="color: #E8B0B0;">
+          <span>Xem Milestones</span>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+          </svg>
+        </div>
+      <% end %>
+
+      <!-- Albums Card -->
+      <%= link_to albums_path, class: "group bg-white rounded-2xl p-8 shadow-soft card-hover border-2 border-transparent hover:border-[#C0DFD0]" do %>
+        <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-6 transition-colors duration-300" style="background-color: rgba(192, 223, 208, 0.4);">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-gray-700">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+          </svg>
+        </div>
+        <h3 class="font-heading font-bold text-xl text-gray-800 mb-3">Albums</h3>
+        <p class="font-body text-gray-600 mb-4">Xem tất cả ảnh và video trong bộ sưu tập kỷ niệm đẹp.</p>
+        <div class="flex items-center gap-2 font-heading font-semibold link-arrow" style="color: #A8D1BD;">
+          <span>Xem Albums</span>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+          </svg>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>
+
+<!-- Recent Memories Preview -->
+<section class="py-16 px-4 md:px-6 lg:px-8 bg-white">
+  <div class="max-w-6xl mx-auto">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-12">
+      <div>
+        <p class="font-accent text-xl mb-2" style="color: #E8B0B0;">Mới nhất</p>
+        <h2 class="font-heading font-bold text-3xl md:text-4xl text-gray-800">Kỷ Niệm Gần Đây</h2>
+      </div>
+      <%= link_to timeline_path, class: "mt-4 md:mt-0 inline-flex items-center gap-2 font-heading font-semibold link-arrow transition-colors duration-200", style: "color: #A8CEC8;" do %>
+        <span>Xem tất cả</span>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+        </svg>
+      <% end %>
+    </div>
+
+    <% if @recent_memories.any? %>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 stagger-children">
+        <% @recent_memories.each do |memory| %>
+          <div class="group rounded-2xl overflow-hidden shadow-soft card-hover cursor-pointer" style="background-color: #F6F2EC;">
+            <div class="aspect-square overflow-hidden">
+              <% if memory.media.attached? %>
+                <%= image_tag memory.media.variant(resize_to_fill: [400, 400]), class: "w-full h-full object-cover img-hover" %>
+              <% else %>
+                <div class="w-full h-full flex items-center justify-center" style="background: linear-gradient(135deg, rgba(193, 221, 216, 0.3) 0%, rgba(242, 194, 194, 0.3) 100%);">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="w-16 h-16 text-gray-300">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                  </svg>
+                </div>
+              <% end %>
+            </div>
+            <div class="p-4">
+              <p class="font-body text-sm text-gray-500"><%= memory.taken_at.strftime("%d/%m/%Y") %></p>
+              <h3 class="font-heading font-semibold text-gray-800 mt-1 group-hover:text-[#A8CEC8] transition-colors duration-200"><%= memory.title %></h3>
+              <% if memory.caption.present? %>
+                <p class="font-body text-sm text-gray-600 mt-2 line-clamp-2"><%= memory.caption %></p>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="text-center py-16 rounded-2xl" style="background-color: #FFFBF7;">
+        <div class="w-20 h-20 rounded-full mx-auto mb-6 flex items-center justify-center" style="background-color: #E0EEEB;">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="w-10 h-10 text-gray-400">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+          </svg>
+        </div>
+        <h3 class="font-heading font-semibold text-xl text-gray-700 mb-2">Chưa có kỷ niệm nào</h3>
+        <p class="font-body text-gray-500">Hãy thêm những khoảnh khắc đáng yêu của bé!</p>
+      </div>
+    <% end %>
+  </div>
+</section>
+
+<!-- Achieved Milestones -->
+<section class="py-16 px-4 md:px-6 lg:px-8" style="background-color: #FFFBF7;">
+  <div class="max-w-6xl mx-auto">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-12">
+      <div>
+        <p class="font-accent text-xl mb-2" style="color: #E8B0B0;">Thành tựu</p>
+        <h2 class="font-heading font-bold text-3xl md:text-4xl text-gray-800">Milestones Đã Đạt</h2>
+      </div>
+      <%= link_to milestones_path, class: "mt-4 md:mt-0 inline-flex items-center gap-2 font-heading font-semibold link-arrow transition-colors duration-200", style: "color: #E8B0B0;" do %>
+        <span>Xem tất cả</span>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+        </svg>
+      <% end %>
+    </div>
+
+    <% if @achieved_milestones.any? %>
+      <div class="flex flex-wrap gap-3 stagger-children">
+        <% @achieved_milestones.each do |milestone| %>
+          <div class="inline-flex items-center gap-2 px-5 py-3 rounded-full shadow-soft hover-wiggle cursor-pointer" style="background-color: #C0DFD0;">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-gray-700">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
+            </svg>
+            <span class="font-heading font-semibold text-sm text-gray-800"><%= milestone.name %></span>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <p class="text-gray-500 font-body">Chưa có milestone nào được đánh dấu hoàn thành.</p>
+    <% end %>
+  </div>
+</section>

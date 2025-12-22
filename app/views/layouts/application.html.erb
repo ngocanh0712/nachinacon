@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <title>NaChiNaCon - Kỷ niệm của bé</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="UTF-8">
+  <meta name="description" content="Website lưu giữ kỷ niệm đáng yêu của bé NaChiNaCon">
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= javascript_importmap_tags %>
+</head>
+
+<body class="min-h-screen font-body text-gray-800" style="background-color: #F6F2EC;">
+  <!-- Navigation -->
+  <nav class="fixed top-0 left-0 right-0 glass shadow-soft z-50">
+    <div class="max-w-6xl mx-auto px-4 md:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <!-- Logo -->
+        <%= link_to root_path, class: "flex items-center gap-2 group" do %>
+          <div class="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 group-hover:scale-110" style="background-color: #C1DDD8;">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-gray-700">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+            </svg>
+          </div>
+          <span class="font-heading font-bold text-xl text-gray-800">NaChiNaCon</span>
+        <% end %>
+
+        <!-- Desktop Navigation -->
+        <div class="hidden md:flex items-center gap-8">
+          <%= link_to 'Trang chủ', root_path, class: "font-heading font-semibold transition-colors duration-200 #{current_page?(root_path) ? 'text-gray-800' : 'text-gray-500 hover:text-gray-800'}" %>
+          <%= link_to 'Timeline', timeline_path, class: "font-heading font-semibold transition-colors duration-200 #{current_page?(timeline_path) ? 'text-gray-800' : 'text-gray-500 hover:text-gray-800'}" %>
+          <%= link_to 'Milestones', milestones_path, class: "font-heading font-semibold transition-colors duration-200 #{current_page?(milestones_path) ? 'text-gray-800' : 'text-gray-500 hover:text-gray-800'}" %>
+          <%= link_to 'Albums', albums_path, class: "font-heading font-semibold transition-colors duration-200 #{current_page?(albums_path) ? 'text-gray-800' : 'text-gray-500 hover:text-gray-800'}" %>
+          <% if admin_logged_in? %>
+            <%= link_to 'Admin', admin_root_path, class: "px-4 py-2 rounded-lg font-heading font-semibold btn-hover", style: "background-color: #C1DDD8; color: #333;" %>
+          <% end %>
+        </div>
+
+        <!-- Mobile menu button -->
+        <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile menu -->
+    <div id="mobile-menu" class="hidden md:hidden glass border-t">
+      <div class="px-4 py-4 space-y-3">
+        <%= link_to 'Trang chủ', root_path, class: "block font-heading font-semibold py-2 #{current_page?(root_path) ? 'text-gray-800' : 'text-gray-500'}" %>
+        <%= link_to 'Timeline', timeline_path, class: "block font-heading font-semibold py-2 #{current_page?(timeline_path) ? 'text-gray-800' : 'text-gray-500'}" %>
+        <%= link_to 'Milestones', milestones_path, class: "block font-heading font-semibold py-2 #{current_page?(milestones_path) ? 'text-gray-800' : 'text-gray-500'}" %>
+        <%= link_to 'Albums', albums_path, class: "block font-heading font-semibold py-2 #{current_page?(albums_path) ? 'text-gray-800' : 'text-gray-500'}" %>
+        <% if admin_logged_in? %>
+          <%= link_to 'Admin', admin_root_path, class: "block font-heading font-semibold py-2 text-gray-500" %>
+        <% end %>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Flash messages -->
+  <% if flash[:notice] %>
+    <div class="fixed top-20 right-4 z-50 px-6 py-4 rounded-xl shadow-soft-lg animate-slide-in-right" style="background-color: #C0DFD0; color: #333;">
+      <div class="flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <%= flash[:notice] %>
+      </div>
+    </div>
+  <% end %>
+  <% if flash[:alert] %>
+    <div class="fixed top-20 right-4 z-50 px-6 py-4 rounded-xl shadow-soft-lg animate-slide-in-right" style="background-color: #F2C2C2; color: #333;">
+      <div class="flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+        </svg>
+        <%= flash[:alert] %>
+      </div>
+    </div>
+  <% end %>
+
+  <!-- Main content -->
+  <main class="pt-16">
+    <%= yield %>
+  </main>
+
+  <!-- Footer -->
+  <footer class="py-12 px-4 md:px-6 lg:px-8" style="background-color: #E0EEEB;">
+    <div class="max-w-6xl mx-auto text-center">
+      <div class="flex items-center justify-center gap-2 mb-4">
+        <div class="w-10 h-10 rounded-full flex items-center justify-center" style="background-color: #C1DDD8;">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-gray-700">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+          </svg>
+        </div>
+        <span class="font-heading font-bold text-xl text-gray-800">NaChiNaCon</span>
+      </div>
+      <p class="font-accent text-xl text-gray-600 mb-4">"Lớn lên cùng tình yêu, từng kỷ niệm một"</p>
+      <p class="font-body text-sm text-gray-500">Made with love for our little prince</p>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile menu toggle
+    document.getElementById('mobile-menu-btn')?.addEventListener('click', function() {
+      document.getElementById('mobile-menu').classList.toggle('hidden');
+    });
+
+    // Auto-hide flash messages
+    setTimeout(() => {
+      document.querySelectorAll('.fixed.top-20').forEach(el => {
+        el.style.opacity = '0';
+        el.style.transition = 'opacity 0.5s ease';
+        setTimeout(() => el.remove(), 500);
+      });
+    }, 4000);
+  </script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<%= form_with model: [:admin, milestone], local: true, class: "space-y-6" do |f| %>
+  <% if milestone.errors.any? %>
+    <div class="p-4 rounded-lg" style="background-color: #F8D8D8;">
+      <p class="font-medium text-gray-800 mb-2">Có lỗi xảy ra:</p>
+      <ul class="list-disc list-inside text-sm text-gray-600">
+        <% milestone.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <label for="milestone_milestone_type" class="block text-sm font-medium text-gray-700 mb-1">Loại Milestone *</label>
+    <%= f.select :milestone_type, Milestone::MILESTONE_TYPES.map { |k, v| [v[:name], k] }, {}, class: "w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:border-transparent", style: "--tw-ring-color: #F2C2C2;" %>
+  </div>
+
+  <div>
+    <label for="milestone_name" class="block text-sm font-medium text-gray-700 mb-1">Tên *</label>
+    <%= f.text_field :name, class: "w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:border-transparent", style: "--tw-ring-color: #F2C2C2;", placeholder: "VD: Nụ cười đầu tiên" %>
+  </div>
+
+  <div>
+    <label for="milestone_description" class="block text-sm font-medium text-gray-700 mb-1">Mô tả</label>
+    <%= f.text_area :description, rows: 3, class: "w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:border-transparent resize-none", style: "--tw-ring-color: #F2C2C2;", placeholder: "Ghi lại chi tiết về milestone này..." %>
+  </div>
+
+  <div>
+    <label for="milestone_achieved_at" class="block text-sm font-medium text-gray-700 mb-1">Ngày đạt được</label>
+    <%= f.date_field :achieved_at, class: "w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:border-transparent", style: "--tw-ring-color: #F2C2C2;" %>
+    <p class="text-sm text-gray-500 mt-1">Để trống nếu chưa đạt được</p>
+  </div>
+
+  <div>
+    <label for="milestone_photo" class="block text-sm font-medium text-gray-700 mb-1">Ảnh</label>
+    <% if milestone.photo.attached? %>
+      <div class="mb-3">
+        <%= image_tag milestone.photo.variant(resize_to_limit: [300, 300]), class: "rounded-lg" %>
+      </div>
+    <% end %>
+    <%= f.file_field :photo, accept: "image/*", class: "w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:font-medium file:cursor-pointer", style: "--tw-ring-color: #F2C2C2; file:background-color: #F2C2C2;" %>
+  </div>
+
+  <div class="flex items-center gap-4">
+    <%= f.submit milestone.persisted? ? "Cập nhật" : "Tạo milestone", class: "px-6 py-3 rounded-lg font-heading font-semibold cursor-pointer transition-colors", style: "background-color: #F2C2C2; color: #333;" %>
+    <%= link_to "Hủy", admin_milestones_path, class: "px-6 py-3 rounded-lg font-medium text-gray-600 hover:text-gray-800" %>
+  </div>
+<% end %>

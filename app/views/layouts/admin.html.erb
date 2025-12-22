@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <title>Admin - NaChiNaCon</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="UTF-8">
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= javascript_importmap_tags %>
+</head>
+
+<body class="min-h-screen font-body text-[#333333]" style="background-color: #F6F2EC;">
+  <% if admin_logged_in? %>
+    <!-- Admin Navigation -->
+    <nav class="fixed top-0 left-0 right-0 bg-white shadow-sm z-50">
+      <div class="max-w-6xl mx-auto px-4 md:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+          <!-- Logo -->
+          <%= link_to admin_root_path, class: "flex items-center gap-2" do %>
+            <div class="w-10 h-10 rounded-full flex items-center justify-center" style="background-color: #C1DDD8;">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-gray-700">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+              </svg>
+            </div>
+            <span class="font-heading font-bold text-xl text-gray-800">Admin</span>
+          <% end %>
+
+          <!-- Navigation -->
+          <div class="flex items-center gap-4">
+            <%= link_to 'Dashboard', admin_root_path, class: "text-gray-600 hover:text-gray-900 font-medium" %>
+            <%= link_to 'Kỷ niệm', admin_memories_path, class: "text-gray-600 hover:text-gray-900 font-medium" %>
+            <%= link_to 'Albums', admin_albums_path, class: "text-gray-600 hover:text-gray-900 font-medium" %>
+            <%= link_to 'Milestones', admin_milestones_path, class: "text-gray-600 hover:text-gray-900 font-medium" %>
+            <%= link_to 'Xem trang', root_path, class: "text-gray-600 hover:text-gray-900 font-medium", target: "_blank" %>
+            <%= button_to 'Đăng xuất', admin_logout_path, method: :delete, class: "px-3 py-1.5 rounded-lg text-sm font-medium cursor-pointer", style: "background-color: #F2C2C2; color: #333;" %>
+          </div>
+        </div>
+      </div>
+    </nav>
+  <% end %>
+
+  <!-- Flash messages -->
+  <% if flash[:notice] %>
+    <div class="fixed top-20 right-4 z-50 px-4 py-3 rounded-lg shadow-lg" style="background-color: #C0DFD0; color: #333;">
+      <%= flash[:notice] %>
+    </div>
+  <% end %>
+  <% if flash[:alert] %>
+    <div class="fixed top-20 right-4 z-50 px-4 py-3 rounded-lg shadow-lg" style="background-color: #F2C2C2; color: #333;">
+      <%= flash[:alert] %>
+    </div>
+  <% end %>
+
+  <!-- Main content -->
+  <main class="<%= admin_logged_in? ? 'pt-20' : 'pt-8' %> pb-12 px-4 md:px-6 lg:px-8">
+    <div class="max-w-6xl mx-auto">
+      <%= yield %>
+    </div>
+  </main>
+</body>
+</html>

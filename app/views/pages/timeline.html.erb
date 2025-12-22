@@ -1,0 +1,82 @@
+<!-- Header -->
+<section class="pt-8 pb-12 px-4 md:px-6 lg:px-8 relative overflow-hidden">
+  <div class="absolute top-0 right-0 w-64 h-64 rounded-full blur-3xl animate-pulse-soft" style="background-color: rgba(193, 221, 216, 0.3);"></div>
+
+  <div class="max-w-6xl mx-auto relative z-10">
+    <div class="text-center animate-fade-in-up">
+      <p class="font-accent text-xl mb-2" style="color: #E8B0B0;">Hành trình</p>
+      <h1 class="font-heading font-bold text-4xl md:text-5xl text-gray-800 mb-4">Timeline Kỷ Niệm</h1>
+      <p class="font-body text-lg text-gray-600 max-w-2xl mx-auto">
+        Từng khoảnh khắc được ghi lại theo thời gian, từ những ngày đầu tiên đến hiện tại.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- Age Group Filter -->
+<section class="pb-8 px-4 md:px-6 lg:px-8">
+  <div class="max-w-6xl mx-auto">
+    <div class="flex flex-wrap justify-center gap-3">
+      <%= link_to "Tất cả", timeline_path,
+          class: "px-5 py-2.5 rounded-full font-heading font-semibold text-sm transition-all duration-300 #{@age_group.nil? ? 'shadow-soft text-gray-800' : 'text-gray-600 hover:bg-white'}",
+          style: @age_group.nil? ? "background-color: #C1DDD8;" : "" %>
+      <% @age_groups.each do |label, value| %>
+        <%= link_to label, timeline_path(age_group: value),
+            class: "px-5 py-2.5 rounded-full font-heading font-semibold text-sm transition-all duration-300 #{@age_group == value ? 'shadow-soft text-gray-800' : 'text-gray-600 hover:bg-white'}",
+            style: @age_group == value ? "background-color: #C1DDD8;" : "" %>
+      <% end %>
+    </div>
+  </div>
+</section>
+
+<!-- Memory Grid -->
+<section class="py-8 px-4 md:px-6 lg:px-8">
+  <div class="max-w-6xl mx-auto">
+    <% if @memories.any? %>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 stagger-children">
+        <% @memories.each do |memory| %>
+          <div class="group rounded-2xl overflow-hidden shadow-soft card-hover cursor-pointer bg-white">
+            <div class="aspect-square overflow-hidden relative">
+              <% if memory.media.attached? %>
+                <%= image_tag memory.media.variant(resize_to_fill: [400, 400]), class: "w-full h-full object-cover img-hover" %>
+              <% else %>
+                <div class="w-full h-full flex items-center justify-center" style="background: linear-gradient(135deg, rgba(193, 221, 216, 0.3) 0%, rgba(242, 194, 194, 0.3) 100%);">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="w-12 h-12 text-gray-300">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                  </svg>
+                </div>
+              <% end %>
+              <!-- Age badge -->
+              <div class="absolute top-2 right-2 px-2 py-1 rounded-full text-xs font-heading font-semibold" style="background-color: rgba(255,255,255,0.9);">
+                <%= Memory::AGE_GROUPS.find { |_, v| v == memory.age_group }&.first || memory.age_group %>
+              </div>
+            </div>
+            <div class="p-4">
+              <p class="font-body text-xs text-gray-500"><%= memory.taken_at.strftime("%d/%m/%Y") %></p>
+              <h3 class="font-heading font-semibold text-gray-800 mt-1 group-hover:text-[#A8CEC8] transition-colors"><%= memory.title %></h3>
+              <% if memory.caption.present? %>
+                <p class="font-body text-sm text-gray-600 mt-1 line-clamp-2"><%= memory.caption %></p>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="text-center py-20 rounded-2xl" style="background-color: #FFFBF7;">
+        <div class="w-20 h-20 rounded-full mx-auto mb-6 flex items-center justify-center" style="background-color: #E0EEEB;">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="w-10 h-10 text-gray-400">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+        <h3 class="font-heading font-semibold text-xl text-gray-700 mb-2">Chưa có kỷ niệm nào</h3>
+        <p class="font-body text-gray-500">
+          <% if @age_group.present? %>
+            Không có kỷ niệm nào trong giai đoạn này.
+          <% else %>
+            Hãy thêm những khoảnh khắc đáng yêu của bé!
+          <% end %>
+        </p>
+      </div>
+    <% end %>
+  </div>
+</section>

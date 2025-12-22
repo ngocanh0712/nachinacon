@@ -1,0 +1,63 @@
+<div class="py-8">
+  <div class="flex items-center justify-between mb-8">
+    <h1 class="font-heading font-bold text-3xl text-gray-800">Kỷ niệm</h1>
+    <%= link_to new_admin_memory_path, class: "flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors", style: "background-color: #C1DDD8; color: #333;" do %>
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+      </svg>
+      Thêm mới
+    <% end %>
+  </div>
+
+  <% if @memories.any? %>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <% @memories.each do |memory| %>
+        <div class="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+          <% if memory.media.attached? %>
+            <%= image_tag memory.media.variant(resize_to_fill: [400, 300]), class: "w-full h-48 object-cover" %>
+          <% else %>
+            <div class="w-full h-48 flex items-center justify-center" style="background-color: #E0EEEB;">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-16 h-16 text-gray-300">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+              </svg>
+            </div>
+          <% end %>
+          <div class="p-4">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-sm text-gray-500"><%= memory.taken_at.strftime("%d/%m/%Y") %></span>
+              <span class="px-2 py-1 rounded-full text-xs font-medium" style="background-color: #E0EEEB; color: #333;">
+                <%= Memory::AGE_GROUPS.find { |g| g.last == memory.age_group }&.first %>
+              </span>
+            </div>
+            <h3 class="font-heading font-semibold text-lg text-gray-800 mb-1"><%= memory.title %></h3>
+            <p class="text-gray-600 text-sm line-clamp-2"><%= memory.caption %></p>
+            <div class="flex items-center gap-2 mt-4">
+              <%= link_to edit_admin_memory_path(memory), class: "px-3 py-1.5 rounded-lg text-sm font-medium", style: "background-color: #E0EEEB; color: #333;" do %>
+                Sửa
+              <% end %>
+              <%= button_to admin_memory_path(memory), method: :delete, data: { turbo_confirm: "Bạn có chắc muốn xóa?" }, class: "px-3 py-1.5 rounded-lg text-sm font-medium cursor-pointer", style: "background-color: #F8D8D8; color: #333;" do %>
+                Xóa
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="bg-white rounded-xl p-12 text-center">
+      <div class="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center" style="background-color: #E0EEEB;">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-gray-400">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+        </svg>
+      </div>
+      <h3 class="font-heading font-semibold text-lg text-gray-800 mb-2">Chưa có kỷ niệm nào</h3>
+      <p class="text-gray-500 mb-4">Bắt đầu lưu giữ những khoảnh khắc đáng nhớ của bé</p>
+      <%= link_to new_admin_memory_path, class: "inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium", style: "background-color: #C1DDD8; color: #333;" do %>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+        </svg>
+        Thêm kỷ niệm đầu tiên
+      <% end %>
+    </div>
+  <% end %>
+</div>
