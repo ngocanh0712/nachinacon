@@ -20,6 +20,9 @@ Bundler.require(*Rails.groups)
 
 module Nachinacon
   class Application < Rails::Application
+    # Set secret_key_base from ENV or use fallback
+    config.secret_key_base = ENV["SECRET_KEY_BASE"] || "22232afe6df956bedfdc6614c0817e1402fac73cd5820ab60679e97122ebfa6ef078f51bbb02819abf15701a0b9579a712cee37c8bc409f2ba3fd81ca4bbd07d"
+
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.1
 
