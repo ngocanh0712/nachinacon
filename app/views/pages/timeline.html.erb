@@ -1,81 +1,257 @@
+<style>
+  @keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-12px) rotate(2deg); }
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% { opacity: 0.4; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(1.1); }
+  }
+
+  @keyframes gradient-shift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  @keyframes shimmer {
+    0% { background-position: -200% center; }
+    100% { background-position: 200% center; }
+  }
+
+  @keyframes sparkle {
+    0%, 100% { opacity: 0; transform: scale(0); }
+    50% { opacity: 1; transform: scale(1); }
+  }
+
+  .floating { animation: float 5s ease-in-out infinite; }
+  .floating-delay-1 { animation: float 5s ease-in-out 1s infinite; }
+  .floating-delay-2 { animation: float 5s ease-in-out 2s infinite; }
+  .pulse-glow { animation: pulse-glow 4s ease-in-out infinite; }
+
+  .gradient-animated {
+    background: linear-gradient(135deg, #C1DDD8, #F2C2C2, #C0DFD0, #E8B0B0);
+    background-size: 300% 300%;
+    animation: gradient-shift 8s ease infinite;
+  }
+
+  .shimmer-text {
+    background: linear-gradient(90deg, #C1DDD8, #F2C2C2, #C1DDD8);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer 3s linear infinite;
+  }
+
+  .glass-card {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+  }
+
+  .memory-card {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .memory-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.15);
+  }
+  .memory-card:hover img {
+    transform: scale(1.1);
+  }
+  .memory-card img {
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .filter-btn {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .filter-btn:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15);
+  }
+
+  .sparkle {
+    animation: sparkle 2s ease-in-out infinite;
+  }
+  .sparkle-delay-1 { animation-delay: 0.4s; }
+  .sparkle-delay-2 { animation-delay: 0.8s; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .floating, .floating-delay-1, .floating-delay-2, .pulse-glow,
+    .gradient-animated, .shimmer-text, .sparkle {
+      animation: none;
+    }
+    .memory-card:hover, .filter-btn:hover {
+      transform: none;
+    }
+  }
+</style>
+
 <!-- Header -->
-<section class="pt-8 pb-12 px-4 md:px-6 lg:px-8 relative overflow-hidden">
-  <div class="absolute top-0 right-0 w-64 h-64 rounded-full blur-3xl animate-pulse-soft" style="background-color: rgba(193, 221, 216, 0.3);"></div>
+<section class="pt-8 pb-12 px-4 md:px-6 lg:px-8 relative overflow-hidden" style="background: linear-gradient(180deg, #FFFBF8 0%, #F8FDFC 30%, #FDF5F5 70%, #F8FDFC 100%);">
+  <!-- Animated Background Elements -->
+  <div class="absolute inset-0 overflow-hidden pointer-events-none">
+    <div class="absolute top-10 -right-20 w-64 h-64 rounded-full blur-3xl pulse-glow" style="background: rgba(242, 194, 194, 0.35);"></div>
+    <div class="absolute bottom-10 -left-20 w-56 h-56 rounded-full blur-3xl pulse-glow" style="background: rgba(193, 221, 216, 0.35); animation-delay: 2s;"></div>
+    <div class="absolute top-1/3 left-1/4 w-40 h-40 rounded-full blur-3xl pulse-glow" style="background: rgba(192, 223, 208, 0.25); animation-delay: 4s;"></div>
+
+    <!-- Sparkle effects -->
+    <div class="absolute top-24 left-16 w-2 h-2 rounded-full sparkle" style="background: #F2C2C2;"></div>
+    <div class="absolute top-40 right-24 w-3 h-3 rounded-full sparkle sparkle-delay-1" style="background: #C1DDD8;"></div>
+    <div class="absolute bottom-32 left-1/3 w-2 h-2 rounded-full sparkle sparkle-delay-2" style="background: #C0DFD0;"></div>
+  </div>
 
   <div class="max-w-6xl mx-auto relative z-10">
-    <div class="text-center animate-fade-in-up">
-      <p class="font-accent text-xl mb-2" style="color: #E8B0B0;">Hành trình</p>
-      <h1 class="font-heading font-bold text-4xl md:text-5xl text-gray-800 mb-4">Timeline Kỷ Niệm</h1>
-      <p class="font-body text-lg text-gray-600 max-w-2xl mx-auto">
-        Từng khoảnh khắc được ghi lại theo thời gian, từ những ngày đầu tiên đến hiện tại.
+    <div class="text-center">
+      <!-- Title -->
+      <p class="font-accent text-xl md:text-2xl mb-2" style="color: #E8B0B0;">Từng khoảnh khắc</p>
+      <h1 class="shimmer-text font-accent italic text-4xl md:text-5xl lg:text-6xl mb-5">
+        Timeline Kỷ Niệm
+      </h1>
+
+      <!-- Decorative line -->
+      <div class="flex items-center justify-center gap-3 mb-6">
+        <div class="w-16 h-1 rounded-full gradient-animated"></div>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 floating" style="color: #E8B0B0;">
+          <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 6a.75.75 0 00-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 000-1.5h-3.75V6z" clip-rule="evenodd" />
+        </svg>
+        <div class="w-16 h-1 rounded-full gradient-animated"></div>
+      </div>
+
+      <p class="font-body text-gray-600 max-w-2xl mx-auto text-lg mb-10">
+        Từng khoảnh khắc được ghi lại theo thời gian, từ những ngày đầu tiên đến hiện tại
       </p>
+
+      <!-- Age Group Filter -->
+      <div class="flex flex-wrap justify-center gap-3 md:gap-4 mt-4">
+        <% filter_colors = [
+          ['#D1FAE5', '#059669'],
+          ['#FCE7F3', '#DB2777'],
+          ['#DBEAFE', '#2563EB'],
+          ['#FEF3C7', '#D97706'],
+          ['#EDE9FE', '#7C3AED'],
+          ['#FFEDD5', '#EA580C']
+        ] %>
+        <%= link_to timeline_path, class: "filter-btn px-6 py-2.5 rounded-full font-heading font-semibold text-sm cursor-pointer shadow-lg #{@age_group.nil? ? 'text-white gradient-animated' : 'glass-card text-gray-600 hover:bg-white'}" do %>
+          Tất cả
+        <% end %>
+        <% @age_groups.each_with_index do |(label, value), index| %>
+          <% colors = filter_colors[index % filter_colors.length] %>
+          <%= link_to timeline_path(age_group: value), class: "filter-btn px-6 py-2.5 rounded-full font-heading font-semibold text-sm cursor-pointer shadow-lg #{@age_group == value ? '' : 'glass-card hover:bg-white'}", style: @age_group == value ? "background: #{colors[0]}; color: #{colors[1]};" : "color: #6B7280;" do %>
+            <%= label %>
+          <% end %>
+        <% end %>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- Age Group Filter -->
-<section class="pb-8 px-4 md:px-6 lg:px-8">
-  <div class="max-w-6xl mx-auto">
-    <div class="flex flex-wrap justify-center gap-3">
-      <%= link_to "Tất cả", timeline_path,
-          class: "px-5 py-2.5 rounded-full font-heading font-semibold text-sm transition-all duration-300 #{@age_group.nil? ? 'shadow-soft text-gray-800' : 'text-gray-600 hover:bg-white'}",
-          style: @age_group.nil? ? "background-color: #C1DDD8;" : "" %>
-      <% @age_groups.each do |label, value| %>
-        <%= link_to label, timeline_path(age_group: value),
-            class: "px-5 py-2.5 rounded-full font-heading font-semibold text-sm transition-all duration-300 #{@age_group == value ? 'shadow-soft text-gray-800' : 'text-gray-600 hover:bg-white'}",
-            style: @age_group == value ? "background-color: #C1DDD8;" : "" %>
-      <% end %>
+<!-- Stats Bar -->
+<section class="py-6 px-4 md:px-6 lg:px-8 -mt-6 relative z-20">
+  <div class="max-w-4xl mx-auto">
+    <div class="p-4 flex items-center justify-center gap-8">
+      <div class="text-center">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-2 shadow-lg" style="background: linear-gradient(135deg, #C1DDD8, #A8CEC8);">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-white">
+            <path fill-rule="evenodd" d="M1.5 6a2.25 2.25 0 012.25-2.25h16.5A2.25 2.25 0 0122.5 6v12a2.25 2.25 0 01-2.25 2.25H3.75A2.25 2.25 0 011.5 18V6zM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0021 18v-1.94l-2.69-2.689a1.5 1.5 0 00-2.12 0l-.88.879.97.97a.75.75 0 11-1.06 1.06l-5.16-5.159a1.5 1.5 0 00-2.12 0L3 16.061zm10.125-7.81a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0z" clip-rule="evenodd" />
+          </svg>
+        </div>
+        <p class="font-heading font-bold text-2xl text-gray-800"><%= @memories.count %></p>
+        <p class="font-body text-xs text-gray-500">
+          <% if @age_group.present? %>Giai đoạn này<% else %>Tổng kỷ niệm<% end %>
+        </p>
+      </div>
     </div>
   </div>
 </section>
 
 <!-- Memory Grid -->
-<section class="py-8 px-4 md:px-6 lg:px-8">
-  <div class="max-w-6xl mx-auto">
+<section class="py-10 pb-20 px-4 md:px-6 lg:px-8 relative overflow-hidden" style="background: linear-gradient(180deg, #F8FAF9 0%, #FDFBF9 100%);">
+  <!-- Background decoration -->
+  <div class="absolute top-20 right-10 w-32 h-32 rounded-full blur-2xl opacity-30" style="background: #C0DFD0;"></div>
+  <div class="absolute bottom-40 left-10 w-24 h-24 rounded-full blur-2xl opacity-30" style="background: #F2C2C2;"></div>
+
+  <div class="max-w-6xl mx-auto relative z-10">
     <% if @memories.any? %>
-      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 stagger-children">
-        <% @memories.each do |memory| %>
-          <div class="group rounded-2xl overflow-hidden shadow-soft card-hover cursor-pointer bg-white">
+      <% card_colors = [
+        ['#FCE7F3', '#EC4899'],
+        ['#D1FAE5', '#22C55E'],
+        ['#DBEAFE', '#3B82F6'],
+        ['#FEF3C7', '#F59E0B'],
+        ['#EDE9FE', '#A855F7'],
+        ['#FFEDD5', '#F97316'],
+        ['#CFFAFE', '#06B6D4'],
+        ['#F5D0FE', '#D946EF']
+      ] %>
+
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 md:gap-6">
+        <% @memories.each_with_index do |memory, index| %>
+          <% colors = card_colors[index % card_colors.length] %>
+          <div class="memory-card group bg-white rounded-2xl overflow-hidden shadow-xl cursor-pointer border border-gray-100">
             <div class="aspect-square overflow-hidden relative">
               <% if memory.media.attached? %>
-                <%= image_tag memory.media.variant(resize_to_fill: [400, 400]), class: "w-full h-full object-cover img-hover" %>
+                <%= image_tag memory.media.variant(resize_to_fill: [400, 400]), class: "w-full h-full object-cover" %>
               <% else %>
-                <div class="w-full h-full flex items-center justify-center" style="background: linear-gradient(135deg, rgba(193, 221, 216, 0.3) 0%, rgba(242, 194, 194, 0.3) 100%);">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="w-12 h-12 text-gray-300">
+                <div class="w-full h-full flex items-center justify-center" style="background: <%= colors[0] %>;">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="w-14 h-14" style="color: <%= colors[1] %>30;">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
                   </svg>
                 </div>
               <% end %>
+
               <!-- Age badge -->
-              <div class="absolute top-2 right-2 px-2 py-1 rounded-full text-xs font-heading font-semibold" style="background-color: rgba(255,255,255,0.9);">
+              <div class="absolute top-3 right-3 px-3 py-1.5 rounded-xl text-xs font-heading font-bold shadow-lg backdrop-blur-sm" style="background: <%= colors[0] %>ee; color: <%= colors[1] %>;">
                 <%= Memory::AGE_GROUPS.find { |_, v| v == memory.age_group }&.first || memory.age_group %>
               </div>
+
+              <!-- Hover overlay -->
+              <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             </div>
+
             <div class="p-4">
-              <p class="font-body text-xs text-gray-500"><%= memory.taken_at.strftime("%d/%m/%Y") %></p>
-              <h3 class="font-heading font-semibold text-gray-800 mt-1 group-hover:text-[#A8CEC8] transition-colors"><%= memory.title %></h3>
+              <div class="flex items-center gap-2 mb-2">
+                <div class="w-6 h-6 rounded-lg flex items-center justify-center" style="background: <%= colors[0] %>;">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-3 h-3" style="color: <%= colors[1] %>;">
+                    <path fill-rule="evenodd" d="M6.75 2.25A.75.75 0 017.5 3v1.5h9V3A.75.75 0 0118 3v1.5h.75a3 3 0 013 3v11.25a3 3 0 01-3 3H5.25a3 3 0 01-3-3V7.5a3 3 0 013-3H6V3a.75.75 0 01.75-.75zm13.5 9a1.5 1.5 0 00-1.5-1.5H5.25a1.5 1.5 0 00-1.5 1.5v7.5a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5v-7.5z" clip-rule="evenodd" />
+                  </svg>
+                </div>
+                <p class="font-heading font-semibold text-xs" style="color: <%= colors[1] %>;"><%= memory.taken_at.strftime("%d/%m/%Y") %></p>
+              </div>
+              <h3 class="font-heading font-bold text-base text-gray-800 line-clamp-1 mb-1"><%= memory.title %></h3>
               <% if memory.caption.present? %>
-                <p class="font-body text-sm text-gray-600 mt-1 line-clamp-2"><%= memory.caption %></p>
+                <p class="font-body text-xs text-gray-500 line-clamp-2"><%= memory.caption %></p>
               <% end %>
             </div>
           </div>
         <% end %>
       </div>
     <% else %>
-      <div class="text-center py-20 rounded-2xl" style="background-color: #FFFBF7;">
-        <div class="w-20 h-20 rounded-full mx-auto mb-6 flex items-center justify-center" style="background-color: #E0EEEB;">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="w-10 h-10 text-gray-400">
+      <!-- Empty State -->
+      <div class="text-center py-20 glass-card rounded-3xl shadow-xl">
+        <div class="w-24 h-24 rounded-full mx-auto mb-6 flex items-center justify-center floating gradient-animated">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 text-white">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
         </div>
-        <h3 class="font-heading font-semibold text-xl text-gray-700 mb-2">Chưa có kỷ niệm nào</h3>
-        <p class="font-body text-gray-500">
+        <h3 class="font-heading font-bold text-2xl text-gray-700 mb-3">Chưa có kỷ niệm nào</h3>
+        <p class="font-body text-gray-500 mb-6 max-w-md mx-auto">
           <% if @age_group.present? %>
-            Không có kỷ niệm nào trong giai đoạn này.
+            Không có kỷ niệm nào trong giai đoạn <span class="font-semibold" style="color: #C1DDD8;"><%= Memory::AGE_GROUPS.find { |_, v| v == @age_group }&.first %></span>.
           <% else %>
             Hãy thêm những khoảnh khắc đáng yêu của bé!
           <% end %>
         </p>
+        <% if @age_group.present? %>
+          <%= link_to timeline_path, class: "group inline-flex items-center gap-2 px-8 py-4 rounded-xl font-heading font-semibold text-white shadow-xl transition-all duration-300 hover:shadow-2xl hover:scale-105 gradient-animated" do %>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 group-hover:-translate-x-1 transition-transform">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" />
+            </svg>
+            Xem tất cả kỷ niệm
+          <% end %>
+        <% end %>
       </div>
     <% end %>
   </div>

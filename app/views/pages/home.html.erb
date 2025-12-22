@@ -1,61 +1,219 @@
+<style>
+  @keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-15px) rotate(2deg); }
+  }
+
+  @keyframes float-reverse {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-12px) rotate(-2deg); }
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% { opacity: 0.4; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(1.1); }
+  }
+
+  @keyframes gradient-shift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  @keyframes shimmer {
+    0% { background-position: -200% center; }
+    100% { background-position: 200% center; }
+  }
+
+  @keyframes bounce-in {
+    0% { transform: scale(0.8); opacity: 0; }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  @keyframes slide-up {
+    0% { transform: translateY(30px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+  }
+
+  @keyframes rotate-slow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  @keyframes sparkle {
+    0%, 100% { opacity: 0; transform: scale(0); }
+    50% { opacity: 1; transform: scale(1); }
+  }
+
+  .floating { animation: float 5s ease-in-out infinite; }
+  .floating-reverse { animation: float-reverse 6s ease-in-out infinite; }
+  .floating-delay-1 { animation: float 5s ease-in-out 1s infinite; }
+  .floating-delay-2 { animation: float 5s ease-in-out 2s infinite; }
+  .floating-delay-3 { animation: float-reverse 6s ease-in-out 1.5s infinite; }
+  .pulse-glow { animation: pulse-glow 4s ease-in-out infinite; }
+  .rotate-slow { animation: rotate-slow 20s linear infinite; }
+
+  .gradient-animated {
+    background: linear-gradient(135deg, #C1DDD8, #F2C2C2, #C0DFD0, #E8B0B0);
+    background-size: 300% 300%;
+    animation: gradient-shift 8s ease infinite;
+  }
+
+  .shimmer-text {
+    background: linear-gradient(90deg, #C1DDD8, #F2C2C2, #C1DDD8);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer 3s linear infinite;
+  }
+
+  .card-3d {
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transform-style: preserve-3d;
+  }
+  .card-3d:hover {
+    transform: translateY(-12px) rotateX(5deg);
+    box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.2);
+  }
+
+  .glass-card {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+  }
+
+  .memory-card {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .memory-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+  }
+  .memory-card:hover img {
+    transform: scale(1.1);
+  }
+  .memory-card img {
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .milestone-pill {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .milestone-pill:hover {
+    transform: translateY(-5px) scale(1.03);
+    box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.15);
+  }
+
+  .stat-number {
+    transition: all 0.3s ease;
+  }
+  .stat-card:hover .stat-number {
+    transform: scale(1.1);
+  }
+
+  .sparkle {
+    animation: sparkle 2s ease-in-out infinite;
+  }
+  .sparkle-delay-1 { animation-delay: 0.3s; }
+  .sparkle-delay-2 { animation-delay: 0.6s; }
+  .sparkle-delay-3 { animation-delay: 0.9s; }
+
+  .section-appear {
+    animation: slide-up 0.8s ease-out forwards;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .floating, .floating-reverse, .floating-delay-1, .floating-delay-2, .floating-delay-3,
+    .pulse-glow, .rotate-slow, .sparkle, .gradient-animated, .shimmer-text {
+      animation: none;
+    }
+    .card-3d:hover, .memory-card:hover, .milestone-pill:hover {
+      transform: none;
+    }
+  }
+</style>
+
 <!-- Hero Section -->
-<section class="pt-8 pb-16 md:pt-16 md:pb-24 px-4 md:px-6 lg:px-8 relative overflow-hidden">
-  <!-- Decorative blobs -->
-  <div class="absolute top-20 -left-32 w-64 h-64 rounded-full blur-3xl animate-pulse-soft" style="background-color: rgba(193, 221, 216, 0.4);"></div>
-  <div class="absolute bottom-0 -right-32 w-80 h-80 rounded-full blur-3xl animate-pulse-soft" style="background-color: rgba(242, 194, 194, 0.4); animation-delay: 1s;"></div>
-  <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full blur-3xl animate-pulse-soft" style="background-color: rgba(192, 223, 208, 0.3); animation-delay: 2s;"></div>
+<section class="py-16 md:py-24 px-4 md:px-6 lg:px-8 relative overflow-hidden" style="background: linear-gradient(180deg, #FFFBF8 0%, #F8FDFC 30%, #FDF5F5 70%, #F8FDFC 100%);">
+  <!-- Animated Background Elements -->
+  <div class="absolute inset-0 overflow-hidden pointer-events-none">
+    <div class="absolute top-20 -right-20 w-72 h-72 rounded-full blur-3xl pulse-glow" style="background: rgba(242, 194, 194, 0.35);"></div>
+    <div class="absolute bottom-20 -left-20 w-64 h-64 rounded-full blur-3xl pulse-glow" style="background: rgba(193, 221, 216, 0.35); animation-delay: 2s;"></div>
+    <div class="absolute top-1/3 left-1/4 w-48 h-48 rounded-full blur-3xl pulse-glow" style="background: rgba(192, 223, 208, 0.25); animation-delay: 4s;"></div>
+    <div class="absolute bottom-1/4 right-1/3 w-40 h-40 rounded-full blur-3xl pulse-glow" style="background: rgba(232, 176, 176, 0.25); animation-delay: 3s;"></div>
+
+    <!-- Sparkle effects -->
+    <div class="absolute top-32 left-20 w-3 h-3 rounded-full sparkle" style="background: #F2C2C2;"></div>
+    <div class="absolute top-48 right-32 w-2 h-2 rounded-full sparkle sparkle-delay-1" style="background: #C1DDD8;"></div>
+    <div class="absolute bottom-40 left-1/3 w-2 h-2 rounded-full sparkle sparkle-delay-2" style="background: #C0DFD0;"></div>
+    <div class="absolute top-1/2 right-20 w-3 h-3 rounded-full sparkle sparkle-delay-3" style="background: #E8B0B0;"></div>
+  </div>
 
   <div class="max-w-6xl mx-auto relative z-10">
-    <div class="flex flex-col lg:flex-row items-center gap-12">
+    <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
       <!-- Text Content -->
-      <div class="flex-1 text-center lg:text-left animate-fade-in-up">
-        <p class="font-accent text-2xl md:text-3xl mb-6" style="color: #E8B0B0;">Chào mừng đến với</p>
-        <h1 class="font-heading font-bold text-4xl md:text-5xl lg:text-6xl text-gray-800 mb-8 leading-tight">
-          Nhật ký của<br>
-          <span class="gradient-text animate-gradient-shift">NaChiNaCon</span>
+      <div class="flex-1 text-center lg:text-left">
+        <p class="font-accent text-2xl md:text-3xl mb-3" style="color: #E8B0B0;">Chào mừng đến với</p>
+        <h1 class="font-heading font-extrabold text-4xl md:text-5xl lg:text-6xl text-gray-800 mb-3 leading-tight">
+          <span class="font-accent font-normal text-3xl md:text-4xl lg:text-5xl" style="color: #E8B0B0;">Nhật ký của</span><br>
+          <span class="shimmer-text">NaChiNaCon</span>
         </h1>
 
-        <!-- Age Display -->
-        <div class="inline-flex items-center gap-3 glass rounded-2xl px-6 py-4 shadow-soft-lg mb-8 animate-glow">
-          <div class="w-12 h-12 rounded-full flex items-center justify-center" style="background-color: #C1DDD8;">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-gray-700">
+        <!-- Decorative line -->
+        <div class="flex items-center gap-3 justify-center lg:justify-start mb-6">
+          <div class="w-16 h-1 rounded-full gradient-animated"></div>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 floating" style="color: #E8B0B0;">
+            <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
+          </svg>
+          <div class="w-16 h-1 rounded-full gradient-animated"></div>
+        </div>
+
+        <!-- Age Display - Glass morphism -->
+        <div class="inline-flex items-center gap-4 glass-card rounded-2xl px-6 py-4 shadow-xl mb-8">
+          <div class="w-14 h-14 rounded-xl flex items-center justify-center gradient-animated shadow-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-7 h-7 text-white">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 8.25v-1.5m0 1.5c-1.355 0-2.697.056-4.024.166C6.845 8.51 6 9.473 6 10.608v2.513m6-4.87c1.355 0 2.697.055 4.024.165C17.155 8.51 18 9.473 18 10.608v2.513m-3-4.87v-1.5m-6 1.5v-1.5m12 9.75l-1.5.75a3.354 3.354 0 01-3 0 3.354 3.354 0 00-3 0 3.354 3.354 0 01-3 0 3.354 3.354 0 00-3 0 3.354 3.354 0 01-3 0L3 16.5m15-3.38a48.474 48.474 0 00-6-.37c-2.032 0-4.034.125-6 .37m12 0c.39.049.777.102 1.163.16 1.07.16 1.837 1.094 1.837 2.175v5.17c0 .62-.504 1.124-1.125 1.124H4.125A1.125 1.125 0 013 20.625v-5.17c0-1.08.768-2.014 1.837-2.174A47.78 47.78 0 016 13.12M12 12.75h.008v.008H12v-.008z" />
             </svg>
           </div>
           <div>
-            <p class="font-body text-sm text-gray-500">Tuổi hiện tại</p>
+            <p class="font-body text-sm text-gray-500">Nacon</p>
             <p class="font-heading font-bold text-2xl text-gray-800">1 năm, 3 tháng</p>
           </div>
         </div>
 
-        <p class="font-body text-lg text-gray-600 mb-8 max-w-lg mx-auto lg:mx-0">
+        <p class="font-body text-lg md:text-xl text-gray-600 mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed">
           Ghi lại từng khoảnh khắc quý giá của hoàng tử nhỏ. Từ nụ cười đầu tiên đến bước chân đầu tiên, mỗi kỷ niệm đều là báu vật.
         </p>
 
         <!-- CTA Buttons -->
         <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-          <%= link_to timeline_path, class: "inline-flex items-center justify-center gap-2 font-heading font-semibold px-8 py-4 rounded-xl btn-hover shadow-soft-lg", style: "background-color: #C1DDD8; color: #333;" do %>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+          <%= link_to timeline_path, class: "group inline-flex items-center justify-center gap-3 text-white font-heading font-semibold px-8 py-4 rounded-xl shadow-xl cursor-pointer transition-all duration-300 hover:shadow-2xl hover:scale-105 gradient-animated", style: "background-size: 200% 200%;" do %>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 group-hover:rotate-12 transition-transform">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Xem Timeline
+            <span>Xem Timeline</span>
           <% end %>
-          <%= link_to milestones_path, class: "inline-flex items-center justify-center gap-2 font-heading font-semibold px-8 py-4 rounded-xl btn-hover shadow-soft-lg border-2", style: "background-color: white; color: #333; border-color: #F2C2C2;" do %>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+          <%= link_to milestones_path, class: "group inline-flex items-center justify-center gap-3 bg-white text-gray-700 font-heading font-semibold px-8 py-4 rounded-xl shadow-lg cursor-pointer border-2 border-gray-100 transition-all duration-300 hover:shadow-xl hover:border-gray-200 hover:scale-105" do %>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 group-hover:rotate-12 transition-transform" style="color: #E8B0B0;">
               <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
             </svg>
-            Milestones
+            <span>Milestones</span>
           <% end %>
         </div>
       </div>
 
       <!-- Hero Image/Avatar -->
-      <div class="flex-1 flex justify-center animate-slide-in-right" style="animation-delay: 0.3s;">
+      <div class="flex-1 flex justify-center">
         <div class="relative">
+          <!-- Rotating ring -->
+          <div class="absolute inset-0 w-80 h-80 md:w-96 md:h-96 rounded-full rotate-slow" style="border: 3px dashed rgba(193, 221, 216, 0.3);"></div>
+
           <!-- Main photo frame -->
-          <div class="w-72 h-72 md:w-80 md:h-80 lg:w-96 lg:h-96 rounded-full p-4 shadow-soft-lg animate-float" style="background: linear-gradient(135deg, #E0EEEB 0%, #F8D8D8 100%);">
-            <div class="w-full h-full bg-white rounded-full flex items-center justify-center overflow-hidden">
-              <div class="w-full h-full flex items-center justify-center" style="background: linear-gradient(135deg, rgba(193, 221, 216, 0.3) 0%, rgba(242, 194, 194, 0.3) 100%);">
+          <div class="relative w-72 h-72 md:w-80 md:h-80 lg:w-96 lg:h-96 rounded-full p-4 shadow-2xl gradient-animated" style="background-size: 200% 200%;">
+            <div class="w-full h-full bg-white rounded-full flex items-center justify-center overflow-hidden shadow-inner">
+              <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
                 <div class="text-center">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="w-20 h-20 text-gray-300 mx-auto mb-2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z" />
@@ -66,20 +224,30 @@
             </div>
           </div>
 
-          <!-- Decorative elements -->
-          <div class="absolute -top-4 -right-4 w-16 h-16 rounded-full flex items-center justify-center shadow-soft-lg animate-float-delayed animate-heartbeat" style="background-color: #F2C2C2;">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8 text-white">
+          <!-- Decorative floating elements -->
+          <div class="absolute -top-4 -right-4 w-20 h-20 rounded-2xl flex items-center justify-center shadow-xl floating" style="background: linear-gradient(135deg, #F2C2C2, #E8B0B0);">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-10 h-10 text-white">
               <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
             </svg>
           </div>
 
-          <div class="absolute -bottom-2 -left-6 w-12 h-12 rounded-full flex items-center justify-center shadow-soft-lg animate-float" style="background-color: #C0DFD0; animation-delay: 1s;">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-white">
+          <div class="absolute -bottom-2 -left-6 w-16 h-16 rounded-2xl flex items-center justify-center shadow-xl floating-delay-1" style="background: linear-gradient(135deg, #C0DFD0, #A8D1BD);">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8 text-white">
               <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
             </svg>
           </div>
 
-          <div class="absolute top-1/2 -left-8 w-10 h-10 rounded-full shadow-soft-lg animate-float-delayed" style="background-color: #C1DDD8;"></div>
+          <div class="absolute top-1/2 -right-10 w-14 h-14 rounded-2xl flex items-center justify-center shadow-xl floating-delay-2" style="background: linear-gradient(135deg, #C1DDD8, #A8CEC8);">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-7 h-7 text-white">
+              <path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
+            </svg>
+          </div>
+
+          <div class="absolute bottom-1/4 -left-8 w-12 h-12 rounded-full flex items-center justify-center shadow-lg floating-delay-3" style="background: linear-gradient(135deg, #FEF3C7, #F59E0B);">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-white">
+              <path fill-rule="evenodd" d="M9 4.5a.75.75 0 01.721.544l.813 2.846a3.75 3.75 0 002.576 2.576l2.846.813a.75.75 0 010 1.442l-2.846.813a3.75 3.75 0 00-2.576 2.576l-.813 2.846a.75.75 0 01-1.442 0l-.813-2.846a3.75 3.75 0 00-2.576-2.576l-2.846-.813a.75.75 0 010-1.442l2.846-.813A3.75 3.75 0 007.466 7.89l.813-2.846A.75.75 0 019 4.5z" clip-rule="evenodd" />
+            </svg>
+          </div>
         </div>
       </div>
     </div>
@@ -87,95 +255,111 @@
 </section>
 
 <!-- Stats Section -->
-<section class="py-8 px-4 md:px-6 lg:px-8">
+<section class="py-8 px-4 md:px-6 lg:px-8 -mt-8 relative z-20">
   <div class="max-w-4xl mx-auto">
-    <div class="grid grid-cols-3 gap-4 stagger-children">
-      <div class="glass rounded-2xl p-6 text-center card-hover shadow-soft">
-        <div class="w-12 h-12 rounded-full mx-auto mb-3 flex items-center justify-center" style="background-color: #E0EEEB;">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-gray-700">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+    <div class="grid grid-cols-3 gap-4">
+      <div class="stat-card glass-card rounded-2xl p-5 text-center shadow-xl cursor-pointer transition-all duration-300 hover:scale-105">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3 shadow-lg" style="background: linear-gradient(135deg, #C1DDD8, #A8CEC8);">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-white">
+            <path fill-rule="evenodd" d="M1.5 6a2.25 2.25 0 012.25-2.25h16.5A2.25 2.25 0 0122.5 6v12a2.25 2.25 0 01-2.25 2.25H3.75A2.25 2.25 0 011.5 18V6zM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0021 18v-1.94l-2.69-2.689a1.5 1.5 0 00-2.12 0l-.88.879.97.97a.75.75 0 11-1.06 1.06l-5.16-5.159a1.5 1.5 0 00-2.12 0L3 16.061zm10.125-7.81a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0z" clip-rule="evenodd" />
           </svg>
         </div>
-        <p class="font-heading font-bold text-3xl text-gray-800"><%= @memory_count %></p>
-        <p class="font-body text-sm text-gray-500">Kỷ niệm</p>
+        <p class="stat-number font-heading font-bold text-2xl md:text-3xl text-gray-800"><%= @recent_memories.count %></p>
+        <p class="font-body text-xs text-gray-500">Kỷ niệm</p>
       </div>
-      <div class="glass rounded-2xl p-6 text-center card-hover shadow-soft">
-        <div class="w-12 h-12 rounded-full mx-auto mb-3 flex items-center justify-center" style="background-color: #F8D8D8;">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-gray-700">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
+
+      <div class="stat-card glass-card rounded-2xl p-5 text-center shadow-xl cursor-pointer transition-all duration-300 hover:scale-105">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3 shadow-lg" style="background: linear-gradient(135deg, #10B981, #059669);">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-white">
+            <path fill-rule="evenodd" d="M8.603 3.799A4.49 4.49 0 0112 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 013.498 1.307 4.491 4.491 0 011.307 3.497A4.49 4.49 0 0121.75 12a4.49 4.49 0 01-1.549 3.397 4.491 4.491 0 01-1.307 3.497 4.491 4.491 0 01-3.497 1.307A4.49 4.49 0 0112 21.75a4.49 4.49 0 01-3.397-1.549 4.49 4.49 0 01-3.498-1.306 4.491 4.491 0 01-1.307-3.498A4.49 4.49 0 012.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 011.307-3.497 4.49 4.49 0 013.497-1.307zm7.007 6.387a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" />
           </svg>
         </div>
-        <p class="font-heading font-bold text-3xl text-gray-800"><%= @milestone_count %></p>
-        <p class="font-body text-sm text-gray-500">Milestones</p>
+        <p class="stat-number font-heading font-bold text-2xl md:text-3xl text-gray-800"><%= @achieved_milestones.count %></p>
+        <p class="font-body text-xs text-gray-500">Milestones</p>
       </div>
-      <div class="glass rounded-2xl p-6 text-center card-hover shadow-soft">
-        <div class="w-12 h-12 rounded-full mx-auto mb-3 flex items-center justify-center" style="background-color: rgba(192, 223, 208, 0.5);">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-gray-700">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" />
+
+      <div class="stat-card glass-card rounded-2xl p-5 text-center shadow-xl cursor-pointer transition-all duration-300 hover:scale-105">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3 shadow-lg" style="background: linear-gradient(135deg, #F2C2C2, #E8B0B0);">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-white">
+            <path d="M12.75 12.75a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM7.5 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM8.25 17.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM9.75 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM10.5 17.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM12 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM12.75 17.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM14.25 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM15 17.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM16.5 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM15 12.75a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM16.5 13.5a.75.75 0 100-1.5.75.75 0 000 1.5z" />
+            <path fill-rule="evenodd" d="M6.75 2.25A.75.75 0 017.5 3v1.5h9V3A.75.75 0 0118 3v1.5h.75a3 3 0 013 3v11.25a3 3 0 01-3 3H5.25a3 3 0 01-3-3V7.5a3 3 0 013-3H6V3a.75.75 0 01.75-.75zm13.5 9a1.5 1.5 0 00-1.5-1.5H5.25a1.5 1.5 0 00-1.5 1.5v7.5a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5v-7.5z" clip-rule="evenodd" />
           </svg>
         </div>
-        <p class="font-heading font-bold text-3xl text-gray-800"><%= @album_count %></p>
-        <p class="font-body text-sm text-gray-500">Albums</p>
+        <p class="stat-number font-heading font-bold text-2xl md:text-3xl text-gray-800">15</p>
+        <p class="font-body text-xs text-gray-500">Tháng tuổi</p>
       </div>
     </div>
   </div>
 </section>
 
 <!-- Quick Links Section -->
-<section class="py-16 px-4 md:px-6 lg:px-8">
-  <div class="max-w-6xl mx-auto">
+<section class="py-16 px-4 md:px-6 lg:px-8 bg-white relative overflow-hidden">
+  <!-- Background decoration -->
+  <div class="absolute top-0 right-0 w-64 h-64 rounded-full blur-3xl opacity-30" style="background: #C1DDD8;"></div>
+  <div class="absolute bottom-0 left-0 w-48 h-48 rounded-full blur-3xl opacity-30" style="background: #F2C2C2;"></div>
+
+  <div class="max-w-6xl mx-auto relative z-10">
     <div class="text-center mb-12">
-      <p class="font-accent text-xl mb-2" style="color: #E8B0B0;">Khám phá</p>
-      <h2 class="font-heading font-bold text-3xl md:text-4xl text-gray-800">Những Khoảnh Khắc Quý Giá</h2>
+      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-4" style="background: rgba(242, 194, 194, 0.2);">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4" style="color: #E8B0B0;">
+          <path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
+        </svg>
+        <span class="font-heading font-semibold text-sm" style="color: #D4A0A0;">Khám phá</span>
+      </div>
+      <h2 class="font-accent italic text-3xl md:text-4xl mb-3" style="color: #C1DDD8;">Những Khoảnh Khắc</h2>
+      <p class="font-heading font-bold text-2xl md:text-3xl text-gray-800">Quý Giá Của Bé</p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 stagger-children">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       <!-- Timeline Card -->
-      <%= link_to timeline_path, class: "group bg-white rounded-2xl p-8 shadow-soft card-hover border-2 border-transparent hover:border-[#C1DDD8]" do %>
-        <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-6 transition-colors duration-300" style="background-color: #E0EEEB;">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-gray-700">
+      <%= link_to timeline_path, class: "group card-3d glass-card rounded-3xl p-8 shadow-xl cursor-pointer border border-white/50" do %>
+        <div class="w-18 h-18 rounded-2xl flex items-center justify-center mb-6 shadow-lg relative overflow-hidden" style="background: linear-gradient(135deg, #E0EEEB, #C1DDD8);">
+          <div class="absolute inset-0 bg-white/20 group-hover:bg-white/30 transition-colors"></div>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-10 h-10 text-white relative z-10">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
         </div>
         <h3 class="font-heading font-bold text-xl text-gray-800 mb-3">Timeline</h3>
-        <p class="font-body text-gray-600 mb-4">Hành trình từng khoảnh khắc, được sắp xếp theo từng giai đoạn tuổi.</p>
-        <div class="flex items-center gap-2 font-heading font-semibold link-arrow" style="color: #A8CEC8;">
+        <p class="font-body text-gray-600 mb-4 leading-relaxed">Hành trình từng khoảnh khắc, được sắp xếp theo từng giai đoạn tuổi.</p>
+        <div class="flex items-center gap-2 font-heading font-semibold text-sm" style="color: #A8CEC8;">
           <span>Xem Timeline</span>
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4 group-hover:translate-x-2 transition-transform duration-300">
             <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
           </svg>
         </div>
       <% end %>
 
       <!-- Milestones Card -->
-      <%= link_to milestones_path, class: "group bg-white rounded-2xl p-8 shadow-soft card-hover border-2 border-transparent hover:border-[#F2C2C2]" do %>
-        <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-6 transition-colors duration-300" style="background-color: #F8D8D8;">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-gray-700">
+      <%= link_to milestones_path, class: "group card-3d glass-card rounded-3xl p-8 shadow-xl cursor-pointer border border-white/50" do %>
+        <div class="w-18 h-18 rounded-2xl flex items-center justify-center mb-6 shadow-lg relative overflow-hidden" style="background: linear-gradient(135deg, #F8D8D8, #F2C2C2);">
+          <div class="absolute inset-0 bg-white/20 group-hover:bg-white/30 transition-colors"></div>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-10 h-10 text-white relative z-10">
             <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
           </svg>
         </div>
         <h3 class="font-heading font-bold text-xl text-gray-800 mb-3">Milestones</h3>
-        <p class="font-body text-gray-600 mb-4">Những mốc quan trọng - nụ cười đầu tiên, từ đầu tiên, bước đi đầu tiên.</p>
-        <div class="flex items-center gap-2 font-heading font-semibold link-arrow" style="color: #E8B0B0;">
+        <p class="font-body text-gray-600 mb-4 leading-relaxed">Những mốc quan trọng - nụ cười đầu tiên, từ đầu tiên, bước đi đầu tiên.</p>
+        <div class="flex items-center gap-2 font-heading font-semibold text-sm" style="color: #E8B0B0;">
           <span>Xem Milestones</span>
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4 group-hover:translate-x-2 transition-transform duration-300">
             <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
           </svg>
         </div>
       <% end %>
 
       <!-- Albums Card -->
-      <%= link_to albums_path, class: "group bg-white rounded-2xl p-8 shadow-soft card-hover border-2 border-transparent hover:border-[#C0DFD0]" do %>
-        <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-6 transition-colors duration-300" style="background-color: rgba(192, 223, 208, 0.4);">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-gray-700">
+      <%= link_to albums_path, class: "group card-3d glass-card rounded-3xl p-8 shadow-xl cursor-pointer border border-white/50" do %>
+        <div class="w-18 h-18 rounded-2xl flex items-center justify-center mb-6 shadow-lg relative overflow-hidden" style="background: linear-gradient(135deg, rgba(192, 223, 208, 0.9), #C0DFD0);">
+          <div class="absolute inset-0 bg-white/20 group-hover:bg-white/30 transition-colors"></div>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-10 h-10 text-white relative z-10">
             <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
           </svg>
         </div>
         <h3 class="font-heading font-bold text-xl text-gray-800 mb-3">Albums</h3>
-        <p class="font-body text-gray-600 mb-4">Xem tất cả ảnh và video trong bộ sưu tập kỷ niệm đẹp.</p>
-        <div class="flex items-center gap-2 font-heading font-semibold link-arrow" style="color: #A8D1BD;">
+        <p class="font-body text-gray-600 mb-4 leading-relaxed">Xem tất cả ảnh và video trong bộ sưu tập kỷ niệm đẹp.</p>
+        <div class="flex items-center gap-2 font-heading font-semibold text-sm" style="color: #A8D1BD;">
           <span>Xem Albums</span>
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4 group-hover:translate-x-2 transition-transform duration-300">
             <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
           </svg>
         </div>
@@ -185,54 +369,76 @@
 </section>
 
 <!-- Recent Memories Preview -->
-<section class="py-16 px-4 md:px-6 lg:px-8 bg-white">
-  <div class="max-w-6xl mx-auto">
-    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-12">
+<section class="py-16 px-4 md:px-6 lg:px-8 relative overflow-hidden" style="background: linear-gradient(180deg, #F8FAF9 0%, #FDFBF9 100%);">
+  <!-- Background decoration -->
+  <div class="absolute top-20 right-10 w-32 h-32 rounded-full blur-2xl opacity-40" style="background: #C0DFD0;"></div>
+  <div class="absolute bottom-20 left-10 w-24 h-24 rounded-full blur-2xl opacity-40" style="background: #F2C2C2;"></div>
+
+  <div class="max-w-6xl mx-auto relative z-10">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-10">
       <div>
-        <p class="font-accent text-xl mb-2" style="color: #E8B0B0;">Mới nhất</p>
-        <h2 class="font-heading font-bold text-3xl md:text-4xl text-gray-800">Kỷ Niệm Gần Đây</h2>
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-3" style="background: rgba(193, 221, 216, 0.2);">
+          <div class="w-1.5 h-1.5 rounded-full" style="background: #A8CEC8;"></div>
+          <span class="font-heading font-semibold text-xs" style="color: #7BB4AA;">Mới cập nhật</span>
+        </div>
+        <p class="font-accent text-xl md:text-2xl mb-2" style="color: #E8B0B0;">Mới nhất</p>
+        <h2 class="font-accent font-bold text-3xl md:text-4xl text-gray-800 mb-2">Kỷ Niệm Gần Đây</h2>
       </div>
-      <%= link_to timeline_path, class: "mt-4 md:mt-0 inline-flex items-center gap-2 font-heading font-semibold link-arrow transition-colors duration-200", style: "color: #A8CEC8;" do %>
+      <%= link_to timeline_path, class: "group mt-4 md:mt-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-heading font-semibold text-sm transition-all duration-300 hover:shadow-lg", style: "background: rgba(193, 221, 216, 0.2); color: #5A9A8E;" do %>
         <span>Xem tất cả</span>
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 group-hover:translate-x-1 transition-transform">
           <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
         </svg>
       <% end %>
     </div>
 
     <% if @recent_memories.any? %>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 stagger-children">
-        <% @recent_memories.each do |memory| %>
-          <div class="group rounded-2xl overflow-hidden shadow-soft card-hover cursor-pointer" style="background-color: #F6F2EC;">
-            <div class="aspect-square overflow-hidden">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <% memory_colors = [
+          ['#FCE7F3', '#EC4899'],
+          ['#D1FAE5', '#22C55E'],
+          ['#DBEAFE', '#3B82F6'],
+          ['#FEF3C7', '#F59E0B']
+        ] %>
+        <% @recent_memories.each_with_index do |memory, index| %>
+          <% colors = memory_colors[index % memory_colors.length] %>
+          <div class="memory-card group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl cursor-pointer border border-gray-100">
+            <div class="aspect-square flex items-center justify-center relative overflow-hidden" style="background: <%= colors[0] %>;">
               <% if memory.media.attached? %>
-                <%= image_tag memory.media.variant(resize_to_fill: [400, 400]), class: "w-full h-full object-cover img-hover" %>
+                <%= image_tag memory.media.variant(resize_to_fill: [400, 400]), class: "w-full h-full object-cover" %>
               <% else %>
-                <div class="w-full h-full flex items-center justify-center" style="background: linear-gradient(135deg, rgba(193, 221, 216, 0.3) 0%, rgba(242, 194, 194, 0.3) 100%);">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="w-16 h-16 text-gray-300">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
-                  </svg>
-                </div>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="w-16 h-16" style="color: <%= colors[1] %>40;">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                </svg>
               <% end %>
+              <!-- Overlay on hover -->
+              <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             </div>
             <div class="p-4">
-              <p class="font-body text-sm text-gray-500"><%= memory.taken_at.strftime("%d/%m/%Y") %></p>
-              <h3 class="font-heading font-semibold text-gray-800 mt-1 group-hover:text-[#A8CEC8] transition-colors duration-200"><%= memory.title %></h3>
+              <div class="flex items-center gap-2 mb-2">
+                <div class="w-5 h-5 rounded-full flex items-center justify-center" style="background: <%= colors[0] %>;">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-3 h-3" style="color: <%= colors[1] %>;">
+                    <path fill-rule="evenodd" d="M6.75 2.25A.75.75 0 017.5 3v1.5h9V3A.75.75 0 0118 3v1.5h.75a3 3 0 013 3v11.25a3 3 0 01-3 3H5.25a3 3 0 01-3-3V7.5a3 3 0 013-3H6V3a.75.75 0 01.75-.75zm13.5 9a1.5 1.5 0 00-1.5-1.5H5.25a1.5 1.5 0 00-1.5 1.5v7.5a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5v-7.5z" clip-rule="evenodd" />
+                  </svg>
+                </div>
+                <p class="font-body text-xs text-gray-500"><%= memory.taken_at.strftime("%d/%m/%Y") %></p>
+              </div>
+              <h3 class="font-heading font-bold text-gray-800 mb-1 line-clamp-1"><%= memory.title %></h3>
               <% if memory.caption.present? %>
-                <p class="font-body text-sm text-gray-600 mt-2 line-clamp-2"><%= memory.caption %></p>
+                <p class="font-body text-sm text-gray-500 line-clamp-2"><%= memory.caption %></p>
               <% end %>
             </div>
           </div>
         <% end %>
       </div>
     <% else %>
-      <div class="text-center py-16 rounded-2xl" style="background-color: #FFFBF7;">
-        <div class="w-20 h-20 rounded-full mx-auto mb-6 flex items-center justify-center" style="background-color: #E0EEEB;">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="w-10 h-10 text-gray-400">
+      <div class="text-center py-16 glass-card rounded-3xl shadow-xl">
+        <div class="w-24 h-24 rounded-full mx-auto mb-6 flex items-center justify-center floating" style="background: linear-gradient(135deg, #E0EEEB, #C1DDD8);">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="w-12 h-12 text-white">
             <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
           </svg>
         </div>
-        <h3 class="font-heading font-semibold text-xl text-gray-700 mb-2">Chưa có kỷ niệm nào</h3>
+        <h3 class="font-heading font-bold text-xl text-gray-700 mb-2">Chưa có kỷ niệm nào</h3>
         <p class="font-body text-gray-500">Hãy thêm những khoảnh khắc đáng yêu của bé!</p>
       </div>
     <% end %>
@@ -240,34 +446,65 @@
 </section>
 
 <!-- Achieved Milestones -->
-<section class="py-16 px-4 md:px-6 lg:px-8" style="background-color: #FFFBF7;">
-  <div class="max-w-6xl mx-auto">
+<section class="py-16 px-4 md:px-6 lg:px-8 bg-white relative overflow-hidden">
+  <!-- Background decoration -->
+  <div class="absolute top-0 left-1/4 w-48 h-48 rounded-full blur-3xl opacity-20" style="background: #F2C2C2;"></div>
+  <div class="absolute bottom-0 right-1/4 w-40 h-40 rounded-full blur-3xl opacity-20" style="background: #C1DDD8;"></div>
+
+  <div class="max-w-6xl mx-auto relative z-10">
     <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-12">
       <div>
-        <p class="font-accent text-xl mb-2" style="color: #E8B0B0;">Thành tựu</p>
-        <h2 class="font-heading font-bold text-3xl md:text-4xl text-gray-800">Milestones Đã Đạt</h2>
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-3" style="background: rgba(16, 185, 129, 0.1);">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4" style="color: #10B981;">
+            <path fill-rule="evenodd" d="M8.603 3.799A4.49 4.49 0 0112 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 013.498 1.307 4.491 4.491 0 011.307 3.497A4.49 4.49 0 0121.75 12a4.49 4.49 0 01-1.549 3.397 4.491 4.491 0 01-1.307 3.497 4.491 4.491 0 01-3.497 1.307A4.49 4.49 0 0112 21.75a4.49 4.49 0 01-3.397-1.549 4.49 4.49 0 01-3.498-1.306 4.491 4.491 0 01-1.307-3.498A4.49 4.49 0 012.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 011.307-3.497 4.49 4.49 0 013.497-1.307zm7.007 6.387a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" />
+          </svg>
+          <span class="font-heading font-semibold text-xs" style="color: #059669;">Đã đạt được</span>
+        </div>
+        <p class="font-accent text-xl md:text-2xl mb-2" style="color: #E8B0B0;">Thành tựu</p>
+        <h2 class="font-accent italic text-3xl md:text-4xl" style="color: #C1DDD8;">Milestones Đã Đạt</h2>
       </div>
-      <%= link_to milestones_path, class: "mt-4 md:mt-0 inline-flex items-center gap-2 font-heading font-semibold link-arrow transition-colors duration-200", style: "color: #E8B0B0;" do %>
+      <%= link_to milestones_path, class: "group mt-4 md:mt-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-heading font-semibold text-sm transition-all duration-300 hover:shadow-lg", style: "background: rgba(242, 194, 194, 0.2); color: #D4A0A0;" do %>
         <span>Xem tất cả</span>
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 group-hover:translate-x-1 transition-transform">
           <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
         </svg>
       <% end %>
     </div>
 
     <% if @achieved_milestones.any? %>
-      <div class="flex flex-wrap gap-3 stagger-children">
-        <% @achieved_milestones.each do |milestone| %>
-          <div class="inline-flex items-center gap-2 px-5 py-3 rounded-full shadow-soft hover-wiggle cursor-pointer" style="background-color: #C0DFD0;">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-gray-700">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
-            </svg>
-            <span class="font-heading font-semibold text-sm text-gray-800"><%= milestone.name %></span>
+      <% pill_colors = [
+        ['#FCE7F3', '#EC4899', '#BE185D'],
+        ['#DBEAFE', '#3B82F6', '#1D4ED8'],
+        ['#D1FAE5', '#22C55E', '#16A34A'],
+        ['#FEF3C7', '#F59E0B', '#B45309'],
+        ['#EDE9FE', '#A855F7', '#7C3AED'],
+        ['#FFEDD5', '#F97316', '#C2410C'],
+        ['#CFFAFE', '#06B6D4', '#0E7490'],
+        ['#F5D0FE', '#D946EF', '#A21CAF']
+      ] %>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <% @achieved_milestones.each_with_index do |milestone, index| %>
+          <% colors = pill_colors[index % pill_colors.length] %>
+          <div class="milestone-pill flex items-center gap-3 px-5 py-4 rounded-2xl cursor-pointer shadow-lg border-2 transition-all duration-300" style="background: <%= colors[0] %>; border-color: <%= colors[1] %>30;">
+            <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style="background: <%= colors[1] %>20;">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5" style="color: <%= colors[1] %>;">
+                <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
+              </svg>
+            </div>
+            <span class="font-heading font-semibold text-sm line-clamp-2" style="color: <%= colors[2] %>;"><%= milestone.name %></span>
           </div>
         <% end %>
       </div>
     <% else %>
-      <p class="text-gray-500 font-body">Chưa có milestone nào được đánh dấu hoàn thành.</p>
+      <div class="glass-card rounded-3xl p-12 text-center shadow-xl">
+        <div class="w-20 h-20 rounded-full mx-auto mb-6 flex items-center justify-center floating" style="background: linear-gradient(135deg, #D1FAE5, #10B981);">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-white">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
+          </svg>
+        </div>
+        <h3 class="font-heading font-bold text-xl text-gray-700 mb-2">Chưa có milestone nào</h3>
+        <p class="font-body text-gray-500">Những bước tiến của bé sẽ được ghi lại ở đây.</p>
+      </div>
     <% end %>
   </div>
 </section>
