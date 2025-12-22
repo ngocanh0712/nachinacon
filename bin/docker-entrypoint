@@ -1,19 +1,26 @@
-#!/bin/bash -e
+#!/bin/bash
+set -e
 
 echo "=== Docker Entrypoint ==="
-echo "Args: $@"
-echo "PORT: ${PORT:-3000}"
+echo "Arguments received: $@"
+echo "Number of args: $#"
+echo "Arg 1: ${1}"
+echo "Arg 2: ${2}"
+echo "PORT env: ${PORT}"
 
 # If running the rails server then create or migrate existing database
 if [ "${1}" == "./bin/rails" ] && [ "${2}" == "server" ]; then
+  echo "Matched rails server command"
   echo "Running db:prepare..."
   ./bin/rails db:prepare
   echo "db:prepare completed!"
 
   # Use PORT from environment (Railway provides this)
-  PORT=${PORT:-3000}
-  echo "Starting Rails server on port $PORT..."
-  exec ./bin/rails server -b 0.0.0.0 -p "$PORT"
+  RAILS_PORT=${PORT:-3000}
+  echo "=== Starting Rails server ==="
+  echo "Binding to: 0.0.0.0:${RAILS_PORT}"
+  exec ./bin/rails server -b 0.0.0.0 -p "${RAILS_PORT}"
+else
+  echo "Did not match rails server, executing: $@"
+  exec "$@"
 fi
-
-exec "${@}"
