@@ -32,11 +32,17 @@ else
   puts "✓ Admin user recreated: admin@nachinacon.info"
 end
 
-puts 'Seeds completed!'
+puts "\n🌱 Starting to seed memories for Gia Minh (Nacon)...\n\n"
 
-exit # Stop here - don't create sample data
+# Clear old data
+puts "Clearing old data..."
+AlbumMemory.destroy_all
+Memory.destroy_all
+Album.destroy_all
+Milestone.where(milestone_type: 'custom').destroy_all
 
 # Create predefined milestones
+puts "\n📍 Creating milestones..."
 Milestone::MILESTONE_TYPES.each do |type, data|
   next if type == 'custom'
 
@@ -44,139 +50,220 @@ Milestone::MILESTONE_TYPES.each do |type, data|
     milestone.name = data[:name]
     milestone.icon = data[:icon]
     milestone.description = "Mốc quan trọng: #{data[:name]}"
-    puts "Created milestone: #{data[:name]}"
+    puts "  ✓ #{data[:name]}"
   end
 end
 
-# Create sample albums
-albums_data = [
-  { name: 'Tháng đầu đời', description: 'Những khoảnh khắc đầu tiên của con' },
-  { name: 'Sinh nhật 1 tuổi', description: 'Tiệc sinh nhật đầu tiên của bé' },
-  { name: 'Ngày thường', description: 'Những khoảnh khắc bình dị hàng ngày' },
-  { name: 'Đi chơi', description: 'Những chuyến du lịch và đi chơi cùng gia đình' }
+# Mark some milestones as achieved with meaningful dates
+achieved_milestones_data = [
+  { type: 'first_smile', months_ago: 10 },
+  { type: 'first_laugh', months_ago: 9 },
+  { type: 'first_tooth', months_ago: 8 },
+  { type: 'first_food', months_ago: 7 },
+  { type: 'first_crawl', months_ago: 6 },
+  { type: 'first_step', months_ago: 3 },
+  { type: 'first_birthday', months_ago: 2 }
 ]
 
-albums_data.each do |album_data|
-  Album.find_or_create_by!(name: album_data[:name]) do |album|
-    album.description = album_data[:description]
-    puts "Created album: #{album_data[:name]}"
-  end
+achieved_milestones_data.each do |data|
+  milestone = Milestone.find_by(milestone_type: data[:type])
+  next unless milestone
+
+  milestone.update!(achieved_at: data[:months_ago].months.ago)
+  puts "  ✓ Marked: #{milestone.name}"
 end
 
-# Create sample memories (without images - you can add images later via admin panel)
-# Valid age_groups: '0-3m', '3-6m', '6-12m', '1-2y', '2-3y'
-memories_data = [
+# Create albums
+puts "\n📚 Creating albums..."
+albums_data = [
   {
-    title: 'Nụ cười đầu tiên',
-    caption: 'Bé cười lần đầu tiên khi nhìn thấy bố mẹ. Khoảnh khắc đặc biệt quá!',
-    age_group: '0-3m',
-    memory_type: 'photo',
-    taken_at: 2.months.ago
+    name: 'Những ngày đầu đời',
+    description: 'Khoảnh khắc chào đời và những tuần đầu tiên của Gia Minh. Từng giây phút đều quý giá và đáng nhớ.',
+    cover_description: 'Nacon khi mới sinh'
   },
   {
-    title: 'Lật người',
-    caption: 'Bé đã tự lật người được rồi! Một cột mốc lớn trong sự phát triển.',
-    age_group: '3-6m',
-    memory_type: 'photo',
-    taken_at: 4.months.ago
+    name: 'Sinh nhật 1 tuổi',
+    description: 'Tiệc sinh nhật đầu tiên của Nacon - một cột mốc đặc biệt với gia đình và bạn bè.',
+    cover_description: 'Tiệc sinh nhật rực rỡ'
   },
   {
-    title: 'Bữa ăn dặm đầu tiên',
-    caption: 'Lần đầu tiên bé ăn dặm. Rất thích rau và trái cây!',
-    age_group: '6-12m',
-    memory_type: 'photo',
-    taken_at: 6.months.ago
+    name: 'Ngày lễ đặc biệt',
+    description: 'Những dịp lễ Tết, Noel đầu tiên cùng con yêu. Mỗi ngày lễ đều là kỷ niệm.',
+    cover_description: 'Các ngày lễ đầu đời'
   },
   {
-    title: 'Tập bò',
-    caption: 'Bé đang tập những bước đi đầu tiên. Mỗi ngày một tiến bộ!',
-    age_group: '6-12m',
-    memory_type: 'photo',
-    taken_at: 11.months.ago
+    name: 'Nacon học bơi',
+    description: 'Những buổi học bơi đầu tiên. Con rất thích chơi với nước!',
+    cover_description: 'Bơi lội cùng con'
   },
   {
-    title: 'Sinh nhật 1 tuổi',
-    caption: 'Bữa tiệc sinh nhật đầu tiên. Bé rất vui khi thổi nến!',
-    age_group: '1-2y',
-    memory_type: 'photo',
-    taken_at: 1.year.ago
+    name: 'Khoảnh khắc gia đình',
+    description: 'Những khoảnh khắc ấm áp bên gia đình - ông bà, bố mẹ cùng Nacon.',
+    cover_description: 'Gia đình hạnh phúc'
   },
   {
-    title: 'Nói tiếng đầu tiên',
-    caption: 'Bé nói "mama" và "baba" rất rõ ràng rồi!',
-    age_group: '1-2y',
-    memory_type: 'photo',
-    taken_at: 14.months.ago
-  },
-  {
-    title: 'Đi công viên',
-    caption: 'Buổi chiều đi chơi công viên gần nhà. Bé thích xích đu lắm!',
-    age_group: '1-2y',
-    memory_type: 'photo',
-    taken_at: 16.months.ago
-  },
-  {
-    title: 'Học vẽ',
-    caption: 'Bé bắt đầu thích vẽ. Toàn vẽ những đường ngoằng nghèo đáng yêu.',
-    age_group: '2-3y',
-    memory_type: 'photo',
-    taken_at: 2.years.ago
+    name: 'Mỗi ngày lớn khôn',
+    description: 'Những khoảnh khắc bình thường nhưng đầy ý nghĩa. Mỗi ngày con đều lớn lên một chút.',
+    cover_description: 'Hành trình lớn khôn'
   }
 ]
 
-memories_data.each do |memory_data|
-  Memory.find_or_create_by!(title: memory_data[:title]) do |memory|
-    memory.caption = memory_data[:caption]
-    memory.age_group = memory_data[:age_group]
-    memory.memory_type = memory_data[:memory_type]
-    memory.taken_at = memory_data[:taken_at]
-    puts "Created memory: #{memory_data[:title]}"
+albums = {}
+albums_data.each do |album_data|
+  album = Album.create!(
+    name: album_data[:name],
+    description: album_data[:description]
+  )
+  albums[album_data[:name]] = album
+  puts "  ✓ #{album_data[:name]}"
+end
+
+# Helper method to attach image
+def attach_image_to_memory(memory, image_filename)
+  image_path = Rails.root.join('app', 'assets', 'images', 'nachinacon', image_filename)
+  if File.exist?(image_path)
+    memory.media.attach(
+      io: File.open(image_path),
+      filename: image_filename,
+      content_type: 'image/jpeg'
+    )
+    true
+  else
+    puts "    ⚠️  Image not found: #{image_filename}"
+    false
   end
 end
 
-# Mark some milestones as achieved
-# Valid milestone types: first_smile, first_laugh, first_tooth, first_word, first_crawl, first_step, first_food, first_birthday, second_birthday, third_birthday
-achieved_milestones = ['first_smile', 'first_laugh', 'first_tooth', 'first_crawl', 'first_step', 'first_food', 'first_birthday']
-achieved_milestones.each_with_index do |type, index|
-  milestone = Milestone.find_by(milestone_type: type)
-  next unless milestone
+# Create memories with real photos
+puts "\n💝 Creating memories with photos..."
 
-  milestone.update!(achieved_at: (12 - index).months.ago)
-  puts "Marked as achieved: #{milestone.name}"
-end
+memories_data = [
+  # Những ngày đầu đời (0-3 tháng)
+  {
+    title: 'Chào đời',
+    caption: 'Ngày con chào đời, cuộc sống của bố mẹ thay đổi hoàn toàn. Một thiên thần nhỏ đã đến với gia đình. Gia Minh, con là niềm hạnh phúc lớn nhất của bố mẹ.',
+    age_group: '0-3m',
+    memory_type: 'photo',
+    taken_at: 12.months.ago,
+    image: 'z7358504728666_f87632e9196275aa437c0639d151e304.jpg',
+    albums: ['Những ngày đầu đời']
+  },
+  {
+    title: 'Nụ cười đầu tiên',
+    caption: 'Lần đầu tiên Nacon cười tươi như thế này, bố mẹ vui lắm! Nụ cười của con là điều tuyệt vời nhất trên đời. Cười lên đi con, để bố mẹ thấy con hạnh phúc.',
+    age_group: '0-3m',
+    memory_type: 'photo',
+    taken_at: 10.months.ago,
+    image: 'z7358505070138_cdc7805f8de23d67402e4ad507b449d0.jpg',
+    albums: ['Những ngày đầu đời', 'Mỗi ngày lớn khôn']
+  },
+  {
+    title: 'Tết đầu tiên',
+    caption: 'Tết đầu tiên của Nacon! Con còn nhỏ xíu nhưng đã được mặc đồ đẹp đi chúc Tết ông bà. Năm nay nhà mình có thêm thành viên mới, Tết vui hơn nhiều.',
+    age_group: '0-3m',
+    memory_type: 'photo',
+    taken_at: 11.months.ago,
+    image: 'z7358505072874_31bbd992f898535d26f7e930c1dbb8de.jpg',
+    albums: ['Ngày lễ đặc biệt', 'Những ngày đầu đời']
+  },
+  {
+    title: 'Ảnh gia đình ấm áp',
+    caption: 'Cả gia đình cùng chụp ảnh với Nacon. Ông bà, bố mẹ đều rất yêu thương con. Con là niềm vui, niềm tự hào của cả nhà.',
+    age_group: '0-3m',
+    memory_type: 'photo',
+    taken_at: 10.months.ago,
+    image: 'z7358513032589_f2afd6aa94473227b60ff7284dddb601.jpg',
+    albums: ['Khoảnh khắc gia đình', 'Những ngày đầu đời']
+  },
 
-# Associate some memories with albums
-first_album = Album.find_by(name: 'Tháng đầu đời')
-birthday_album = Album.find_by(name: 'Sinh nhật 1 tuổi')
-daily_album = Album.find_by(name: 'Ngày thường')
-travel_album = Album.find_by(name: 'Đi chơi')
+  # 6-12 tháng
+  {
+    title: 'Học bơi lần đầu',
+    caption: 'Lần đầu tiên Nacon xuống bể bơi với phao hình ong vàng. Tuy hơi ngại ngại nhưng con rất dũng cảm! Bơi giỏi lắm con ơi.',
+    age_group: '6-12m',
+    memory_type: 'photo',
+    taken_at: 8.months.ago,
+    image: 'z7358504725146_6c36054999325938964675a5dc01a9f8.jpg',
+    albums: ['Nacon học bơi', 'Mỗi ngày lớn khôn']
+  },
+  {
+    title: 'Chơi camping',
+    caption: 'Concept chụp ảnh camping nhà của Nacon. Con ngồi ghế gỗ đội mũ rộng vành trông như một nhà thám hiểm nhỏ. Cute quá đi!',
+    age_group: '6-12m',
+    memory_type: 'photo',
+    taken_at: 7.months.ago,
+    image: 'z7358505065706_f2d8773a7188812ea5e31989b042fabc.jpg',
+    albums: ['Mỗi ngày lớn khôn']
+  },
+  {
+    title: 'Nacon tươi cười',
+    caption: 'Nụ cười tươi rói của Nacon khi cầm thẻ chơi. Con cười là bố mẹ vui rồi! Những khoảnh khắc bình dị nhưng đầy ý nghĩa như thế này.',
+    age_group: '6-12m',
+    memory_type: 'photo',
+    taken_at: 8.months.ago,
+    image: 'z7358505059924_12d63f42daabb58995a7acded47025e8.jpg',
+    albums: ['Mỗi ngày lớn khôn']
+  },
 
-if first_album
-  Memory.where(age_group: %w[0-3m 3-6m]).each do |memory|
-    AlbumMemory.find_or_create_by!(album: first_album, memory: memory)
-    puts "Added #{memory.title} to #{first_album.name}"
+  # 1-2 tuổi
+  {
+    title: 'Sinh nhật 1 tuổi',
+    caption: 'Sinh nhật 1 tuổi của Gia Minh - Nacon! Tiệc sinh nhật với theme màu cam vàng tươi sáng, có backdrop tên con, bóng bay và bánh kem. Cả nhà rất vui, con đã lớn thêm 1 tuổi rồi!',
+    age_group: '1-2y',
+    memory_type: 'photo',
+    taken_at: 2.months.ago,
+    image: 'z7358504731981_f01495c3aa99aaf64cda7ffe5e442a89.jpg',
+    albums: ['Sinh nhật 1 tuổi', 'Mỗi ngày lớn khôn']
+  },
+  {
+    title: 'Noel đầu tiên',
+    caption: 'Noel đầu tiên của Nacon! Con mặc đồ ông già Noel đỏ chói, ngồi trong lều có chữ "사랑해" (Yêu con). Bên cạnh có người tuyết và quà Noel. Noel vui vẻ nha con!',
+    age_group: '1-2y',
+    memory_type: 'photo',
+    taken_at: 1.month.ago,
+    image: 'z7358504733153_bd48f2f02de3036f26aa50f1f4c8bf51.jpg',
+    albums: ['Ngày lễ đặc biệt', 'Mỗi ngày lớn khôn']
+  },
+  {
+    title: 'Chơi với gấu bông',
+    caption: 'Nacon chơi với gấu bông trên giường, cười toe toét. Con thích chơi với đồ chơi mềm mại, đặc biệt là những con thú nhồi. Khoảnh khắc bình yên của con.',
+    age_group: '1-2y',
+    memory_type: 'photo',
+    taken_at: 3.months.ago,
+    image: 'z7358504721314_bd19081c4f1a8f94d811cf61ae95df48.jpg',
+    albums: ['Mỗi ngày lớn khôn']
+  }
+]
+
+memories_data.each_with_index do |data, index|
+  memory = Memory.create!(
+    title: data[:title],
+    caption: data[:caption],
+    age_group: data[:age_group],
+    memory_type: data[:memory_type],
+    taken_at: data[:taken_at]
+  )
+
+  # Attach image
+  if data[:image] && attach_image_to_memory(memory, data[:image])
+    puts "  ✓ [#{index + 1}/#{memories_data.length}] #{data[:title]} (with photo: #{data[:image]})"
+  else
+    puts "  ✓ [#{index + 1}/#{memories_data.length}] #{data[:title]} (no photo attached)"
+  end
+
+  # Add to albums
+  data[:albums]&.each do |album_name|
+    album = albums[album_name]
+    if album
+      AlbumMemory.create!(album: album, memory: memory)
+    end
   end
 end
 
-if birthday_album
-  Memory.find_by(title: 'Sinh nhật 1 tuổi')&.tap do |memory|
-    AlbumMemory.find_or_create_by!(album: birthday_album, memory: memory)
-    puts "Added #{memory.title} to #{birthday_album.name}"
-  end
-end
-
-if daily_album
-  Memory.where(title: ['Học vẽ', 'Nói tiếng đầu tiên']).each do |memory|
-    AlbumMemory.find_or_create_by!(album: daily_album, memory: memory)
-    puts "Added #{memory.title} to #{daily_album.name}"
-  end
-end
-
-if travel_album
-  Memory.find_by(title: 'Đi công viên')&.tap do |memory|
-    AlbumMemory.find_or_create_by!(album: travel_album, memory: memory)
-    puts "Added #{memory.title} to #{travel_album.name}"
-  end
-end
-
-puts 'Seeds completed!'
+puts "\n✅ Seeds completed successfully!"
+puts "\n📊 Summary:"
+puts "  - Albums: #{Album.count}"
+puts "  - Memories: #{Memory.count}"
+puts "  - Milestones: #{Milestone.count}"
+puts "  - Achieved milestones: #{Milestone.where.not(achieved_at: nil).count}"
+puts "\n💙 Nacon's memories are ready to be viewed!\n\n"
