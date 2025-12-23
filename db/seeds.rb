@@ -1,16 +1,19 @@
 # frozen_string_literal: true
 
+# Delete old admin if exists
+old_admin = AdminUser.find_by(email: 'admin@nachinacon.com')
+if old_admin
+  old_admin.destroy
+  puts "Old admin removed: admin@nachinacon.com"
+end
+
 # Create default admin user
 admin = AdminUser.find_or_initialize_by(email: 'admin@nachinacon.info')
 admin.name = 'Admin'
 admin.password = 'ngocanh0712'
+admin.password_confirmation = 'ngocanh0712'
 admin.save!
-puts "Admin user: admin@nachinacon.info"
-
-# Delete old admin if exists
-old_admin = AdminUser.find_by(email: 'admin@nachinacon.com')
-old_admin&.destroy
-puts "Old admin removed" if old_admin
+puts "Admin user created/updated: admin@nachinacon.info"
 
 # Create predefined milestones
 Milestone::MILESTONE_TYPES.each do |type, data|
