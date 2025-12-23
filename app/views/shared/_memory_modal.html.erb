@@ -1,0 +1,174 @@
+<!-- Memory Detail Modal -->
+<div id="memoryModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+  <!-- Backdrop -->
+  <div class="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300" onclick="closeMemoryModal()"></div>
+
+  <!-- Modal Container -->
+  <div class="flex min-h-screen items-center justify-center p-4">
+    <div class="relative w-full max-w-4xl transform transition-all duration-300 scale-95 opacity-0" id="modalContent">
+      <!-- Close Button -->
+      <button onclick="closeMemoryModal()" class="absolute -top-4 -right-4 z-10 w-12 h-12 rounded-full flex items-center justify-center shadow-2xl transition-all duration-300 hover:scale-110 hover:rotate-90" style="background: linear-gradient(135deg, #F2C2C2, #E8B0B0);">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6 text-white">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+
+      <!-- Modal Content -->
+      <div class="glass-card rounded-3xl overflow-hidden shadow-2xl">
+        <div class="grid md:grid-cols-2 gap-0">
+          <!-- Image Section -->
+          <div class="relative bg-gray-100 md:min-h-[600px]">
+            <div class="absolute inset-0 flex items-center justify-center p-8">
+              <div class="relative w-full h-full">
+                <img id="modalImage" src="" alt="" class="w-full h-full object-contain rounded-2xl shadow-xl" />
+                <!-- Image placeholder -->
+                <div id="modalImagePlaceholder" class="hidden absolute inset-0 flex items-center justify-center" style="background: linear-gradient(135deg, #FCE7F3, #DBEAFE);">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="w-24 h-24 text-gray-300">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Content Section -->
+          <div class="p-8 md:p-10 flex flex-col bg-white/95 backdrop-blur-md">
+            <!-- Age Badge -->
+            <div class="mb-6">
+              <div id="modalAgeBadge" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-heading font-bold shadow-lg"></div>
+            </div>
+
+            <!-- Title -->
+            <h2 id="modalTitle" class="font-accent italic text-3xl md:text-4xl mb-4 leading-tight" style="color: #2D3748;"></h2>
+
+            <!-- Date -->
+            <div class="flex items-center gap-3 mb-6">
+              <div class="w-10 h-10 rounded-xl flex items-center justify-center shadow-md" style="background: linear-gradient(135deg, #C1DDD8, #A8CEC8);">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-white">
+                  <path fill-rule="evenodd" d="M6.75 2.25A.75.75 0 017.5 3v1.5h9V3A.75.75 0 0118 3v1.5h.75a3 3 0 013 3v11.25a3 3 0 01-3 3H5.25a3 3 0 01-3-3V7.5a3 3 0 013-3H6V3a.75.75 0 01.75-.75zm13.5 9a1.5 1.5 0 00-1.5-1.5H5.25a1.5 1.5 0 00-1.5 1.5v7.5a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5v-7.5z" clip-rule="evenodd" />
+                </svg>
+              </div>
+              <div>
+                <p class="font-body text-xs text-gray-500">Ngày ghi nhận</p>
+                <p id="modalDate" class="font-heading font-bold text-base text-gray-700"></p>
+              </div>
+            </div>
+
+            <!-- Decorative divider -->
+            <div class="flex items-center gap-3 my-6">
+              <div class="flex-1 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent"></div>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5" style="color: #F2C2C2;">
+                <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
+              </svg>
+              <div class="flex-1 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent"></div>
+            </div>
+
+            <!-- Caption -->
+            <div class="flex-1 overflow-y-auto max-h-[300px] pr-2 custom-scrollbar">
+              <p id="modalCaption" class="font-body text-base text-gray-600 leading-relaxed whitespace-pre-line"></p>
+            </div>
+
+            <!-- Decorative footer -->
+            <div class="mt-8 pt-6 border-t border-gray-100">
+              <div class="flex items-center justify-center gap-2">
+                <div class="w-2 h-2 rounded-full" style="background: #F2C2C2;"></div>
+                <div class="w-2 h-2 rounded-full" style="background: #C1DDD8;"></div>
+                <div class="w-2 h-2 rounded-full" style="background: #C0DFD0;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function openMemoryModal(data) {
+    const modal = document.getElementById('memoryModal');
+    const modalContent = document.getElementById('modalContent');
+    const modalImage = document.getElementById('modalImage');
+    const modalImagePlaceholder = document.getElementById('modalImagePlaceholder');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalDate = document.getElementById('modalDate');
+    const modalCaption = document.getElementById('modalCaption');
+    const modalAgeBadge = document.getElementById('modalAgeBadge');
+
+    // Set content
+    modalTitle.textContent = data.title || '';
+    modalDate.textContent = data.date || '';
+    modalCaption.textContent = data.caption || '';
+
+    // Set age badge
+    const ageBadgeColor = data.ageColor || '#DBEAFE;#3B82F6';
+    const [bgColor, textColor] = ageBadgeColor.split(';');
+    modalAgeBadge.style.background = bgColor + 'ee';
+    modalAgeBadge.style.color = textColor;
+    modalAgeBadge.innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+        <path d="M12.75 12.75a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM7.5 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM8.25 17.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM9.75 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM10.5 17.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM12 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM12.75 17.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM14.25 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM15 17.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM16.5 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM15 12.75a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM16.5 13.5a.75.75 0 100-1.5.75.75 0 000 1.5z" />
+        <path fill-rule="evenodd" d="M6.75 2.25A.75.75 0 017.5 3v1.5h9V3A.75.75 0 0118 3v1.5h.75a3 3 0 013 3v11.25a3 3 0 01-3 3H5.25a3 3 0 01-3-3V7.5a3 3 0 013-3H6V3a.75.75 0 01.75-.75zm13.5 9a1.5 1.5 0 00-1.5-1.5H5.25a1.5 1.5 0 00-1.5 1.5v7.5a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5v-7.5z" clip-rule="evenodd" />
+      </svg>
+      <span>${data.ageGroup || ''}</span>
+    `;
+
+    // Set image
+    if (data.imageUrl) {
+      modalImage.src = data.imageUrl;
+      modalImage.classList.remove('hidden');
+      modalImagePlaceholder.classList.add('hidden');
+    } else {
+      modalImage.classList.add('hidden');
+      modalImagePlaceholder.classList.remove('hidden');
+    }
+
+    // Show modal with animation
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+
+    setTimeout(() => {
+      modalContent.classList.remove('scale-95', 'opacity-0');
+      modalContent.classList.add('scale-100', 'opacity-100');
+    }, 10);
+  }
+
+  function closeMemoryModal() {
+    const modal = document.getElementById('memoryModal');
+    const modalContent = document.getElementById('modalContent');
+
+    modalContent.classList.remove('scale-100', 'opacity-100');
+    modalContent.classList.add('scale-95', 'opacity-0');
+
+    setTimeout(() => {
+      modal.classList.add('hidden');
+      document.body.style.overflow = 'auto';
+    }, 300);
+  }
+
+  // Close modal on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeMemoryModal();
+    }
+  });
+</script>
+
+<style>
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #F2C2C2, #C1DDD8);
+    border-radius: 10px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #E8B0B0, #A8CEC8);
+  }
+</style>

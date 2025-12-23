@@ -122,15 +122,12 @@ albums_data.each do |album_data|
   puts "  ✓ #{album_data[:name]}"
 end
 
-# Helper method to attach image
-def attach_image_to_memory(memory, image_filename)
-  image_path = Rails.root.join('app', 'assets', 'images', 'nachinacon', image_filename)
-  if File.exist?(image_path)
-    memory.media.attach(
-      io: File.open(image_path),
-      filename: image_filename,
-      content_type: 'image/jpeg'
-    )
+# Helper method to set image path (using public folder for production persistence)
+def set_image_path_for_memory(memory, image_filename)
+  # Check if image exists in public folder
+  public_path = Rails.root.join('public', 'images', 'nachinacon', image_filename)
+  if File.exist?(public_path)
+    memory.image_path = "/images/nachinacon/#{image_filename}"
     true
   else
     puts "    ⚠️  Image not found: #{image_filename}"
@@ -248,11 +245,12 @@ memories_data.each_with_index do |data, index|
     taken_at: data[:taken_at]
   )
 
-  # Attach image
-  if data[:image] && attach_image_to_memory(memory, data[:image])
+  # Set image path
+  if data[:image] && set_image_path_for_memory(memory, data[:image])
+    memory.save!
     puts "  ✓ [#{index + 1}/#{memories_data.length}] #{data[:title]} (with photo: #{data[:image]})"
   else
-    puts "  ✓ [#{index + 1}/#{memories_data.length}] #{data[:title]} (no photo attached)"
+    puts "  ✓ [#{index + 1}/#{memories_data.length}] #{data[:title]} (no photo)"
   end
 
   # Add to albums
