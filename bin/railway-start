@@ -1,0 +1,13 @@
+#!/bin/bash
+set -ex
+
+echo "==== RAILWAY START SCRIPT ===="
+echo "PORT: ${PORT:-3000}"
+echo "DATABASE_URL present: ${DATABASE_URL:+yes}"
+
+echo "Running db:prepare..."
+./bin/rails db:prepare
+
+echo "db:prepare done! Starting server..."
+RAILS_PORT=${PORT:-3000}
+exec ./bin/rails server -b 0.0.0.0 -p "${RAILS_PORT}"
