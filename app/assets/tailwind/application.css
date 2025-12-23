@@ -3,6 +3,11 @@
 
 @import "tailwindcss";
 
+/* Content sources for Tailwind to scan */
+@source "../../../app/views/**/*.html.erb";
+@source "../../../app/helpers/**/*.rb";
+@source "../../../app/javascript/**/*.js";
+
 /* Custom Theme Variables */
 @theme {
   /* Colors */

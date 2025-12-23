@@ -1,37 +1,91 @@
+<style>
+  .form-input-accent:focus { border-color: #C0DFD0 !important; box-shadow: 0 0 0 4px rgba(192,223,208,0.2) !important; outline: none; }
+  .form-input-accent:hover { border-color: #C0DFD0; }
+  .upload-zone-accent:hover { border-color: #C0DFD0 !important; background-color: rgba(192,223,208,0.05) !important; }
+</style>
+
 <%= form_with model: [:admin, @album], class: "space-y-6" do |f| %>
+  <!-- Error messages -->
   <% if @album.errors.any? %>
-    <div class="p-4 rounded-lg" style="background-color: #F8D8D8;">
-      <h3 class="font-heading font-semibold text-gray-800 mb-2">Có lỗi xảy ra:</h3>
-      <ul class="list-disc list-inside text-sm text-gray-700">
-        <% @album.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
+    <div class="p-4 rounded-xl border-2" style="background-color: #FEF2F2; border-color: #FECACA;">
+      <div class="flex items-start gap-3">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+        </svg>
+        <div>
+          <p class="font-heading font-semibold text-red-700">Có <%= @album.errors.count %> lỗi xảy ra:</p>
+          <ul class="list-disc list-inside text-sm text-red-600 mt-2 space-y-1">
+            <% @album.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
     </div>
   <% end %>
 
+  <!-- Name -->
   <div>
-    <%= f.label :name, "Tên album", class: "block font-heading font-semibold text-gray-700 mb-2" %>
-    <%= f.text_field :name, class: "w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#C1DDD8]", placeholder: "Ví dụ: Sinh nhật 1 tuổi" %>
+    <label for="album_name" class="flex items-center gap-1 text-sm font-semibold text-gray-700 mb-2 font-heading">
+      Tên album
+      <span class="text-red-500">*</span>
+    </label>
+    <%= f.text_field :name,
+      class: "form-input-accent w-full px-4 py-3 rounded-xl border-2 border-gray-200 transition-all duration-200 font-body placeholder-gray-400",
+      placeholder: "Ví dụ: Sinh nhật 1 tuổi" %>
   </div>
 
+  <!-- Description -->
   <div>
-    <%= f.label :description, "Mô tả", class: "block font-heading font-semibold text-gray-700 mb-2" %>
-    <%= f.text_area :description, rows: 3, class: "w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#C1DDD8]", placeholder: "Mô tả ngắn về album..." %>
+    <label for="album_description" class="block text-sm font-semibold text-gray-700 mb-2 font-heading">Mô tả</label>
+    <%= f.text_area :description,
+      rows: 3,
+      class: "form-input-accent w-full px-4 py-3 rounded-xl border-2 border-gray-200 transition-all duration-200 font-body placeholder-gray-400 resize-none",
+      placeholder: "Mô tả ngắn về album..." %>
   </div>
 
+  <!-- Cover Photo -->
   <div>
-    <%= f.label :cover_photo, "Ảnh bìa", class: "block font-heading font-semibold text-gray-700 mb-2" %>
+    <label class="block text-sm font-semibold text-gray-700 mb-2 font-heading">Ảnh bìa</label>
+
     <% if @album.cover_photo.attached? %>
-      <div class="mb-3">
-        <%= image_tag @album.cover_photo.variant(resize_to_fill: [200, 150]), class: "rounded-lg" %>
+      <div class="mb-4 p-4 rounded-xl bg-gray-50 border-2 border-gray-200 flex items-center gap-4">
+        <%= image_tag @album.cover_photo.variant(resize_to_fill: [80, 80]), class: "w-20 h-20 rounded-lg object-cover" %>
+        <div class="flex-1 min-w-0">
+          <p class="font-heading font-medium text-gray-800 truncate"><%= @album.cover_photo.filename %></p>
+          <p class="text-sm text-gray-500 font-body"><%= number_to_human_size(@album.cover_photo.byte_size) %></p>
+        </div>
+        <div class="px-3 py-1 rounded-full text-xs font-body" style="background-color: #C0DFD0; color: #333;">
+          Đã tải lên
+        </div>
       </div>
     <% end %>
-    <%= f.file_field :cover_photo, accept: "image/*", class: "w-full px-4 py-3 rounded-lg border border-gray-200 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:font-heading file:font-semibold file:bg-[#E0EEEB] file:text-gray-700 hover:file:bg-[#C1DDD8]" %>
+
+    <div class="relative">
+      <%= f.file_field :cover_photo,
+        accept: "image/*",
+        class: "sr-only",
+        id: "album_cover_photo_input" %>
+
+      <label for="album_cover_photo_input"
+        class="upload-zone-accent flex flex-col items-center justify-center p-8 rounded-xl border-2 border-dashed border-gray-300 bg-gray-50 cursor-pointer transition-all duration-200">
+        <div class="w-14 h-14 rounded-full flex items-center justify-center mb-3" style="background-color: rgba(192,223,208,0.3);">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7" style="color: #A8D1BD;">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+          </svg>
+        </div>
+        <p class="font-heading font-semibold text-gray-700">Kéo thả hoặc nhấp để chọn ảnh bìa</p>
+        <p class="text-sm text-gray-500 mt-1 font-body">PNG, JPG • Tối đa 10MB</p>
+      </label>
+    </div>
   </div>
 
+  <!-- Buttons -->
   <div class="flex items-center gap-4 pt-4">
-    <%= f.submit @album.persisted? ? "Cập nhật" : "Tạo album", class: "px-6 py-3 rounded-lg font-heading font-semibold btn-hover cursor-pointer", style: "background-color: #C1DDD8;" %>
-    <%= link_to "Hủy", admin_albums_path, class: "px-6 py-3 rounded-lg font-heading font-semibold text-gray-600 hover:text-gray-800" %>
+    <%= f.submit @album.persisted? ? "Cập nhật" : "Tạo album",
+      class: "px-6 py-3 rounded-xl font-heading font-semibold text-gray-800 cursor-pointer shadow-md hover:shadow-lg transition-all duration-200",
+      style: "background: linear-gradient(135deg, #C0DFD0 0%, #A8D1BD 100%);" %>
+    <%= link_to "Hủy", admin_albums_path,
+      class: "px-6 py-3 rounded-xl font-heading font-semibold text-gray-600 hover:text-gray-800 hover:bg-gray-100 transition-colors" %>
   </div>
 <% end %>
