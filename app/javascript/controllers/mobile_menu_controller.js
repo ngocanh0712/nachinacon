@@ -5,6 +5,9 @@ export default class extends Controller {
   static targets = ["menu", "iconOpen", "iconClose"]
 
   connect() {
+    // Ensure menu is closed on initial load
+    this.close()
+
     // Close menu on window resize to desktop
     this.resizeHandler = this.handleResize.bind(this)
     window.addEventListener("resize", this.resizeHandler)

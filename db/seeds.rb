@@ -19,17 +19,17 @@ Milestone::MILESTONE_TYPES.each do |type, data|
   Milestone.find_or_create_by!(milestone_type: type) do |milestone|
     milestone.name = data[:name]
     milestone.icon = data[:icon]
-    milestone.description = "Moc quan trong: #{data[:name]}"
+    milestone.description = "Mốc quan trọng: #{data[:name]}"
     puts "Created milestone: #{data[:name]}"
   end
 end
 
 # Create sample albums
 albums_data = [
-  { name: 'Thang dau doi', description: 'Nhung khoanh khac dau tien cua con' },
-  { name: 'Sinh nhat 1 tuoi', description: 'Tiec sinh nhat dau tien cua be' },
-  { name: 'Ngay thuong', description: 'Nhung khoanh khac binh di hang ngay' },
-  { name: 'Di choi', description: 'Nhung chuyen du lich va di choi cung gia dinh' }
+  { name: 'Tháng đầu đời', description: 'Những khoảnh khắc đầu tiên của con' },
+  { name: 'Sinh nhật 1 tuổi', description: 'Tiệc sinh nhật đầu tiên của bé' },
+  { name: 'Ngày thường', description: 'Những khoảnh khắc bình dị hàng ngày' },
+  { name: 'Đi chơi', description: 'Những chuyến du lịch và đi chơi cùng gia đình' }
 ]
 
 albums_data.each do |album_data|
@@ -43,57 +43,57 @@ end
 # Valid age_groups: '0-3m', '3-6m', '6-12m', '1-2y', '2-3y'
 memories_data = [
   {
-    title: 'Nu cuoi dau tien',
-    caption: 'Be cuoi lan dau tien khi nhin thay bo me. Khoanh khac dac biet qua!',
+    title: 'Nụ cười đầu tiên',
+    caption: 'Bé cười lần đầu tiên khi nhìn thấy bố mẹ. Khoảnh khắc đặc biệt quá!',
     age_group: '0-3m',
     memory_type: 'photo',
     taken_at: 2.months.ago
   },
   {
-    title: 'Lat nguoi',
-    caption: 'Be da tu lat nguoi duoc roi! Mot cot moc lon trong su phat trien.',
+    title: 'Lật người',
+    caption: 'Bé đã tự lật người được rồi! Một cột mốc lớn trong sự phát triển.',
     age_group: '3-6m',
     memory_type: 'photo',
     taken_at: 4.months.ago
   },
   {
-    title: 'Bua an dam dau tien',
-    caption: 'Lan dau tien be an dam. Rat thich rau va trai cay!',
+    title: 'Bữa ăn dặm đầu tiên',
+    caption: 'Lần đầu tiên bé ăn dặm. Rất thích rau và trái cây!',
     age_group: '6-12m',
     memory_type: 'photo',
     taken_at: 6.months.ago
   },
   {
-    title: 'Tap bo',
-    caption: 'Be dang tap nhung buoc di dau tien. Moi ngay mot tien bo!',
+    title: 'Tập bò',
+    caption: 'Bé đang tập những bước đi đầu tiên. Mỗi ngày một tiến bộ!',
     age_group: '6-12m',
     memory_type: 'photo',
     taken_at: 11.months.ago
   },
   {
-    title: 'Sinh nhat 1 tuoi',
-    caption: 'Bua tiec sinh nhat dau tien. Be rat vui khi thoi nen!',
+    title: 'Sinh nhật 1 tuổi',
+    caption: 'Bữa tiệc sinh nhật đầu tiên. Bé rất vui khi thổi nến!',
     age_group: '1-2y',
     memory_type: 'photo',
     taken_at: 1.year.ago
   },
   {
-    title: 'Noi tieng dau tien',
-    caption: 'Be noi "mama" va "baba" rat ro rang roi!',
+    title: 'Nói tiếng đầu tiên',
+    caption: 'Bé nói "mama" và "baba" rất rõ ràng rồi!',
     age_group: '1-2y',
     memory_type: 'photo',
     taken_at: 14.months.ago
   },
   {
-    title: 'Di cong vien',
-    caption: 'Buoi chieu di choi cong vien gan nha. Be thich xich du lam!',
+    title: 'Đi công viên',
+    caption: 'Buổi chiều đi chơi công viên gần nhà. Bé thích xích đu lắm!',
     age_group: '1-2y',
     memory_type: 'photo',
     taken_at: 16.months.ago
   },
   {
-    title: 'Hoc ve',
-    caption: 'Be bat dau thich ve. Toan ve nhung duong ngoang nghoeo dang yeu.',
+    title: 'Học vẽ',
+    caption: 'Bé bắt đầu thích vẽ. Toàn vẽ những đường ngoằng nghèo đáng yêu.',
     age_group: '2-3y',
     memory_type: 'photo',
     taken_at: 2.years.ago
@@ -122,10 +122,10 @@ achieved_milestones.each_with_index do |type, index|
 end
 
 # Associate some memories with albums
-first_album = Album.find_by(name: 'Thang dau doi')
-birthday_album = Album.find_by(name: 'Sinh nhat 1 tuoi')
-daily_album = Album.find_by(name: 'Ngay thuong')
-travel_album = Album.find_by(name: 'Di choi')
+first_album = Album.find_by(name: 'Tháng đầu đời')
+birthday_album = Album.find_by(name: 'Sinh nhật 1 tuổi')
+daily_album = Album.find_by(name: 'Ngày thường')
+travel_album = Album.find_by(name: 'Đi chơi')
 
 if first_album
   Memory.where(age_group: %w[0-3m 3-6m]).each do |memory|
@@ -135,21 +135,21 @@ if first_album
 end
 
 if birthday_album
-  Memory.find_by(title: 'Sinh nhat 1 tuoi')&.tap do |memory|
+  Memory.find_by(title: 'Sinh nhật 1 tuổi')&.tap do |memory|
     AlbumMemory.find_or_create_by!(album: birthday_album, memory: memory)
     puts "Added #{memory.title} to #{birthday_album.name}"
   end
 end
 
 if daily_album
-  Memory.where(title: ['Hoc ve', 'Noi tieng dau tien']).each do |memory|
+  Memory.where(title: ['Học vẽ', 'Nói tiếng đầu tiên']).each do |memory|
     AlbumMemory.find_or_create_by!(album: daily_album, memory: memory)
     puts "Added #{memory.title} to #{daily_album.name}"
   end
 end
 
 if travel_album
-  Memory.find_by(title: 'Di cong vien')&.tap do |memory|
+  Memory.find_by(title: 'Đi công viên')&.tap do |memory|
     AlbumMemory.find_or_create_by!(album: travel_album, memory: memory)
     puts "Added #{memory.title} to #{travel_album.name}"
   end

@@ -827,11 +827,15 @@
   .floating-delay-2,
   .floating-delay-3,
   .pulse-glow,
-  .rotate-slow,
   .sparkle,
   .gradient-animated,
   .shimmer-text {
     animation: none !important;
+  }
+
+  /* Keep rotate-slow animation even with reduced motion for visual consistency */
+  .rotate-slow {
+    animation: rotateSlow 40s linear infinite; /* Slower for reduced motion */
   }
 
   .card-3d:hover,
