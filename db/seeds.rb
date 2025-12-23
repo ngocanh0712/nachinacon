@@ -34,6 +34,8 @@ end
 
 puts "\n✅ Admin user setup completed!"
 
+exit # Stop here - memories already created, prevent duplicates
+
 # Now create memories with real photos
 puts "\n🌱 Starting to seed memories for Gia Minh (Nacon)...\n\n"
 

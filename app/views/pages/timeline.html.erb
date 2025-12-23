@@ -101,6 +101,7 @@
           <% colors = card_colors[index % card_colors.length] %>
           <% age_label = Memory::AGE_GROUPS.find { |_, v| v == memory.age_group }&.first || memory.age_group %>
           <div class="memory-card group bg-white rounded-2xl overflow-hidden shadow-xl cursor-pointer transition-all duration-300"
+               data-turbo="false"
                onclick="openMemoryModal({
                  title: <%= raw memory.title.to_json %>,
                  date: '<%= memory.taken_at.strftime("%d/%m/%Y") %>',
