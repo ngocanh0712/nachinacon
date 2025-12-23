@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+# Only create admin user - DO NOT create sample data on production
+# Sample data (albums, memories, milestones) should be created via admin panel
+
 # Delete old admin if exists
 old_admin = AdminUser.find_by(email: 'admin@nachinacon.com')
 if old_admin
@@ -28,6 +31,10 @@ else
   )
   puts "✓ Admin user recreated: admin@nachinacon.info"
 end
+
+puts 'Seeds completed!'
+
+exit # Stop here - don't create sample data
 
 # Create predefined milestones
 Milestone::MILESTONE_TYPES.each do |type, data|

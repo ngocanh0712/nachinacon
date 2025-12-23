@@ -22,7 +22,7 @@
 
 <body class="min-h-screen font-body text-gray-800 bg-background">
   <!-- Navigation -->
-  <nav class="fixed top-0 left-0 right-0 backdrop-blur-sm shadow-sm z-50" style="background-color: rgba(255,255,255,0.95);">
+  <nav data-controller="mobile-menu" class="fixed top-0 left-0 right-0 backdrop-blur-sm shadow-sm z-50" style="background-color: rgba(255,255,255,0.95);">
     <div class="max-w-6xl mx-auto px-4 md:px-6 lg:px-8">
       <div class="flex items-center justify-between h-16">
         <!-- Logo -->
@@ -87,7 +87,7 @@
         </div>
 
         <!-- Mobile menu button -->
-        <button data-controller="mobile-menu" data-action="click->mobile-menu#toggle" class="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors focus:outline-none" style="--ring-color: #C1DDD8;">
+        <button data-action="click->mobile-menu#toggle" class="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors focus:outline-none" style="--ring-color: #C1DDD8;">
           <svg data-mobile-menu-target="iconOpen" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 text-gray-700">
             <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
           </svg>
