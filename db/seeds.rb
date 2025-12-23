@@ -34,7 +34,7 @@ end
 
 puts "\n✅ Admin user setup completed!"
 
-exit # Stop here - memories already created, prevent duplicates
+# exit # Stop here - memories already created, prevent duplicates
 
 # Now create memories with real photos
 puts "\n🌱 Starting to seed memories for Gia Minh (Nacon)...\n\n"
@@ -59,23 +59,27 @@ Milestone::MILESTONE_TYPES.each do |type, data|
   end
 end
 
-# Mark some milestones as achieved with meaningful dates
+# Mark some milestones as achieved with meaningful dates and images
 achieved_milestones_data = [
-  { type: 'first_smile', months_ago: 10 },
-  { type: 'first_laugh', months_ago: 9 },
-  { type: 'first_tooth', months_ago: 8 },
-  { type: 'first_food', months_ago: 7 },
-  { type: 'first_crawl', months_ago: 6 },
-  { type: 'first_step', months_ago: 3 },
-  { type: 'first_birthday', months_ago: 2 }
+  { type: 'first_smile', months_ago: 10, image: 'z7358505070138_cdc7805f8de23d67402e4ad507b449d0.jpg' },
+  { type: 'first_laugh', months_ago: 9, image: 'z7358505059924_12d63f42daabb58995a7acded47025e8.jpg' },
+  { type: 'first_tooth', months_ago: 8, image: 'z7358504726520_5b668e90ccaebb970cad911da4d4c270.jpg' },
+  { type: 'first_food', months_ago: 7, image: 'z7358504726637_38efce5a353372f11f6659c0d7c6a9a5.jpg' },
+  { type: 'first_crawl', months_ago: 6, image: 'z7358504725146_6c36054999325938964675a5dc01a9f8.jpg' },
+  { type: 'first_step', months_ago: 3, image: 'z7358504726994_ac8bc5e50ee169d7617f42095a4a7d47.jpg' },
+  { type: 'first_birthday', months_ago: 2, image: 'z7358504731981_f01495c3aa99aaf64cda7ffe5e442a89.jpg' }
 ]
 
 achieved_milestones_data.each do |data|
   milestone = Milestone.find_by(milestone_type: data[:type])
   next unless milestone
 
-  milestone.update!(achieved_at: data[:months_ago].months.ago)
-  puts "  ✓ Marked: #{milestone.name}"
+  # Set achieved date and image path
+  milestone.update!(
+    achieved_at: data[:months_ago].months.ago,
+    image_path: "/images/nachinacon/#{data[:image]}"
+  )
+  puts "  ✓ Marked: #{milestone.name} (with image)"
 end
 
 # Create albums
@@ -84,32 +88,38 @@ albums_data = [
   {
     name: 'Những ngày đầu đời',
     description: 'Khoảnh khắc chào đời và những tuần đầu tiên của Gia Minh. Từng giây phút đều quý giá và đáng nhớ.',
-    cover_description: 'Nacon khi mới sinh'
+    cover_description: 'Nacon khi mới sinh',
+    cover_image: 'z7358504728666_f87632e9196275aa437c0639d151e304.jpg'
   },
   {
     name: 'Sinh nhật 1 tuổi',
     description: 'Tiệc sinh nhật đầu tiên của Nacon - một cột mốc đặc biệt với gia đình và bạn bè.',
-    cover_description: 'Tiệc sinh nhật rực rỡ'
+    cover_description: 'Tiệc sinh nhật rực rỡ',
+    cover_image: 'z7358504731981_f01495c3aa99aaf64cda7ffe5e442a89.jpg'
   },
   {
     name: 'Ngày lễ đặc biệt',
     description: 'Những dịp lễ Tết, Noel đầu tiên cùng con yêu. Mỗi ngày lễ đều là kỷ niệm.',
-    cover_description: 'Các ngày lễ đầu đời'
+    cover_description: 'Các ngày lễ đầu đời',
+    cover_image: 'z7358504733153_bd48f2f02de3036f26aa50f1f4c8bf51.jpg'
   },
   {
     name: 'Nacon học bơi',
     description: 'Những buổi học bơi đầu tiên. Con rất thích chơi với nước!',
-    cover_description: 'Bơi lội cùng con'
+    cover_description: 'Bơi lội cùng con',
+    cover_image: 'z7358504725146_6c36054999325938964675a5dc01a9f8.jpg'
   },
   {
     name: 'Khoảnh khắc gia đình',
     description: 'Những khoảnh khắc ấm áp bên gia đình - ông bà, bố mẹ cùng Nacon.',
-    cover_description: 'Gia đình hạnh phúc'
+    cover_description: 'Gia đình hạnh phúc',
+    cover_image: 'z7358513032589_f2afd6aa94473227b60ff7284dddb601.jpg'
   },
   {
     name: 'Mỗi ngày lớn khôn',
     description: 'Những khoảnh khắc bình thường nhưng đầy ý nghĩa. Mỗi ngày con đều lớn lên một chút.',
-    cover_description: 'Hành trình lớn khôn'
+    cover_description: 'Hành trình lớn khôn',
+    cover_image: 'z7358505065706_f2d8773a7188812ea5e31989b042fabc.jpg'
   }
 ]
 
@@ -117,10 +127,11 @@ albums = {}
 albums_data.each do |album_data|
   album = Album.create!(
     name: album_data[:name],
-    description: album_data[:description]
+    description: album_data[:description],
+    cover_image_path: "/images/nachinacon/#{album_data[:cover_image]}"
   )
   albums[album_data[:name]] = album
-  puts "  ✓ #{album_data[:name]}"
+  puts "  ✓ #{album_data[:name]} (with cover image)"
 end
 
 # Helper method to set image path (using public folder for production persistence)
@@ -233,6 +244,80 @@ memories_data = [
     memory_type: 'photo',
     taken_at: 3.months.ago,
     image: 'z7358504721314_bd19081c4f1a8f94d811cf61ae95df48.jpg',
+    albums: ['Mỗi ngày lớn khôn']
+  },
+
+  # Thêm kỷ niệm mới
+  {
+    title: 'Nacon ăn cơm ngoan',
+    caption: 'Con ăn cơm rất ngoan và tự lập. Nacon cầm thìa tự ăn, tuy hơi bẩn nhưng con rất vui. Bố mẹ tự hào lắm con ơi!',
+    age_group: '1-2y',
+    memory_type: 'photo',
+    taken_at: 4.months.ago,
+    image: 'z7358504722217_75c45c977c00c5cb3c31393427ab3400.jpg',
+    albums: ['Mỗi ngày lớn khôn']
+  },
+  {
+    title: 'Học đi xe',
+    caption: 'Lần đầu tiên Nacon ngồi trên xe đẩy, con rất thích! Mắt con sáng lên khi được đi dạo quanh nhà.',
+    age_group: '6-12m',
+    memory_type: 'photo',
+    taken_at: 9.months.ago,
+    image: 'z7358504722640_e94ff2f20cffee5ed62df8c834e3321f.jpg',
+    albums: ['Mỗi ngày lớn khôn']
+  },
+  {
+    title: 'Chụp ảnh cùng bố',
+    caption: 'Khoảnh khắc ấm áp của bố và con. Nacon nằm trong vòng tay bố, an toàn và hạnh phúc. Bố luôn yêu con nhất!',
+    age_group: '0-3m',
+    memory_type: 'photo',
+    taken_at: 11.months.ago,
+    image: 'z7358504728174_95860b76f4f99e19ed41587445e4d035.jpg',
+    albums: ['Khoảnh khắc gia đình']
+  },
+  {
+    title: 'Ngủ ngon lành',
+    caption: 'Con ngủ say trong giấc ngủ trưa. Khuôn mặt bình yên của con là điều đẹp nhất đời bố mẹ. Ngủ ngon nha con yêu!',
+    age_group: '0-3m',
+    memory_type: 'photo',
+    taken_at: 10.months.ago,
+    image: 'z7358504729198_6c601f6f091d3a5d02f58c11249da8c7.jpg',
+    albums: ['Mỗi ngày lớn khôn']
+  },
+  {
+    title: 'Vui chơi với đồ chơi',
+    caption: 'Nacon chơi với đồ chơi nhiều màu sắc. Con rất thích khám phá những món đồ chơi mới. Sự tò mò của con thật đáng yêu!',
+    age_group: '6-12m',
+    memory_type: 'photo',
+    taken_at: 8.months.ago,
+    image: 'z7358504730813_c5fc79b553f86901a02a988fa329dddc.jpg',
+    albums: ['Mỗi ngày lớn khôn']
+  },
+  {
+    title: 'Tập ngồi',
+    caption: 'Con đã tập ngồi được rồi! Tuy còn hơi loạng choạng nhưng con rất cố gắng. Bố mẹ rất tự hào về sự tiến bộ của con.',
+    age_group: '6-12m',
+    memory_type: 'photo',
+    taken_at: 7.months.ago,
+    image: 'z7358505061164_11294b964182ee7894d5d251ac163446.jpg',
+    albums: ['Mỗi ngày lớn khôn']
+  },
+  {
+    title: 'Chụp ảnh đẹp',
+    caption: 'Nacon chụp ảnh trong bộ đồ đẹp. Con nhìn thật xinh xắn và đáng yêu. Mỗi khoảnh khắc của con đều quý giá!',
+    age_group: '1-2y',
+    memory_type: 'photo',
+    taken_at: 2.months.ago,
+    image: 'z7358505062125_665de73ac7a04f8eacce14c3c7062e96.jpg',
+    albums: ['Mỗi ngày lớn khôn']
+  },
+  {
+    title: 'Cười tươi rói',
+    caption: 'Nụ cười tươi như hoa của Nacon. Con cười là bố mẹ quên hết mệt mỏi. Yêu con nhiều lắm!',
+    age_group: '1-2y',
+    memory_type: 'photo',
+    taken_at: 3.months.ago,
+    image: 'z7358505069389_cf8c2316ff4789c17f254f379f1ca41d.jpg',
     albums: ['Mỗi ngày lớn khôn']
   }
 ]
