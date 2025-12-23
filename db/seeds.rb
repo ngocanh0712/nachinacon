@@ -32,6 +32,10 @@ else
   puts "✓ Admin user recreated: admin@nachinacon.info"
 end
 
+puts "\n✅ Admin user setup completed!"
+
+exit # Stop here - don't create sample data on production
+
 puts "\n🌱 Starting to seed memories for Gia Minh (Nacon)...\n\n"
 
 # Clear old data
