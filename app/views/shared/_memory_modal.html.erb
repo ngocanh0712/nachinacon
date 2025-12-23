@@ -132,6 +132,19 @@
     }, 10);
   }
 
+  // Helper function to read data from element attributes
+  function openMemoryModalFromData(element) {
+    const data = {
+      title: element.dataset.memoryTitle || '',
+      date: element.dataset.memoryDate || '',
+      caption: element.dataset.memoryCaption || '',
+      imageUrl: element.dataset.memoryImage || '',
+      ageGroup: element.dataset.memoryAgeGroup || '',
+      ageColor: element.dataset.memoryAgeColor || '#DBEAFE;#3B82F6'
+    };
+    openMemoryModal(data);
+  }
+
   function closeMemoryModal() {
     const modal = document.getElementById('memoryModal');
     const modalContent = document.getElementById('modalContent');
