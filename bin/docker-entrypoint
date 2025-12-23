@@ -1,38 +1,28 @@
 #!/bin/bash
-set -e
+set -ex  # -e exits on error, -x prints each command
 
-# Force unbuffered output
-exec 1> >(stdbuf -o0 cat)
-exec 2>&1
-
-echo "=== Docker Entrypoint Start ==="
-echo "Arguments received: $@"
-echo "Number of args: $#"
-echo "Arg 1: ${1}"
-echo "Arg 2: ${2}"
-echo "PORT env: ${PORT}"
-echo "PWD: $(pwd)"
+>&2 echo "=== ENTRYPOINT START ==="
+>&2 echo "Args: $@"
+>&2 echo "PORT: ${PORT:-not set}"
+>&2 echo "PWD: $(pwd)"
 
 # If running the rails server then create or migrate existing database
 if [ "${1}" == "./bin/rails" ] && [ "${2}" == "server" ]; then
-  echo "✓ Matched rails server command"
-  echo "→ Running db:prepare..."
+  >&2 echo "✓ Matched rails server command"
+  >&2 echo "→ Running db:prepare..."
 
-  if ./bin/rails db:prepare; then
-    echo "✓ db:prepare completed successfully"
-  else
-    echo "✗ db:prepare failed with exit code $?"
-    exit 1
-  fi
+  ./bin/rails db:prepare
+
+  >&2 echo "✓ db:prepare completed"
+  >&2 echo "=== STARTING RAILS SERVER ==="
 
   # Use PORT from environment (Railway provides this)
   RAILS_PORT=${PORT:-3000}
-  echo "=== Starting Rails Server ==="
-  echo "→ Binding to: 0.0.0.0:${RAILS_PORT}"
-  echo "→ Executing: ./bin/rails server -b 0.0.0.0 -p ${RAILS_PORT}"
+  >&2 echo "→ Port: ${RAILS_PORT}"
+  >&2 echo "→ Command: ./bin/rails server -b 0.0.0.0 -p ${RAILS_PORT}"
 
   exec ./bin/rails server -b 0.0.0.0 -p "${RAILS_PORT}"
 else
-  echo "✗ Did not match rails server, executing: $@"
+  >&2 echo "✗ No match, executing: $@"
   exec "$@"
 fi
