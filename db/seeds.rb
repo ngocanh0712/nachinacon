@@ -7,13 +7,27 @@ if old_admin
   puts "Old admin removed: admin@nachinacon.com"
 end
 
-# Create default admin user
+# Create or reset default admin user
 admin = AdminUser.find_or_initialize_by(email: 'admin@nachinacon.info')
 admin.name = 'Admin'
+# Always reset password (even if admin already exists)
 admin.password = 'ngocanh0712'
 admin.password_confirmation = 'ngocanh0712'
-admin.save!
-puts "Admin user created/updated: admin@nachinacon.info"
+
+if admin.save
+  puts "✓ Admin user created/updated: admin@nachinacon.info"
+else
+  puts "✗ Failed to save admin user: #{admin.errors.full_messages.join(', ')}"
+  # Force delete and recreate if save fails
+  admin.delete if admin.persisted?
+  admin = AdminUser.create!(
+    email: 'admin@nachinacon.info',
+    name: 'Admin',
+    password: 'ngocanh0712',
+    password_confirmation: 'ngocanh0712'
+  )
+  puts "✓ Admin user recreated: admin@nachinacon.info"
+end
 
 # Create predefined milestones
 Milestone::MILESTONE_TYPES.each do |type, data|
