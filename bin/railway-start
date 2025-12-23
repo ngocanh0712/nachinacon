@@ -13,5 +13,8 @@ echo "Starting server on port: $RAILS_PORT"
 echo "Running db:prepare..."
 ./bin/rails db:prepare
 
-echo "db:prepare done! Starting Rails server..."
+echo "Running seeds to ensure admin user is set up..."
+./bin/rails db:seed
+
+echo "Setup complete! Starting Rails server..."
 exec ./bin/rails server -b 0.0.0.0 -p "${RAILS_PORT}"
