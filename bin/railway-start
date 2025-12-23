@@ -2,12 +2,21 @@
 set -ex
 
 echo "==== RAILWAY START SCRIPT ===="
-echo "PORT: ${PORT:-3000}"
+echo "PORT env var: '${PORT}'"
+echo "PORT with default: '${PORT:-3000}'"
 echo "DATABASE_URL present: ${DATABASE_URL:+yes}"
+
+# Railway provides PORT, but we must use it explicitly
+if [ -z "$PORT" ]; then
+  echo "WARNING: PORT not set by Railway, using 3000"
+  RAILS_PORT=3000
+else
+  echo "Using Railway PORT: $PORT"
+  RAILS_PORT=$PORT
+fi
 
 echo "Running db:prepare..."
 ./bin/rails db:prepare
 
-echo "db:prepare done! Starting server..."
-RAILS_PORT=${PORT:-3000}
+echo "db:prepare done! Starting server on 0.0.0.0:${RAILS_PORT}..."
 exec ./bin/rails server -b 0.0.0.0 -p "${RAILS_PORT}"
