@@ -1,11 +1,11 @@
 <!-- Memory Detail Modal -->
 <div id="memoryModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
   <!-- Backdrop -->
-  <div class="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300" onclick="closeMemoryModal()"></div>
+  <div id="modalBackdrop" class="fixed inset-0 bg-black/60 transition-opacity duration-300 opacity-0" onclick="closeMemoryModal()"></div>
 
   <!-- Modal Container -->
   <div class="flex min-h-screen items-center justify-center p-4">
-    <div class="relative w-full max-w-4xl transform transition-all duration-300 scale-95 opacity-0" id="modalContent">
+    <div class="relative w-full max-w-4xl transition-all duration-300 scale-95 opacity-0" id="modalContent" style="will-change: transform, opacity; transform: translateZ(0);">
       <!-- Close Button -->
       <button onclick="closeMemoryModal()" class="absolute -top-4 -right-4 z-10 w-12 h-12 rounded-full flex items-center justify-center shadow-2xl transition-all duration-300 hover:scale-110 hover:rotate-90" style="background: linear-gradient(135deg, #F2C2C2, #E8B0B0);">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6 text-white">
@@ -32,7 +32,7 @@
           </div>
 
           <!-- Content Section -->
-          <div class="p-8 md:p-10 flex flex-col bg-white/95 backdrop-blur-md">
+          <div class="p-8 md:p-10 flex flex-col bg-white">
             <!-- Age Badge -->
             <div class="mb-6">
               <div id="modalAgeBadge" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-heading font-bold shadow-lg"></div>
@@ -126,10 +126,17 @@
     modal.classList.remove('hidden');
     document.body.style.overflow = 'hidden';
 
-    setTimeout(() => {
-      modalContent.classList.remove('scale-95', 'opacity-0');
-      modalContent.classList.add('scale-100', 'opacity-100');
-    }, 10);
+    const backdrop = document.getElementById('modalBackdrop');
+
+    // Use requestAnimationFrame for smoother animation
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        backdrop.classList.remove('opacity-0');
+        backdrop.classList.add('opacity-100');
+        modalContent.classList.remove('scale-95', 'opacity-0');
+        modalContent.classList.add('scale-100', 'opacity-100');
+      });
+    });
   }
 
   // Helper function to read data from element attributes
@@ -148,7 +155,11 @@
   function closeMemoryModal() {
     const modal = document.getElementById('memoryModal');
     const modalContent = document.getElementById('modalContent');
+    const backdrop = document.getElementById('modalBackdrop');
 
+    // Animate out
+    backdrop.classList.remove('opacity-100');
+    backdrop.classList.add('opacity-0');
     modalContent.classList.remove('scale-100', 'opacity-100');
     modalContent.classList.add('scale-95', 'opacity-0');
 
