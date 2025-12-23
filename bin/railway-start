@@ -2,17 +2,16 @@
 set -ex
 
 echo "==== RAILWAY START SCRIPT ===="
-echo "PORT env var: '${PORT}'"
-
-# Railway public domain expects port 8080
-# Override whatever PORT is set to ensure we match Railway's routing
-RAILS_PORT=8080
-
-echo "Using PORT: $RAILS_PORT (Railway public routing expects 8080)"
+echo "All env vars related to PORT:"
+env | grep -i port || echo "No PORT vars found"
 echo "DATABASE_URL present: ${DATABASE_URL:+yes}"
+
+# Use PORT from Railway, or default to 3000
+RAILS_PORT=${PORT:-3000}
+echo "Starting server on port: $RAILS_PORT"
 
 echo "Running db:prepare..."
 ./bin/rails db:prepare
 
-echo "db:prepare done! Starting server on 0.0.0.0:${RAILS_PORT}..."
+echo "db:prepare done! Starting Rails server..."
 exec ./bin/rails server -b 0.0.0.0 -p "${RAILS_PORT}"
