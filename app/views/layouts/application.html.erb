@@ -7,6 +7,14 @@
   <meta name="description" content="Website lưu giữ kỷ niệm đáng yêu của bé NaChiNaCon">
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
+
+  <!-- Preconnect to Google Fonts for faster loading -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <!-- Load Google Fonts with font-display: swap to prevent FOIT -->
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+
   <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
   <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
   <%= javascript_importmap_tags %>
@@ -79,11 +87,11 @@
         </div>
 
         <!-- Mobile menu button -->
-        <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors focus:outline-none" style="--ring-color: #C1DDD8;">
-          <svg id="menu-icon-open" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 text-gray-700">
+        <button data-controller="mobile-menu" data-action="click->mobile-menu#toggle" class="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors focus:outline-none" style="--ring-color: #C1DDD8;">
+          <svg data-mobile-menu-target="iconOpen" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 text-gray-700">
             <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
           </svg>
-          <svg id="menu-icon-close" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 text-gray-700 hidden">
+          <svg data-mobile-menu-target="iconClose" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 text-gray-700 hidden">
             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
@@ -91,7 +99,7 @@
     </div>
 
     <!-- Mobile menu -->
-    <div id="mobile-menu" class="md:hidden overflow-hidden transition-all duration-300" style="max-height: 0; background-color: #FAFAFA;">
+    <div data-mobile-menu-target="menu" class="md:hidden overflow-hidden transition-all duration-300" style="max-height: 0; background-color: #FAFAFA;">
       <div class="px-4 py-4 space-y-1 border-t border-gray-100">
         <%= link_to root_path, class: "flex items-center gap-3 px-4 py-3 rounded-xl font-heading font-semibold transition-colors", style: current_page?(root_path) ? "background-color: #E0EEEB; color: #111827;" : "color: #4B5563;" do %>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
@@ -136,7 +144,7 @@
 
   <!-- Flash messages -->
   <% if flash[:notice] %>
-    <div class="fixed top-20 right-4 z-50 bg-white px-5 py-3 rounded-xl shadow-lg border flash-message" style="border-color: #BBF7D0;">
+    <div data-controller="flash-message" class="fixed top-20 right-4 z-50 bg-white px-5 py-3 rounded-xl shadow-lg border" style="border-color: #BBF7D0;">
       <div class="flex items-center gap-3">
         <div class="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0" style="background: #C0DFD0;">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 text-white">
@@ -148,7 +156,7 @@
     </div>
   <% end %>
   <% if flash[:alert] %>
-    <div class="fixed top-20 right-4 z-50 bg-white px-5 py-3 rounded-xl shadow-lg border flash-message" style="border-color: #FECACA;">
+    <div data-controller="flash-message" class="fixed top-20 right-4 z-50 bg-white px-5 py-3 rounded-xl shadow-lg border" style="border-color: #FECACA;">
       <div class="flex items-center gap-3">
         <div class="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0" style="background: #F2C2C2;">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 text-white">
@@ -181,44 +189,5 @@
     </div>
   </footer>
 
-  <script>
-    // Mobile menu toggle with smooth animation
-    document.getElementById('mobile-menu-btn')?.addEventListener('click', function() {
-      const menu = document.getElementById('mobile-menu');
-      const iconOpen = document.getElementById('menu-icon-open');
-      const iconClose = document.getElementById('menu-icon-close');
-
-      if (menu.style.maxHeight === '0px' || menu.style.maxHeight === '') {
-        menu.style.maxHeight = menu.scrollHeight + 'px';
-        iconOpen.classList.add('hidden');
-        iconClose.classList.remove('hidden');
-      } else {
-        menu.style.maxHeight = '0px';
-        iconOpen.classList.remove('hidden');
-        iconClose.classList.add('hidden');
-      }
-    });
-
-    // Close menu on window resize
-    window.addEventListener('resize', function() {
-      if (window.innerWidth >= 768) {
-        const menu = document.getElementById('mobile-menu');
-        const iconOpen = document.getElementById('menu-icon-open');
-        const iconClose = document.getElementById('menu-icon-close');
-        menu.style.maxHeight = '0px';
-        iconOpen?.classList.remove('hidden');
-        iconClose?.classList.add('hidden');
-      }
-    });
-
-    // Auto-hide flash messages
-    setTimeout(() => {
-      document.querySelectorAll('.flash-message').forEach(el => {
-        el.style.opacity = '0';
-        el.style.transition = 'opacity 0.5s ease';
-        setTimeout(() => el.remove(), 500);
-      });
-    }, 4000);
-  </script>
 </body>
 </html>

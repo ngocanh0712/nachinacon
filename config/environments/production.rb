@@ -26,8 +26,14 @@ Rails.application.configure do
   # Enable serving static files from public/
   config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
 
-  # Compress CSS using a preprocessor.
-  # config.assets.css_compressor = :sass
+  # Configure cache headers for static files (CSS, JS, images)
+  config.public_file_server.headers = {
+    'Cache-Control' => 'public, max-age=31536000, immutable',
+    'Expires' => 1.year.from_now.to_formatted_s(:rfc822)
+  }
+
+  # Note: CSS minification handled by Tailwind CSS 4.x build process
+  # No need for Rails CSS compressor with Tailwind
 
   # Do not fall back to assets pipeline if a precompiled asset is missed.
   config.assets.compile = false
