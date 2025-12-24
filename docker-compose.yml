@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      RAILS_ENV: production
+      DATABASE_URL: mysql2://root:password@db:3306/nachinacon_production
+      RAILS_MASTER_KEY: ${RAILS_MASTER_KEY}
+    volumes:
+      # Persist uploaded images across container restarts
+      - uploaded_images:/rails/public/images
+    depends_on:
+      - db
+    restart: unless-stopped
+
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: nachinacon_production
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: unless-stopped
+
+volumes:
+  # Named volume for persisting uploaded images
+  uploaded_images:
+  # Named volume for database
+  db_data:
