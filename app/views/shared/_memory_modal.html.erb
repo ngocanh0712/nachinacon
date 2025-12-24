@@ -1,11 +1,11 @@
 <!-- Memory Detail Modal -->
 <div id="memoryModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
   <!-- Backdrop -->
-  <div id="modalBackdrop" class="fixed inset-0 bg-black/60 transition-opacity duration-300 opacity-0" onclick="closeMemoryModal()"></div>
+  <div id="modalBackdrop" class="fixed inset-0 bg-black/60 transition-opacity duration-200 opacity-0" onclick="closeMemoryModal()"></div>
 
   <!-- Modal Container -->
   <div class="flex min-h-screen items-center justify-center p-4">
-    <div class="relative w-full max-w-4xl transition-all duration-300 scale-95 opacity-0" id="modalContent">
+    <div class="relative w-full max-w-4xl transition-all duration-200 scale-95 opacity-0" id="modalContent">
       <!-- Close Button -->
       <button onclick="closeMemoryModal()" class="absolute -top-4 -right-4 z-10 w-12 h-12 rounded-full flex items-center justify-center shadow-2xl transition-all duration-300 hover:scale-110 hover:rotate-90" style="background: linear-gradient(135deg, #F2C2C2, #E8B0B0);">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6 text-white">
@@ -172,7 +172,7 @@
       // Remove will-change after animation completes to free up resources
       setTimeout(() => {
         modalContent.classList.remove('scale-100');
-      }, 300);
+      }, 200);
     });
   }
 
@@ -205,7 +205,7 @@
       document.body.style.overflow = 'auto';
       // Clean up will-change after close
       modalContent.classList.remove('scale-95');
-    }, 300);
+    }, 200);
   }
 
   // Close modal on Escape key
@@ -258,6 +258,22 @@
   #modalImage {
     image-rendering: -webkit-optimize-contrast;
     image-rendering: crisp-edges;
+    content-visibility: auto;
+  }
+
+  /* Reduce motion for better performance */
+  @media (prefers-reduced-motion: no-preference) {
+    #modalContent,
+    #modalBackdrop {
+      transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #modalContent,
+    #modalBackdrop {
+      transition-duration: 0.01ms !important;
+    }
   }
 
   .custom-scrollbar::-webkit-scrollbar {
