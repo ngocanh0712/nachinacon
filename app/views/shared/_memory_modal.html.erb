@@ -84,31 +84,26 @@
 </div>
 
 <script>
-  // Cache DOM elements
-  const modalElements = {
-    modal: null,
-    modalContent: null,
-    modalImage: null,
-    modalImagePlaceholder: null,
-    modalTitle: null,
-    modalDate: null,
-    modalCaption: null,
-    modalAgeBadge: null,
-    backdrop: null
-  };
+  // Cache DOM elements - lazy initialization
+  let modalElements = null;
 
-  // Initialize cache on DOMContentLoaded
-  document.addEventListener('DOMContentLoaded', () => {
-    modalElements.modal = document.getElementById('memoryModal');
-    modalElements.modalContent = document.getElementById('modalContent');
-    modalElements.modalImage = document.getElementById('modalImage');
-    modalElements.modalImagePlaceholder = document.getElementById('modalImagePlaceholder');
-    modalElements.modalTitle = document.getElementById('modalTitle');
-    modalElements.modalDate = document.getElementById('modalDate');
-    modalElements.modalCaption = document.getElementById('modalCaption');
-    modalElements.modalAgeBadge = document.getElementById('modalAgeBadge');
-    modalElements.backdrop = document.getElementById('modalBackdrop');
-  });
+  // Lazy initialize modal elements when needed
+  function getModalElements() {
+    if (!modalElements) {
+      modalElements = {
+        modal: document.getElementById('memoryModal'),
+        modalContent: document.getElementById('modalContent'),
+        modalImage: document.getElementById('modalImage'),
+        modalImagePlaceholder: document.getElementById('modalImagePlaceholder'),
+        modalTitle: document.getElementById('modalTitle'),
+        modalDate: document.getElementById('modalDate'),
+        modalCaption: document.getElementById('modalCaption'),
+        modalAgeBadge: document.getElementById('modalAgeBadge'),
+        backdrop: document.getElementById('modalBackdrop')
+      };
+    }
+    return modalElements;
+  }
 
   // Preload image on hover for better performance on desktop
   let preloadedImages = new Set();
@@ -139,7 +134,7 @@
       modalCaption,
       modalAgeBadge,
       backdrop
-    } = modalElements;
+    } = getModalElements();
 
     // Batch DOM updates for better performance
     // Set text content first (faster operations)
@@ -195,7 +190,7 @@
   }
 
   function closeMemoryModal() {
-    const { modal, modalContent, backdrop } = modalElements;
+    const { modal, modalContent, backdrop } = getModalElements();
 
     // Re-add scale-95 class for will-change optimization
     modalContent.classList.add('scale-95', 'opacity-0');
