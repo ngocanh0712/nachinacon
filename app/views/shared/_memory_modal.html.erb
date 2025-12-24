@@ -84,37 +84,23 @@
 </div>
 
 <script>
-  // Cache DOM elements - lazy initialization to prevent null errors
-  let modalElements = null;
-  function getModalElements() {
-    if (!modalElements) {
-      modalElements = {
-        modal: document.getElementById('memoryModal'),
-        modalContent: document.getElementById('modalContent'),
-        modalImage: document.getElementById('modalImage'),
-        modalImagePlaceholder: document.getElementById('modalImagePlaceholder'),
-        modalTitle: document.getElementById('modalTitle'),
-        modalDate: document.getElementById('modalDate'),
-        modalCaption: document.getElementById('modalCaption'),
-        modalAgeBadge: document.getElementById('modalAgeBadge'),
-        backdrop: document.getElementById('modalBackdrop')
-      };
-    }
-    return modalElements;
-  }
-
   function openMemoryModal(data) {
-    const {
-      modal,
-      modalContent,
-      modalImage,
-      modalImagePlaceholder,
-      modalTitle,
-      modalDate,
-      modalCaption,
-      modalAgeBadge,
-      backdrop
-    } = getModalElements();
+    // Get elements directly each time to ensure they exist
+    const modal = document.getElementById('memoryModal');
+    const modalContent = document.getElementById('modalContent');
+    const modalImage = document.getElementById('modalImage');
+    const modalImagePlaceholder = document.getElementById('modalImagePlaceholder');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalDate = document.getElementById('modalDate');
+    const modalCaption = document.getElementById('modalCaption');
+    const modalAgeBadge = document.getElementById('modalAgeBadge');
+    const backdrop = document.getElementById('modalBackdrop');
+
+    // Safety check
+    if (!modal || !modalContent) {
+      console.error('Modal elements not found');
+      return;
+    }
 
     // Set content
     modalTitle.textContent = data.title || '';
@@ -171,7 +157,11 @@
   }
 
   function closeMemoryModal() {
-    const { modal, modalContent, backdrop } = getModalElements();
+    const modal = document.getElementById('memoryModal');
+    const modalContent = document.getElementById('modalContent');
+    const backdrop = document.getElementById('modalBackdrop');
+
+    if (!modal || !modalContent) return;
 
     // Animate out
     backdrop.classList.remove('opacity-100');
