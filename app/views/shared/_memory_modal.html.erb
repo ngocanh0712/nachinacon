@@ -5,7 +5,7 @@
 
   <!-- Modal Container -->
   <div class="flex min-h-screen items-center justify-center p-4">
-    <div class="relative w-full max-w-4xl transition-all duration-300 scale-95 opacity-0" id="modalContent" style="will-change: transform, opacity; transform: translateZ(0);">
+    <div class="relative w-full max-w-4xl transition-all duration-300 scale-95 opacity-0" id="modalContent">
       <!-- Close Button -->
       <button onclick="closeMemoryModal()" class="absolute -top-4 -right-4 z-10 w-12 h-12 rounded-full flex items-center justify-center shadow-2xl transition-all duration-300 hover:scale-110 hover:rotate-90" style="background: linear-gradient(135deg, #F2C2C2, #E8B0B0);">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6 text-white">
@@ -84,35 +84,76 @@
 </div>
 
 <script>
-  function openMemoryModal(data) {
-    const modal = document.getElementById('memoryModal');
-    const modalContent = document.getElementById('modalContent');
-    const modalImage = document.getElementById('modalImage');
-    const modalImagePlaceholder = document.getElementById('modalImagePlaceholder');
-    const modalTitle = document.getElementById('modalTitle');
-    const modalDate = document.getElementById('modalDate');
-    const modalCaption = document.getElementById('modalCaption');
-    const modalAgeBadge = document.getElementById('modalAgeBadge');
+  // Cache DOM elements
+  const modalElements = {
+    modal: null,
+    modalContent: null,
+    modalImage: null,
+    modalImagePlaceholder: null,
+    modalTitle: null,
+    modalDate: null,
+    modalCaption: null,
+    modalAgeBadge: null,
+    backdrop: null
+  };
 
-    // Set content
+  // Initialize cache on DOMContentLoaded
+  document.addEventListener('DOMContentLoaded', () => {
+    modalElements.modal = document.getElementById('memoryModal');
+    modalElements.modalContent = document.getElementById('modalContent');
+    modalElements.modalImage = document.getElementById('modalImage');
+    modalElements.modalImagePlaceholder = document.getElementById('modalImagePlaceholder');
+    modalElements.modalTitle = document.getElementById('modalTitle');
+    modalElements.modalDate = document.getElementById('modalDate');
+    modalElements.modalCaption = document.getElementById('modalCaption');
+    modalElements.modalAgeBadge = document.getElementById('modalAgeBadge');
+    modalElements.backdrop = document.getElementById('modalBackdrop');
+  });
+
+  // Preload image on hover for better performance on desktop
+  let preloadedImages = new Set();
+  function preloadModalImage(imageUrl) {
+    if (!imageUrl || preloadedImages.has(imageUrl)) return;
+
+    const img = new Image();
+    img.src = imageUrl;
+    preloadedImages.add(imageUrl);
+  }
+
+  // Badge SVG template (avoid innerHTML for better performance)
+  const badgeSvgHTML = `
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+      <path d="M12.75 12.75a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM7.5 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM8.25 17.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM9.75 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM10.5 17.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM12 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM12.75 17.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM14.25 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM15 17.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM16.5 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM15 12.75a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM16.5 13.5a.75.75 0 100-1.5.75.75 0 000 1.5z" />
+      <path fill-rule="evenodd" d="M6.75 2.25A.75.75 0 017.5 3v1.5h9V3A.75.75 0 0118 3v1.5h.75a3 3 0 013 3v11.25a3 3 0 01-3 3H5.25a3 3 0 01-3-3V7.5a3 3 0 013-3H6V3a.75.75 0 01.75-.75zm13.5 9a1.5 1.5 0 00-1.5-1.5H5.25a1.5 1.5 0 00-1.5 1.5v7.5a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5v-7.5z" clip-rule="evenodd" />
+    </svg>
+  `;
+
+  function openMemoryModal(data) {
+    const {
+      modal,
+      modalContent,
+      modalImage,
+      modalImagePlaceholder,
+      modalTitle,
+      modalDate,
+      modalCaption,
+      modalAgeBadge,
+      backdrop
+    } = modalElements;
+
+    // Batch DOM updates for better performance
+    // Set text content first (faster operations)
     modalTitle.textContent = data.title || '';
     modalDate.textContent = data.date || '';
     modalCaption.textContent = data.caption || '';
 
-    // Set age badge
+    // Set age badge with pre-parsed colors
     const ageBadgeColor = data.ageColor || '#DBEAFE;#3B82F6';
     const [bgColor, textColor] = ageBadgeColor.split(';');
-    modalAgeBadge.style.background = bgColor + 'ee';
-    modalAgeBadge.style.color = textColor;
-    modalAgeBadge.innerHTML = `
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
-        <path d="M12.75 12.75a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM7.5 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM8.25 17.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM9.75 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM10.5 17.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM12 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM12.75 17.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM14.25 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM15 17.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM16.5 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM15 12.75a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM16.5 13.5a.75.75 0 100-1.5.75.75 0 000 1.5z" />
-        <path fill-rule="evenodd" d="M6.75 2.25A.75.75 0 017.5 3v1.5h9V3A.75.75 0 0118 3v1.5h.75a3 3 0 013 3v11.25a3 3 0 01-3 3H5.25a3 3 0 01-3-3V7.5a3 3 0 013-3H6V3a.75.75 0 01.75-.75zm13.5 9a1.5 1.5 0 00-1.5-1.5H5.25a1.5 1.5 0 00-1.5 1.5v7.5a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5v-7.5z" clip-rule="evenodd" />
-      </svg>
-      <span>${data.ageGroup || ''}</span>
-    `;
+    modalAgeBadge.style.cssText = `background: ${bgColor}ee; color: ${textColor};`;
+    modalAgeBadge.innerHTML = badgeSvgHTML + `<span>${data.ageGroup || ''}</span>`;
 
-    // Set image
+    // Handle image display
     if (data.imageUrl) {
       modalImage.src = data.imageUrl;
       modalImage.classList.remove('hidden');
@@ -122,20 +163,21 @@
       modalImagePlaceholder.classList.remove('hidden');
     }
 
-    // Show modal with animation
+    // Show modal
     modal.classList.remove('hidden');
     document.body.style.overflow = 'hidden';
 
-    const backdrop = document.getElementById('modalBackdrop');
-
-    // Use requestAnimationFrame for smoother animation
+    // Use single requestAnimationFrame for smoother animation
     requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        backdrop.classList.remove('opacity-0');
-        backdrop.classList.add('opacity-100');
-        modalContent.classList.remove('scale-95', 'opacity-0');
-        modalContent.classList.add('scale-100', 'opacity-100');
-      });
+      backdrop.classList.add('opacity-100');
+      backdrop.classList.remove('opacity-0');
+      modalContent.classList.add('scale-100', 'opacity-100');
+      modalContent.classList.remove('scale-95', 'opacity-0');
+
+      // Remove will-change after animation completes to free up resources
+      setTimeout(() => {
+        modalContent.classList.remove('scale-100');
+      }, 300);
     });
   }
 
@@ -153,19 +195,21 @@
   }
 
   function closeMemoryModal() {
-    const modal = document.getElementById('memoryModal');
-    const modalContent = document.getElementById('modalContent');
-    const backdrop = document.getElementById('modalBackdrop');
+    const { modal, modalContent, backdrop } = modalElements;
+
+    // Re-add scale-95 class for will-change optimization
+    modalContent.classList.add('scale-95', 'opacity-0');
+    modalContent.classList.remove('opacity-100');
 
     // Animate out
-    backdrop.classList.remove('opacity-100');
     backdrop.classList.add('opacity-0');
-    modalContent.classList.remove('scale-100', 'opacity-100');
-    modalContent.classList.add('scale-95', 'opacity-0');
+    backdrop.classList.remove('opacity-100');
 
     setTimeout(() => {
       modal.classList.add('hidden');
       document.body.style.overflow = 'auto';
+      // Clean up will-change after close
+      modalContent.classList.remove('scale-95');
     }, 300);
   }
 
@@ -175,9 +219,52 @@
       closeMemoryModal();
     }
   });
+
+  // Add hover preload for desktop devices
+  if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    document.addEventListener('mouseover', (e) => {
+      const card = e.target.closest('[data-memory-image]');
+      if (card) {
+        const imageUrl = card.dataset.memoryImage;
+        if (imageUrl) {
+          preloadModalImage(imageUrl);
+        }
+      }
+    }, { passive: true });
+  }
 </script>
 
 <style>
+  /* Modal optimizations for smooth animations */
+  #memoryModal {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  #modalContent {
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
+
+  #modalContent.scale-100 {
+    will-change: transform, opacity;
+  }
+
+  #modalContent.scale-95 {
+    will-change: auto;
+  }
+
+  #modalBackdrop {
+    transform: translate3d(0, 0, 0);
+  }
+
+  /* Optimize image rendering */
+  #modalImage {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+
   .custom-scrollbar::-webkit-scrollbar {
     width: 6px;
   }
