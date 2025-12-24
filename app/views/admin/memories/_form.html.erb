@@ -81,7 +81,7 @@
 
     <!-- Preview existing image -->
     <% if memory.image_path.present? || memory.media.attached? %>
-      <div class="mb-4 p-4 rounded-xl bg-gray-50 border-2 border-gray-200">
+      <div id="existingImageContainer" class="mb-4 p-4 rounded-xl bg-gray-50 border-2 border-gray-200">
         <div class="flex items-center gap-4">
           <% if memory.image_path.present? %>
             <%= image_tag memory.image_path, class: "w-20 h-20 rounded-lg object-cover" %>
@@ -96,11 +96,12 @@
               <%= memory.media.attached? ? number_to_human_size(memory.media.byte_size) : 'Ảnh đã lưu' %>
             </p>
           </div>
-          <div class="px-3 py-1 rounded-full text-xs font-body" style="background-color: #E0EEEB; color: #333;">
-            Đã tải lên
-          </div>
+          <button type="button" onclick="removeExistingImage()" class="px-3 py-1.5 rounded-full text-xs font-body hover:bg-red-100 transition-colors" style="background-color: #FEE2E2; color: #DC2626;">
+            Xóa ảnh
+          </button>
         </div>
       </div>
+      <%= hidden_field_tag :remove_image, '', id: 'remove_image_field' %>
     <% end %>
 
     <!-- Image preview container (for new upload) -->
@@ -138,6 +139,13 @@
   </div>
 
   <script>
+    function removeExistingImage() {
+      if (confirm('Bạn có chắc muốn xóa ảnh này?')) {
+        document.getElementById('existingImageContainer').remove();
+        document.getElementById('remove_image_field').value = '1';
+      }
+    }
+
     function previewImage(input) {
       const file = input.files[0];
       if (!file) return;
@@ -156,6 +164,13 @@
         return;
       }
 
+      // Hide existing image preview when uploading new one
+      const existingContainer = document.getElementById('existingImageContainer');
+      if (existingContainer) {
+        existingContainer.style.display = 'none';
+        document.getElementById('remove_image_field').value = '1';
+      }
+
       // Show preview
       const reader = new FileReader();
       reader.onload = function(e) {
@@ -171,6 +186,13 @@
       document.getElementById('memory_media_input').value = '';
       document.getElementById('imagePreviewContainer').classList.add('hidden');
       document.getElementById('imagePreview').src = '';
+
+      // Show existing image back if it was hidden
+      const existingContainer = document.getElementById('existingImageContainer');
+      if (existingContainer) {
+        existingContainer.style.display = 'block';
+        document.getElementById('remove_image_field').value = '';
+      }
     }
 
     function formatFileSize(bytes) {

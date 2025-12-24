@@ -225,8 +225,12 @@
             <div class="album-card bg-white shadow-xl cursor-pointer" style="border-radius: 1.5rem; border: 1px solid #f3f4f6; overflow: hidden;">
               <!-- Cover photo -->
               <div class="aspect-video overflow-hidden relative" style="background: linear-gradient(135deg, <%= colors[0] %>, white); border-radius: 1.5rem 1.5rem 0 0;">
-                <% if album.cover_photo.attached? %>
-                  <%= image_tag album.cover_photo.variant(resize_to_fill: [600, 400]), class: "w-full h-full object-cover" %>
+                <% if album.cover_image_path.present? || album.cover_photo.attached? %>
+                  <% if album.cover_image_path.present? %>
+                    <%= image_tag album.cover_image_path, class: "w-full h-full object-cover" %>
+                  <% elsif album.cover_photo.attached? %>
+                    <%= image_tag album.cover_photo.variant(resize_to_fill: [600, 400]), class: "w-full h-full object-cover" %>
+                  <% end %>
                 <% else %>
                   <div class="w-full h-full flex items-center justify-center">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="w-16 h-16" style="color: <%= colors[1] %>30;">

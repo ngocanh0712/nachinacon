@@ -19,8 +19,12 @@
         <div class="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 group">
           <!-- Cover Photo -->
           <div class="relative aspect-video overflow-hidden">
-            <% if album.cover_photo.attached? %>
-              <%= image_tag album.cover_photo.variant(resize_to_fill: [400, 250]), class: "w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" %>
+            <% if album.cover_image_path.present? || album.cover_photo.attached? %>
+              <% if album.cover_image_path.present? %>
+                <%= image_tag album.cover_image_path, class: "w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" %>
+              <% elsif album.cover_photo.attached? %>
+                <%= image_tag album.cover_photo.variant(resize_to_fill: [400, 250]), class: "w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" %>
+              <% end %>
             <% else %>
               <div class="w-full h-full flex items-center justify-center" style="background: linear-gradient(135deg, rgba(192, 223, 208, 0.4) 0%, rgba(193, 221, 216, 0.4) 100%);">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="w-12 h-12 text-gray-300">

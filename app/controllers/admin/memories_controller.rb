@@ -33,8 +33,15 @@ module Admin
     def edit; end
 
     def update
+      # Handle image deletion
+      if params[:remove_image] == '1' && @memory.image_path.present?
+        delete_existing_image(@memory)
+        @memory.image_path = nil
+      end
+
       # Process uploaded image if present
       if params[:memory][:media].present?
+        delete_existing_image(@memory) if @memory.image_path.present?
         process_and_save_image(@memory, params[:memory][:media])
       end
 
@@ -61,6 +68,16 @@ module Admin
     def memory_params
       params.require(:memory).permit(:title, :caption, :taken_at, :age_group, :memory_type, :media, :image_path,
                                      album_ids: [])
+    end
+
+    def delete_existing_image(memory)
+      return unless memory.image_path.present?
+
+      file_path = Rails.root.join('public', memory.image_path.delete_prefix('/'))
+      File.delete(file_path) if File.exist?(file_path)
+      Rails.logger.info "Deleted existing image: #{memory.image_path}"
+    rescue StandardError => e
+      Rails.logger.error "Error deleting image: #{e.message}"
     end
 
     def process_and_save_image(memory, uploaded_file)

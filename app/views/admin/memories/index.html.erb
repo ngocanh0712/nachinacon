@@ -19,7 +19,7 @@
         <div class="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 group">
           <!-- Thumbnail -->
           <div class="relative h-48 overflow-hidden">
-            <% if memory.media.attached? %>
+            <% if memory.image_path.present? || memory.media.attached? %>
               <% if memory.memory_type == 'video' %>
                 <div class="w-full h-full flex items-center justify-center" style="background: linear-gradient(135deg, #E0EEEB 0%, #F6F2EC 100%);">
                   <div class="w-16 h-16 rounded-full flex items-center justify-center" style="background-color: rgba(0,0,0,0.1);">
@@ -29,7 +29,11 @@
                   </div>
                 </div>
               <% else %>
-                <%= image_tag memory.media.variant(resize_to_fill: [400, 300]), class: "w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" %>
+                <% if memory.image_path.present? %>
+                  <%= image_tag memory.image_path, class: "w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" %>
+                <% elsif memory.media.attached? %>
+                  <%= image_tag memory.media.variant(resize_to_fill: [400, 300]), class: "w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" %>
+                <% end %>
               <% end %>
             <% else %>
               <div class="w-full h-full flex items-center justify-center" style="background: linear-gradient(135deg, #E0EEEB 0%, #F6F2EC 100%);">
