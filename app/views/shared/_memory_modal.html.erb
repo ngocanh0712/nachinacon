@@ -14,7 +14,7 @@
       </button>
 
       <!-- Modal Content -->
-      <div class="glass-card rounded-3xl overflow-hidden shadow-2xl">
+      <div class="bg-white rounded-3xl overflow-hidden shadow-xl">
         <div class="grid md:grid-cols-2 gap-0">
           <!-- Image Section -->
           <div class="relative bg-gray-100 md:min-h-[600px]">
@@ -84,10 +84,8 @@
 </div>
 
 <script>
-  // Cache DOM elements - lazy initialization
+  // Cache DOM elements - lazy initialization to prevent null errors
   let modalElements = null;
-
-  // Lazy initialize modal elements when needed
   function getModalElements() {
     if (!modalElements) {
       modalElements = {
@@ -105,24 +103,6 @@
     return modalElements;
   }
 
-  // Preload image on hover for better performance on desktop
-  let preloadedImages = new Set();
-  function preloadModalImage(imageUrl) {
-    if (!imageUrl || preloadedImages.has(imageUrl)) return;
-
-    const img = new Image();
-    img.src = imageUrl;
-    preloadedImages.add(imageUrl);
-  }
-
-  // Badge SVG template (avoid innerHTML for better performance)
-  const badgeSvgHTML = `
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
-      <path d="M12.75 12.75a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM7.5 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM8.25 17.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM9.75 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM10.5 17.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM12 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM12.75 17.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM14.25 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM15 17.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM16.5 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM15 12.75a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM16.5 13.5a.75.75 0 100-1.5.75.75 0 000 1.5z" />
-      <path fill-rule="evenodd" d="M6.75 2.25A.75.75 0 017.5 3v1.5h9V3A.75.75 0 0118 3v1.5h.75a3 3 0 013 3v11.25a3 3 0 01-3 3H5.25a3 3 0 01-3-3V7.5a3 3 0 013-3H6V3a.75.75 0 01.75-.75zm13.5 9a1.5 1.5 0 00-1.5-1.5H5.25a1.5 1.5 0 00-1.5 1.5v7.5a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5v-7.5z" clip-rule="evenodd" />
-    </svg>
-  `;
-
   function openMemoryModal(data) {
     const {
       modal,
@@ -136,19 +116,25 @@
       backdrop
     } = getModalElements();
 
-    // Batch DOM updates for better performance
-    // Set text content first (faster operations)
+    // Set content
     modalTitle.textContent = data.title || '';
     modalDate.textContent = data.date || '';
     modalCaption.textContent = data.caption || '';
 
-    // Set age badge with pre-parsed colors
+    // Set age badge
     const ageBadgeColor = data.ageColor || '#DBEAFE;#3B82F6';
     const [bgColor, textColor] = ageBadgeColor.split(';');
-    modalAgeBadge.style.cssText = `background: ${bgColor}ee; color: ${textColor};`;
-    modalAgeBadge.innerHTML = badgeSvgHTML + `<span>${data.ageGroup || ''}</span>`;
+    modalAgeBadge.style.background = bgColor + 'ee';
+    modalAgeBadge.style.color = textColor;
+    modalAgeBadge.innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+        <path d="M12.75 12.75a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM7.5 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM8.25 17.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM9.75 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM10.5 17.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM12 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM12.75 17.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM14.25 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM15 17.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM16.5 15.75a.75.75 0 100-1.5.75.75 0 000 1.5zM15 12.75a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM16.5 13.5a.75.75 0 100-1.5.75.75 0 000 1.5z" />
+        <path fill-rule="evenodd" d="M6.75 2.25A.75.75 0 017.5 3v1.5h9V3A.75.75 0 0118 3v1.5h.75a3 3 0 013 3v11.25a3 3 0 01-3 3H5.25a3 3 0 01-3-3V7.5a3 3 0 013-3H6V3a.75.75 0 01.75-.75zm13.5 9a1.5 1.5 0 00-1.5-1.5H5.25a1.5 1.5 0 00-1.5 1.5v7.5a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5v-7.5z" clip-rule="evenodd" />
+      </svg>
+      <span>${data.ageGroup || ''}</span>
+    `;
 
-    // Handle image display
+    // Set image
     if (data.imageUrl) {
       modalImage.src = data.imageUrl;
       modalImage.classList.remove('hidden');
@@ -158,21 +144,16 @@
       modalImagePlaceholder.classList.remove('hidden');
     }
 
-    // Show modal
+    // Show modal with animation
     modal.classList.remove('hidden');
     document.body.style.overflow = 'hidden';
 
-    // Use single requestAnimationFrame for smoother animation
+    // Use requestAnimationFrame for smoother animation
     requestAnimationFrame(() => {
-      backdrop.classList.add('opacity-100');
       backdrop.classList.remove('opacity-0');
-      modalContent.classList.add('scale-100', 'opacity-100');
+      backdrop.classList.add('opacity-100');
       modalContent.classList.remove('scale-95', 'opacity-0');
-
-      // Remove will-change after animation completes to free up resources
-      setTimeout(() => {
-        modalContent.classList.remove('scale-100');
-      }, 200);
+      modalContent.classList.add('scale-100', 'opacity-100');
     });
   }
 
@@ -192,19 +173,15 @@
   function closeMemoryModal() {
     const { modal, modalContent, backdrop } = getModalElements();
 
-    // Re-add scale-95 class for will-change optimization
-    modalContent.classList.add('scale-95', 'opacity-0');
-    modalContent.classList.remove('opacity-100');
-
     // Animate out
-    backdrop.classList.add('opacity-0');
     backdrop.classList.remove('opacity-100');
+    backdrop.classList.add('opacity-0');
+    modalContent.classList.remove('scale-100', 'opacity-100');
+    modalContent.classList.add('scale-95', 'opacity-0');
 
     setTimeout(() => {
       modal.classList.add('hidden');
       document.body.style.overflow = 'auto';
-      // Clean up will-change after close
-      modalContent.classList.remove('scale-95');
     }, 200);
   }
 
@@ -214,68 +191,9 @@
       closeMemoryModal();
     }
   });
-
-  // Add hover preload for desktop devices
-  if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-    document.addEventListener('mouseover', (e) => {
-      const card = e.target.closest('[data-memory-image]');
-      if (card) {
-        const imageUrl = card.dataset.memoryImage;
-        if (imageUrl) {
-          preloadModalImage(imageUrl);
-        }
-      }
-    }, { passive: true });
-  }
 </script>
 
 <style>
-  /* Modal optimizations for smooth animations */
-  #memoryModal {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  #modalContent {
-    transform: translate3d(0, 0, 0);
-    backface-visibility: hidden;
-    perspective: 1000px;
-  }
-
-  #modalContent.scale-100 {
-    will-change: transform, opacity;
-  }
-
-  #modalContent.scale-95 {
-    will-change: auto;
-  }
-
-  #modalBackdrop {
-    transform: translate3d(0, 0, 0);
-  }
-
-  /* Optimize image rendering */
-  #modalImage {
-    image-rendering: -webkit-optimize-contrast;
-    image-rendering: crisp-edges;
-    content-visibility: auto;
-  }
-
-  /* Reduce motion for better performance */
-  @media (prefers-reduced-motion: no-preference) {
-    #modalContent,
-    #modalBackdrop {
-      transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    #modalContent,
-    #modalBackdrop {
-      transition-duration: 0.01ms !important;
-    }
-  }
-
   .custom-scrollbar::-webkit-scrollbar {
     width: 6px;
   }
