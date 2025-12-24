@@ -31,4 +31,27 @@ module ApplicationHelper
 
     image_tag(attachment.variant(variant), options)
   end
+
+  def calculate_age(birth_date)
+    today = Date.today
+    years = today.year - birth_date.year
+    months = today.month - birth_date.month
+
+    # Điều chỉnh nếu tháng hiện tại nhỏ hơn tháng sinh
+    if months < 0
+      years -= 1
+      months += 12
+    end
+
+    # Điều chỉnh nếu ngày hiện tại nhỏ hơn ngày sinh trong tháng
+    if today.day < birth_date.day
+      months -= 1
+      if months < 0
+        months += 12
+        years -= 1
+      end
+    end
+
+    [years, months]
+  end
 end
