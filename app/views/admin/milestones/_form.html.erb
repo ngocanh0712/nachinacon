@@ -66,24 +66,50 @@
   <div>
     <label class="block text-sm font-semibold text-gray-700 mb-2 font-heading">Ảnh</label>
 
-    <% if milestone.photo.attached? %>
-      <div class="mb-4 p-4 rounded-xl bg-gray-50 border-2 border-gray-200 flex items-center gap-4">
-        <%= image_tag milestone.photo.variant(resize_to_fill: [80, 80]), class: "w-20 h-20 rounded-lg object-cover" %>
-        <div class="flex-1 min-w-0">
-          <p class="font-heading font-medium text-gray-800 truncate"><%= milestone.photo.filename %></p>
-          <p class="text-sm text-gray-500 font-body"><%= number_to_human_size(milestone.photo.byte_size) %></p>
-        </div>
-        <div class="px-3 py-1 rounded-full text-xs font-body" style="background-color: #F8D8D8; color: #333;">
-          Đã tải lên
+    <!-- Preview existing image -->
+    <% if milestone.image_path.present? || milestone.photo.attached? %>
+      <div class="mb-4 p-4 rounded-xl bg-gray-50 border-2 border-gray-200">
+        <div class="flex items-center gap-4">
+          <% if milestone.image_path.present? %>
+            <%= image_tag milestone.image_path, class: "w-20 h-20 rounded-lg object-cover" %>
+          <% elsif milestone.photo.attached? %>
+            <%= image_tag milestone.photo.variant(resize_to_fill: [80, 80]), class: "w-20 h-20 rounded-lg object-cover" %>
+          <% end %>
+          <div class="flex-1 min-w-0">
+            <p class="font-heading font-medium text-gray-800 truncate">
+              <%= milestone.image_path.present? ? File.basename(milestone.image_path) : milestone.photo.filename %>
+            </p>
+            <p class="text-sm text-gray-500 font-body">
+              <%= milestone.photo.attached? ? number_to_human_size(milestone.photo.byte_size) : 'Ảnh đã lưu' %>
+            </p>
+          </div>
+          <div class="px-3 py-1 rounded-full text-xs font-body" style="background-color: #F8D8D8; color: #333;">
+            Đã tải lên
+          </div>
         </div>
       </div>
     <% end %>
 
+    <!-- Image preview container (for new upload) -->
+    <div id="milestoneImagePreview" class="hidden mb-4 p-4 rounded-xl bg-gray-50 border-2 border-gray-200">
+      <div class="flex items-center gap-4">
+        <img id="milestonePreviewImg" src="" alt="Preview" class="w-20 h-20 rounded-lg object-cover">
+        <div class="flex-1 min-w-0">
+          <p id="milestoneFileName" class="font-heading font-medium text-gray-800 truncate"></p>
+          <p id="milestoneFileSize" class="text-sm text-gray-500 font-body"></p>
+        </div>
+        <button type="button" onclick="clearMilestonePreview()" class="px-3 py-1 rounded-full text-xs font-body hover:bg-red-100 transition-colors" style="background-color: #FEE2E2; color: #DC2626;">
+          Xóa
+        </button>
+      </div>
+    </div>
+
     <div class="relative">
       <%= f.file_field :photo,
-        accept: "image/*",
+        accept: "image/jpeg,image/jpg,image/png,image/webp",
         class: "sr-only",
-        id: "milestone_photo_input" %>
+        id: "milestone_photo_input",
+        onchange: "previewMilestoneImage(this)" %>
 
       <label for="milestone_photo_input"
         class="upload-zone-secondary flex flex-col items-center justify-center p-8 rounded-xl border-2 border-dashed border-gray-300 bg-gray-50 cursor-pointer transition-all duration-200">
@@ -93,10 +119,52 @@
           </svg>
         </div>
         <p class="font-heading font-semibold text-gray-700">Kéo thả hoặc nhấp để chọn ảnh</p>
-        <p class="text-sm text-gray-500 mt-1 font-body">PNG, JPG • Tối đa 10MB</p>
+        <p class="text-sm text-gray-500 mt-1 font-body">JPG, PNG, WEBP • Tối đa 10MB</p>
       </label>
     </div>
   </div>
+
+  <script>
+    function previewMilestoneImage(input) {
+      const file = input.files[0];
+      if (!file) return;
+
+      if (!file.type.match('image/jpeg') && !file.type.match('image/jpg') && !file.type.match('image/png') && !file.type.match('image/webp')) {
+        alert('Chỉ chấp nhận file ảnh (JPG, PNG, WEBP)');
+        input.value = '';
+        return;
+      }
+
+      if (file.size > 10 * 1024 * 1024) {
+        alert('File ảnh quá lớn. Vui lòng chọn ảnh nhỏ hơn 10MB');
+        input.value = '';
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        document.getElementById('milestonePreviewImg').src = e.target.result;
+        document.getElementById('milestoneFileName').textContent = file.name;
+        document.getElementById('milestoneFileSize').textContent = formatFileSize(file.size);
+        document.getElementById('milestoneImagePreview').classList.remove('hidden');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function clearMilestonePreview() {
+      document.getElementById('milestone_photo_input').value = '';
+      document.getElementById('milestoneImagePreview').classList.add('hidden');
+      document.getElementById('milestonePreviewImg').src = '';
+    }
+
+    function formatFileSize(bytes) {
+      if (bytes === 0) return '0 Bytes';
+      const k = 1024;
+      const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+    }
+  </script>
 
   <!-- Buttons -->
   <div class="flex items-center gap-4 pt-4">
