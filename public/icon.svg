@@ -1,0 +1,57 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background with gradient -->
+  <rect width="512" height="512" rx="110" fill="url(#gradient)"/>
+
+  <!-- Gradient definition -->
+  <defs>
+    <linearGradient id="gradient" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#C1DDD8"/>
+      <stop offset="100%" stop-color="#A8CEC8"/>
+    </linearGradient>
+
+    <!-- Shadow filter -->
+    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="8"/>
+      <feOffset dx="0" dy="4" result="offsetblur"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.3"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Decorative circles -->
+  <circle cx="420" cy="92" r="35" fill="#F2C2C2" opacity="0.4"/>
+  <circle cx="92" cy="420" r="28" fill="#C0DFD0" opacity="0.4"/>
+  <circle cx="140" cy="120" r="20" fill="#E8B0B0" opacity="0.3"/>
+
+  <!-- Main heart icon (centered) -->
+  <g filter="url(#shadow)">
+    <path d="M256 400C256 400 128 312 128 208C128 168 152 144 184 144C208 144 232 160 256 184C280 160 304 144 328 144C360 144 384 168 384 208C384 312 256 400 256 400Z"
+          fill="white"
+          stroke="white"
+          stroke-width="4"
+          stroke-linecap="round"
+          stroke-linejoin="round"/>
+  </g>
+
+  <!-- Small decorative hearts -->
+  <path d="M140 200C140 200 110 180 110 160C110 150 120 145 125 145C130 145 135 150 140 155C145 150 150 145 155 145C160 145 170 150 170 160C170 180 140 200 140 200Z"
+        fill="white"
+        opacity="0.6"/>
+
+  <path d="M372 340C372 340 352 325 352 310C352 302 358 298 362 298C366 298 370 302 372 306C374 302 378 298 382 298C386 298 392 302 392 310C392 325 372 340 372 340Z"
+        fill="white"
+        opacity="0.5"/>
+
+  <!-- Baby footprint (cute detail) -->
+  <g opacity="0.4" fill="white">
+    <ellipse cx="320" cy="180" rx="8" ry="10"/>
+    <circle cx="315" cy="195" r="4"/>
+    <circle cx="320" cy="198" r="4"/>
+    <circle cx="325" cy="195" r="4"/>
+  </g>
+</svg>
