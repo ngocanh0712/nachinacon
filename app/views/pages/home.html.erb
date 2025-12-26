@@ -393,7 +393,7 @@
                   <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" />
                 </svg>
                 <div class="flex-1">
-                  <p class="font-heading font-semibold text-gray-800"><%= milestone.title %></p>
+                  <p class="font-heading font-semibold text-gray-800"><%= milestone.name %></p>
                   <% if milestone.achieved_at %>
                     <p class="text-xs text-gray-500 mt-1"><%= milestone.achieved_at.strftime("%d/%m/%Y") %></p>
                   <% end %>
@@ -422,7 +422,7 @@
                   <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 6a.75.75 0 00-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 000-1.5h-3.75V6z" clip-rule="evenodd" />
                 </svg>
                 <div class="flex-1">
-                  <p class="font-heading font-semibold text-gray-800"><%= milestone.title %></p>
+                  <p class="font-heading font-semibold text-gray-800"><%= milestone.name %></p>
                   <% if milestone.description.present? %>
                     <p class="text-xs text-gray-500 mt-1"><%= truncate(milestone.description, length: 60) %></p>
                   <% end %>
@@ -548,12 +548,19 @@
         <% @recent_memories.each_with_index do |memory, index| %>
           <% colors = memory_colors[index % memory_colors.length] %>
           <% age_label = Memory::AGE_GROUPS.find { |_, v| v == memory.age_group }&.first || memory.age_group %>
+          <% image_url = if memory.image_path.present?
+               memory.image_path
+             elsif memory.media.attached?
+               url_for(memory.media.variant(resize_to_limit: [800, 800]))
+             else
+               ''
+             end %>
           <div class="memory-card group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl cursor-pointer border border-gray-100 transition-all duration-300"
                data-turbo="false"
                data-memory-title="<%= memory.title %>"
                data-memory-date="<%= memory.taken_at.strftime("%d/%m/%Y") %>"
                data-memory-caption="<%= memory.caption %>"
-               data-memory-image="<%= memory.image_path.present? ? memory.image_path : (memory.media.attached? ? url_for(memory.media.variant(resize_to_limit: [800, 800])) : '') %>"
+               data-memory-image="<%= image_url %>"
                data-memory-age-group="<%= age_label %>"
                data-memory-age-color="<%= colors.join(';') %>"
                onclick="openMemoryModalFromData(this)">
@@ -563,9 +570,7 @@
               <% elsif memory.media.attached? %>
                 <%= optimized_image_tag(memory.media, :medium, class: "w-full h-full object-cover", alt: memory.title || "Memory photo") %>
               <% else %>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="w-16 h-16" style="color: <%= colors[1] %>40;">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
-                </svg>
+                <div class="text-6xl opacity-30" style="color: <%= colors[1] %>;">📷</div>
               <% end %>
               <!-- Overlay on hover -->
               <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
@@ -576,11 +581,7 @@
             </div>
             <div class="p-4">
               <div class="flex items-center gap-2 mb-2">
-                <div class="w-5 h-5 rounded-full flex items-center justify-center" style="background: <%= colors[0] %>;">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-3 h-3" style="color: <%= colors[1] %>;">
-                    <path fill-rule="evenodd" d="M6.75 2.25A.75.75 0 017.5 3v1.5h9V3A.75.75 0 0118 3v1.5h.75a3 3 0 013 3v11.25a3 3 0 01-3 3H5.25a3 3 0 01-3-3V7.5a3 3 0 013-3H6V3a.75.75 0 01.75-.75zm13.5 9a1.5 1.5 0 00-1.5-1.5H5.25a1.5 1.5 0 00-1.5 1.5v7.5a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5v-7.5z" clip-rule="evenodd" />
-                  </svg>
-                </div>
+                <span class="text-lg">📅</span>
                 <p class="font-body text-xs text-gray-500"><%= memory.taken_at.strftime("%d/%m/%Y") %></p>
               </div>
               <h3 class="font-heading font-bold text-gray-800 mb-1 line-clamp-1"><%= memory.title %></h3>
