@@ -2,7 +2,7 @@
 
 class PagesController < ApplicationController
   def home
-    @recent_memories = Memory.recent.limit(8)
+    @recent_memories = Memory.includes(:tags).recent.limit(8)
     @achieved_milestones = Milestone.achieved.limit(6)
     @memory_count = Memory.count
     @milestone_count = Milestone.achieved.count
@@ -12,9 +12,9 @@ class PagesController < ApplicationController
   def timeline
     @age_group = params[:age_group]
     memories = if @age_group.present?
-                 Memory.by_age_group(@age_group).recent
+                 Memory.includes(:tags).by_age_group(@age_group).recent
                else
-                 Memory.recent
+                 Memory.includes(:tags).recent
                end
     @age_groups = Memory::AGE_GROUPS
     @pagy, @memories = pagy(memories, items: 12)
@@ -39,7 +39,7 @@ class PagesController < ApplicationController
     @age_group = params[:age_group]
 
     if @query.present? || @age_group.present?
-      @memories = Memory.recent
+      @memories = Memory.includes(:tags).recent
       @memories = @memories.where("title LIKE ? OR caption LIKE ?", "%#{@query}%", "%#{@query}%") if @query.present?
       @memories = @memories.where(age_group: @age_group) if @age_group.present?
       @pagy, @memories = pagy(@memories, items: 12)

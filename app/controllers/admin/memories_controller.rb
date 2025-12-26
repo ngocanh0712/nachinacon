@@ -5,7 +5,7 @@ module Admin
     before_action :set_memory, only: %i[show edit update destroy]
 
     def index
-      @memories = Memory.recent
+      @memories = Memory.includes(:tags).recent
 
       # Search by title or caption
       if params[:q].present?

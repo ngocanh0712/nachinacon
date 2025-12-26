@@ -146,7 +146,23 @@
               </div>
               <h3 class="font-heading font-bold text-base text-gray-800 line-clamp-1 mb-1"><%= memory.title %></h3>
               <% if memory.caption.present? %>
-                <p class="font-body text-xs text-gray-500 line-clamp-2"><%= memory.caption %></p>
+                <p class="font-body text-xs text-gray-500 line-clamp-2 mb-2"><%= memory.caption %></p>
+              <% end %>
+
+              <!-- Tags -->
+              <% if memory.tags.any? %>
+                <div class="flex flex-wrap gap-1 mt-2">
+                  <% memory.tags.first(2).each do |tag| %>
+                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-body font-medium" style="background-color: <%= tag.color %>20; color: <%= tag.color %>;">
+                      <%= tag.name %>
+                    </span>
+                  <% end %>
+                  <% if memory.tags.count > 2 %>
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-body font-medium text-gray-500" style="background-color: rgba(156, 163, 175, 0.15);">
+                      +<%= memory.tags.count - 2 %>
+                    </span>
+                  <% end %>
+                </div>
               <% end %>
             </div>
           </div>

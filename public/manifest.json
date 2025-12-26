@@ -1,0 +1,62 @@
+{
+  "name": "NaChiNaCon - Baby Memory Keepsake",
+  "short_name": "NaChiNaCon",
+  "description": "Lưu giữ những khoảnh khắc quý giá của bé yêu",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FFFBF8",
+  "theme_color": "#C1DDD8",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshot-mobile.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "/screenshot-desktop.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ],
+  "categories": ["lifestyle", "photo"],
+  "shortcuts": [
+    {
+      "name": "Timeline",
+      "short_name": "Timeline",
+      "description": "Xem timeline kỷ niệm",
+      "url": "/timeline",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Albums",
+      "short_name": "Albums",
+      "description": "Xem albums",
+      "url": "/albums",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Milestones",
+      "short_name": "Milestones",
+      "description": "Xem milestones",
+      "url": "/milestones",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}
