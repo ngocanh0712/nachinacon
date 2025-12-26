@@ -3,10 +3,32 @@
 class PagesController < ApplicationController
   def home
     @recent_memories = Memory.includes(:tags).recent.limit(8)
-    @achieved_milestones = Milestone.achieved.limit(6)
+    @achieved_milestones = Milestone.achieved.limit(3)
+    @pending_milestones = Milestone.pending.limit(3)
+
+    # Stats
     @memory_count = Memory.count
     @milestone_count = Milestone.achieved.count
     @album_count = Album.count
+    @tag_count = Tag.count
+
+    # Featured memory (random with image)
+    @featured_memory = Memory.where.not(image_path: nil).order('RAND()').first ||
+                       Memory.where('media IS NOT NULL').order('RAND()').first
+
+    # Popular tags (with memory count)
+    @popular_tags = Tag.joins(:memories)
+                       .select('tags.*, COUNT(memories.id) as memory_count')
+                       .group('tags.id')
+                       .order('memory_count DESC')
+                       .limit(8)
+
+    # Recent albums
+    @recent_albums = Album.with_memories.recent.limit(4)
+
+    # Days since birth
+    birth_date = SiteSetting.baby_birth_date
+    @days_old = (Date.today - birth_date).to_i
   end
 
   def timeline
