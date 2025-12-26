@@ -1,0 +1,218 @@
+
+<!-- Header -->
+<section class="pt-8 pb-12 px-4 md:px-6 lg:px-8 relative overflow-hidden" style="background: linear-gradient(180deg, #FFFBF8 0%, #F8FDFC 30%, #FDF5F5 70%, #F8FDFC 100%);">
+  <!-- Animated Background Elements -->
+  <div class="absolute inset-0 overflow-hidden pointer-events-none">
+    <div class="absolute top-10 -right-20 w-64 h-64 rounded-full blur-3xl pulse-glow" style="background: rgba(242, 194, 194, 0.35);"></div>
+    <div class="absolute bottom-10 -left-20 w-56 h-56 rounded-full blur-3xl pulse-glow" style="background: rgba(193, 221, 216, 0.35); animation-delay: 2s;"></div>
+    <div class="absolute top-1/3 left-1/4 w-40 h-40 rounded-full blur-3xl pulse-glow" style="background: rgba(192, 223, 208, 0.25); animation-delay: 4s;"></div>
+
+    <!-- Sparkle effects -->
+    <div class="absolute top-24 left-16 w-2 h-2 rounded-full sparkle" style="background: #F2C2C2;"></div>
+    <div class="absolute top-40 right-24 w-3 h-3 rounded-full sparkle sparkle-delay-1" style="background: #C1DDD8;"></div>
+    <div class="absolute bottom-32 left-1/3 w-2 h-2 rounded-full sparkle sparkle-delay-2" style="background: #C0DFD0;"></div>
+  </div>
+
+  <div class="max-w-6xl mx-auto relative z-10">
+    <div class="text-center">
+      <!-- Title -->
+      <p class="font-accent text-xl md:text-2xl mb-2" style="color: #E8B0B0;">Tìm kiếm kỷ niệm</p>
+      <h1 class="shimmer-text font-accent italic text-4xl md:text-5xl lg:text-6xl mb-5">
+        <% if @query.present? %>
+          Kết quả cho "<%= @query %>"
+        <% else %>
+          Tìm kiếm
+        <% end %>
+      </h1>
+
+      <!-- Decorative line -->
+      <div class="flex items-center justify-center gap-3 mb-6">
+        <div class="w-16 h-1 rounded-full gradient-animated"></div>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 floating" style="color: #E8B0B0;">
+          <path fill-rule="evenodd" d="M10.5 3.75a6.75 6.75 0 100 13.5 6.75 6.75 0 000-13.5zM2.25 10.5a8.25 8.25 0 1114.59 5.28l4.69 4.69a.75.75 0 11-1.06 1.06l-4.69-4.69A8.25 8.25 0 012.25 10.5z" clip-rule="evenodd" />
+        </svg>
+        <div class="w-16 h-1 rounded-full gradient-animated"></div>
+      </div>
+
+      <!-- Search Bar -->
+      <div class="max-w-3xl mx-auto mb-8">
+        <%= form_with url: search_path, method: :get, class: "relative z-10" do %>
+          <div class="relative rounded-2xl overflow-hidden shadow-lg" style="background: linear-gradient(135deg, rgba(193, 221, 216, 0.08), rgba(242, 194, 194, 0.08));">
+            <div class="flex gap-2 p-1.5">
+              <%= text_field_tag :q, @query,
+                  placeholder: "Tìm kiếm kỷ niệm của bé...",
+                  class: "flex-1 px-5 py-3.5 rounded-xl font-body text-gray-700 placeholder-gray-400 transition-all duration-200 focus:outline-none bg-white border-0 focus:shadow-md",
+                  style: "box-shadow: 0 1px 3px rgba(193, 221, 216, 0.1);" %>
+              <%= button_tag type: "submit", class: "px-6 py-3.5 rounded-xl font-heading font-semibold text-white transition-all duration-200 hover:shadow-xl hover:scale-105 shadow-lg", style: "background: linear-gradient(135deg, #C1DDD8 0%, #A8CEC8 50%, #9FC4BC 100%);" do %>
+                <span class="flex items-center gap-2">
+                  <span class="text-lg">🔍</span>
+                  <span class="hidden sm:inline">Tìm kiếm</span>
+                </span>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+      <!-- Age Group Filter -->
+      <div class="flex flex-wrap justify-center gap-3 md:gap-4 mt-4">
+        <% filter_colors = [
+          ['#D1FAE5', '#059669'],
+          ['#FCE7F3', '#DB2777'],
+          ['#DBEAFE', '#2563EB'],
+          ['#FEF3C7', '#D97706'],
+          ['#EDE9FE', '#7C3AED'],
+          ['#FFEDD5', '#EA580C']
+        ] %>
+        <%= link_to search_path(q: @query), class: "filter-btn px-6 py-2.5 rounded-full font-heading font-semibold text-sm cursor-pointer shadow-lg #{@age_group.nil? ? 'text-white gradient-animated' : 'glass-card text-gray-600 hover:bg-white'}" do %>
+          Tất cả
+        <% end %>
+        <% @age_groups.each_with_index do |(label, value), index| %>
+          <% colors = filter_colors[index % filter_colors.length] %>
+          <%= link_to search_path(q: @query, age_group: value), class: "filter-btn px-6 py-2.5 rounded-full font-heading font-semibold text-sm cursor-pointer shadow-lg #{@age_group == value ? '' : 'glass-card hover:bg-white'}", style: @age_group == value ? "background: #{colors[0]}; color: #{colors[1]};" : "color: #6B7280;" do %>
+            <%= label %>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Stats Bar -->
+<section class="py-6 px-4 md:px-6 lg:px-8 -mt-6 relative z-20">
+  <div class="max-w-4xl mx-auto">
+    <div class="p-4 flex items-center justify-center gap-8">
+      <div class="text-center">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-2 shadow-lg" style="background: linear-gradient(135deg, #C1DDD8, #A8CEC8);">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-white">
+            <path fill-rule="evenodd" d="M1.5 6a2.25 2.25 0 012.25-2.25h16.5A2.25 2.25 0 0122.5 6v12a2.25 2.25 0 01-2.25 2.25H3.75A2.25 2.25 0 011.5 18V6zM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0021 18v-1.94l-2.69-2.689a1.5 1.5 0 00-2.12 0l-.88.879.97.97a.75.75 0 11-1.06 1.06l-5.16-5.159a1.5 1.5 0 00-2.12 0L3 16.061zm10.125-7.81a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0z" clip-rule="evenodd" />
+          </svg>
+        </div>
+        <p class="font-heading font-bold text-2xl text-gray-800">
+          <% if @pagy %>
+            <%= @pagy.count %>
+          <% else %>
+            <%= @memories.count %>
+          <% end %>
+        </p>
+        <p class="font-body text-xs text-gray-500">
+          <% if @query.present? %>Kết quả tìm thấy<% else %>Kỷ niệm<% end %>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Results Grid -->
+<section class="py-10 pb-20 px-4 md:px-6 lg:px-8 relative overflow-hidden" style="background: linear-gradient(180deg, #F8FAF9 0%, #FDFBF9 100%);">
+  <!-- Background decoration -->
+  <div class="absolute top-20 right-10 w-32 h-32 rounded-full blur-2xl opacity-30" style="background: #C0DFD0;"></div>
+  <div class="absolute bottom-40 left-10 w-24 h-24 rounded-full blur-2xl opacity-30" style="background: #F2C2C2;"></div>
+
+  <div class="max-w-6xl mx-auto relative z-10">
+    <% if @memories.any? %>
+      <% card_colors = [
+        ['#FCE7F3', '#EC4899'],
+        ['#D1FAE5', '#22C55E'],
+        ['#DBEAFE', '#3B82F6'],
+        ['#FEF3C7', '#F59E0B'],
+        ['#EDE9FE', '#A855F7'],
+        ['#FFEDD5', '#F97316'],
+        ['#CFFAFE', '#06B6D4'],
+        ['#F5D0FE', '#D946EF']
+      ] %>
+
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 md:gap-6 mb-4">
+        <% @memories.each_with_index do |memory, index| %>
+          <% colors = card_colors[index % card_colors.length] %>
+          <div class="group relative rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105 cursor-pointer" style="background: <%= colors[0] %>;">
+            <!-- Image -->
+            <div class="relative aspect-square overflow-hidden">
+              <% if memory.image_path.present? %>
+                <%= image_tag memory.image_path, class: "w-full h-full object-cover group-hover:scale-110 transition-transform duration-500", alt: memory.title %>
+              <% elsif memory.media.attached? %>
+                <%= optimized_image_tag(memory.media, :thumbnail, class: "w-full h-full object-cover group-hover:scale-110 transition-transform duration-500", alt: memory.title) %>
+              <% else %>
+                <div class="w-full h-full flex items-center justify-center text-6xl">
+                  📸
+                </div>
+              <% end %>
+              <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+
+              <!-- Age badge -->
+              <% age_label = Memory::AGE_GROUPS.find { |_, v| v == memory.age_group }&.first || memory.age_group %>
+              <div class="absolute top-3 left-3 px-3 py-1.5 rounded-full text-xs font-heading font-semibold shadow-lg backdrop-blur-sm" style="background: <%= colors[0] %>; color: <%= colors[1] %>;">
+                <%= age_label %>
+              </div>
+            </div>
+
+            <!-- Content -->
+            <div class="p-4">
+              <h3 class="font-heading font-bold text-base md:text-lg text-gray-800 mb-2 line-clamp-2 group-hover:text-gray-900">
+                <%= memory.title %>
+              </h3>
+
+              <div class="flex items-center gap-2 text-xs text-gray-600 mb-3">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4" style="color: <%= colors[1] %>;">
+                  <path fill-rule="evenodd" d="M6.75 2.25A.75.75 0 017.5 3v1.5h9V3A.75.75 0 0118 3v1.5h.75a3 3 0 013 3v11.25a3 3 0 01-3 3H5.25a3 3 0 01-3-3V7.5a3 3 0 013-3H6V3a.75.75 0 01.75-.75zm13.5 9a1.5 1.5 0 00-1.5-1.5H5.25a1.5 1.5 0 00-1.5 1.5v7.5a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5v-7.5z" clip-rule="evenodd" />
+                </svg>
+                <span class="font-body"><%= memory.taken_at.strftime("%d/%m/%Y") %></span>
+              </div>
+
+              <% if memory.tags.any? %>
+                <div class="flex flex-wrap gap-1.5">
+                  <% memory.tags.first(3).each do |tag| %>
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-body font-medium" style="background-color: <%= tag.color %>20; color: <%= tag.color %>;">
+                      <%= tag.name %>
+                    </span>
+                  <% end %>
+                  <% if memory.tags.count > 3 %>
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-body font-medium text-gray-500" style="background: rgba(156, 163, 175, 0.1);">
+                      +<%= memory.tags.count - 3 %>
+                    </span>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+      <!-- Pagination -->
+      <% if @pagy && @pagy.pages > 1 %>
+        <div class="mt-12 flex justify-center">
+          <%== pagy_nav(@pagy, link_extra: 'class="mx-1 px-4 py-3 rounded-xl font-heading font-medium text-sm transition-all duration-300"',
+                        page_link_extra: 'class="bg-white/80 hover:bg-white text-gray-700 shadow-md hover:shadow-lg"',
+                        active_link_extra: 'class="text-white shadow-xl" style="background: linear-gradient(135deg, #C1DDD8 0%, #A8D1BD 100%);"') %>
+        </div>
+      <% end %>
+    <% else %>
+      <!-- Empty State -->
+      <div class="text-center py-20">
+        <div class="inline-flex items-center justify-center w-24 h-24 rounded-full mb-6 shadow-xl" style="background: linear-gradient(135deg, #C1DDD8, #A8CEC8);">
+          <span class="text-5xl">🔍</span>
+        </div>
+        <h3 class="font-heading font-bold text-2xl text-gray-800 mb-3">
+          <% if @query.present? || @age_group.present? %>
+            Không tìm thấy kết quả
+          <% else %>
+            Nhập từ khóa để tìm kiếm
+          <% end %>
+        </h3>
+        <p class="font-body text-gray-600 mb-8">
+          <% if @query.present? || @age_group.present? %>
+            Thử tìm kiếm với từ khóa khác hoặc xóa bộ lọc
+          <% else %>
+            Tìm kiếm kỷ niệm của bé bằng từ khóa hoặc bộ lọc theo độ tuổi
+          <% end %>
+        </p>
+        <%= link_to root_path, class: "inline-flex items-center gap-2 px-6 py-3 rounded-xl font-heading font-semibold text-white shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105", style: "background: linear-gradient(135deg, #C1DDD8 0%, #A8CEC8 50%, #9FC4BC 100%);" do %>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+          </svg>
+          <span>Về trang chủ</span>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</section>
