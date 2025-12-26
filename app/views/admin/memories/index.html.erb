@@ -13,6 +13,62 @@
     <% end %>
   </div>
 
+  <!-- Search and Filter -->
+  <%= form_with url: admin_memories_path, method: :get, local: true, class: "bg-white rounded-2xl p-6 shadow-md" do |f| %>
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <!-- Search Input -->
+      <div class="md:col-span-2">
+        <label for="q" class="block font-body text-sm font-medium text-gray-700 mb-2">
+          Tìm kiếm
+        </label>
+        <%= text_field_tag :q, params[:q],
+            placeholder: "Tìm theo tiêu đề hoặc mô tả...",
+            class: "w-full px-4 py-2.5 font-body text-sm border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#C1DDD8] focus:border-transparent transition-all" %>
+      </div>
+
+      <!-- Age Group Filter -->
+      <div>
+        <label for="age_group" class="block font-body text-sm font-medium text-gray-700 mb-2">
+          Giai đoạn
+        </label>
+        <%= select_tag :age_group,
+            options_for_select([["Tất cả", ""]] + Memory::AGE_GROUPS, params[:age_group]),
+            class: "w-full px-4 py-2.5 font-body text-sm border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#C1DDD8] focus:border-transparent transition-all" %>
+      </div>
+
+      <!-- Memory Type Filter -->
+      <div>
+        <label for="memory_type" class="block font-body text-sm font-medium text-gray-700 mb-2">
+          Loại
+        </label>
+        <%= select_tag :memory_type,
+            options_for_select([["Tất cả", ""], ["Ảnh", "photo"], ["Video", "video"]], params[:memory_type]),
+            class: "w-full px-4 py-2.5 font-body text-sm border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#C1DDD8] focus:border-transparent transition-all" %>
+      </div>
+    </div>
+
+    <!-- Filter Actions -->
+    <div class="flex items-center gap-3 mt-4">
+      <%= button_tag type: 'submit',
+          class: "inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-heading font-semibold text-white shadow-md hover:shadow-lg transition-all",
+          style: "background: linear-gradient(135deg, #C1DDD8 0%, #A8D1BD 100%);" do %>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+        </svg>
+        Tìm kiếm
+      <% end %>
+
+      <% if params[:q].present? || params[:age_group].present? || params[:memory_type].present? %>
+        <%= link_to admin_memories_path, class: "inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-heading font-semibold text-gray-600 bg-gray-100 hover:bg-gray-200 transition-all" do %>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+          Xóa bộ lọc
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+
   <% if @memories.any? %>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       <% @memories.each do |memory| %>
@@ -78,6 +134,15 @@
         </div>
       <% end %>
     </div>
+
+    <!-- Pagination -->
+    <% if @pagy.pages > 1 %>
+      <div class="mt-8 flex justify-center">
+        <%== pagy_nav(@pagy, link_extra: 'class="mx-1 px-4 py-2 rounded-lg font-heading font-medium text-sm transition-all duration-200"',
+                      page_link_extra: 'class="hover:bg-gray-100 text-gray-700"',
+                      active_link_extra: 'class="text-white shadow-md" style="background: linear-gradient(135deg, #C1DDD8 0%, #A8D1BD 100%);"') %>
+      </div>
+    <% end %>
   <% else %>
     <!-- Empty State -->
     <div class="bg-white rounded-2xl shadow-md p-12 text-center">

@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   get 'milestones', to: 'pages#milestones'
   get 'albums', to: 'pages#albums'
   get 'albums/:id', to: 'pages#album', as: :album_detail
+  get 'search', to: 'pages#search'
 
   # Admin authentication
   get 'admin/login', to: 'sessions#new', as: :admin_login
@@ -22,5 +23,7 @@ Rails.application.routes.draw do
     resources :memories
     resources :milestones
     resources :albums
+    get 'settings', to: 'settings#index'
+    patch 'settings', to: 'settings#update'
   end
 end

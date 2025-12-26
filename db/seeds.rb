@@ -34,6 +34,19 @@ end
 
 puts "\n✅ Admin user setup completed!"
 
+# Create default site settings
+puts "\n⚙️  Setting up site settings..."
+SiteSetting::DEFAULTS.each do |key, value|
+  setting = SiteSetting.find_or_initialize_by(key: key)
+  next if setting.persisted? # Don't overwrite existing settings
+
+  setting.value = value
+  setting.value_type = (key.include?('date') ? 'date' : 'string')
+  setting.save!
+  puts "  ✓ #{key}: #{value}"
+end
+puts "✅ Site settings configured!"
+
 exit # Stop here - memories already created, prevent duplicates
 
 # Now create memories with real photos

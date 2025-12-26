@@ -1,0 +1,141 @@
+<div class="space-y-8">
+  <!-- Page Header -->
+  <div>
+    <h1 class="font-heading font-bold text-2xl text-gray-800">Cài đặt</h1>
+    <p class="font-body text-sm text-gray-500 mt-1">Cấu hình thông tin bé và website</p>
+  </div>
+
+  <!-- Flash Messages -->
+  <% if notice %>
+    <div class="bg-green-50 border-l-4 border-green-400 p-4 rounded-lg">
+      <p class="font-body text-sm text-green-700"><%= notice %></p>
+    </div>
+  <% end %>
+  <% if alert %>
+    <div class="bg-red-50 border-l-4 border-red-400 p-4 rounded-lg">
+      <p class="font-body text-sm text-red-700"><%= alert %></p>
+    </div>
+  <% end %>
+
+  <!-- Settings Form -->
+  <%= form_with url: admin_settings_path, method: :patch, local: true, class: "space-y-6" do |f| %>
+
+    <!-- Baby Information Section -->
+    <div class="bg-white rounded-2xl p-6 shadow-md">
+      <div class="flex items-center gap-3 mb-6">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style="background: linear-gradient(135deg, #F8D8D8 0%, #F2C2C2 100%);">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-gray-700">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+          </svg>
+        </div>
+        <div>
+          <h2 class="font-heading font-semibold text-lg text-gray-800">Thông tin bé</h2>
+          <p class="font-body text-xs text-gray-500">Cập nhật tên và ngày sinh của bé</p>
+        </div>
+      </div>
+
+      <div class="space-y-4">
+        <!-- Baby Full Name -->
+        <div>
+          <label for="baby_name" class="block font-body text-sm font-medium text-gray-700 mb-2">
+            Tên đầy đủ
+          </label>
+          <%= text_field_tag 'settings[baby_name]', @settings['baby_name'],
+              id: 'baby_name',
+              class: 'w-full px-4 py-3 font-body text-sm border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#C1DDD8] focus:border-transparent transition-all',
+              placeholder: 'Ví dụ: Nguyễn Gia Minh' %>
+        </div>
+
+        <!-- Baby Nickname -->
+        <div>
+          <label for="baby_nickname" class="block font-body text-sm font-medium text-gray-700 mb-2">
+            Biệt danh / Tên thân mật
+          </label>
+          <%= text_field_tag 'settings[baby_nickname]', @settings['baby_nickname'],
+              id: 'baby_nickname',
+              class: 'w-full px-4 py-3 font-body text-sm border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#C1DDD8] focus:border-transparent transition-all',
+              placeholder: 'Ví dụ: Nacon' %>
+        </div>
+
+        <!-- Birth Date -->
+        <div>
+          <label for="baby_birth_date" class="block font-body text-sm font-medium text-gray-700 mb-2">
+            Ngày sinh
+          </label>
+          <%= date_field_tag 'settings[baby_birth_date]', @settings['baby_birth_date'],
+              id: 'baby_birth_date',
+              class: 'w-full px-4 py-3 font-body text-sm border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#C1DDD8] focus:border-transparent transition-all' %>
+          <p class="font-body text-xs text-gray-500 mt-1">
+            Tuổi hiện tại: <%= SiteSetting.baby_age_in_months %> tháng
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Site Information Section -->
+    <div class="bg-white rounded-2xl p-6 shadow-md">
+      <div class="flex items-center gap-3 mb-6">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style="background: linear-gradient(135deg, #E0EEEB 0%, #C1DDD8 100%);">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-gray-700">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+        </div>
+        <div>
+          <h2 class="font-heading font-semibold text-lg text-gray-800">Thông tin website</h2>
+          <p class="font-body text-xs text-gray-500">Cấu hình tiêu đề và nội dung trang chủ</p>
+        </div>
+      </div>
+
+      <div class="space-y-4">
+        <!-- Site Title -->
+        <div>
+          <label for="site_title" class="block font-body text-sm font-medium text-gray-700 mb-2">
+            Tiêu đề website
+          </label>
+          <%= text_field_tag 'settings[site_title]', @settings['site_title'],
+              id: 'site_title',
+              class: 'w-full px-4 py-3 font-body text-sm border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#C1DDD8] focus:border-transparent transition-all',
+              placeholder: 'Ví dụ: NaChiNaCon - Baby Memory Keepsake' %>
+        </div>
+
+        <!-- Hero Title -->
+        <div>
+          <label for="hero_title" class="block font-body text-sm font-medium text-gray-700 mb-2">
+            Tiêu đề trang chủ
+          </label>
+          <%= text_field_tag 'settings[hero_title]', @settings['hero_title'],
+              id: 'hero_title',
+              class: 'w-full px-4 py-3 font-body text-sm border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#C1DDD8] focus:border-transparent transition-all',
+              placeholder: 'Ví dụ: Kỷ Niệm Của Bé' %>
+        </div>
+
+        <!-- Hero Subtitle -->
+        <div>
+          <label for="hero_subtitle" class="block font-body text-sm font-medium text-gray-700 mb-2">
+            Phụ đề trang chủ
+          </label>
+          <%= text_field_tag 'settings[hero_subtitle]', @settings['hero_subtitle'],
+              id: 'hero_subtitle',
+              class: 'w-full px-4 py-3 font-body text-sm border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#C1DDD8] focus:border-transparent transition-all',
+              placeholder: 'Ví dụ: Lưu giữ từng khoảnh khắc quý giá' %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="flex justify-end">
+      <%= button_tag type: 'submit',
+          class: 'px-6 py-3 font-body font-medium text-sm text-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300',
+          style: 'background: linear-gradient(135deg, #C1DDD8 0%, #A8D1BD 100%);' do %>
+        <span class="flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+          </svg>
+          Lưu cài đặt
+        </span>
+      <% end %>
+    </div>
+
+  <% end %>
+</div>

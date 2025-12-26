@@ -178,6 +178,15 @@
         <% end %>
       </div>
     <% end %>
+
+    <!-- Pagination -->
+    <% if @pagy && @pagy.pages > 1 %>
+      <div class="mt-12 flex justify-center">
+        <%== pagy_nav(@pagy, link_extra: 'class="mx-1 px-4 py-3 rounded-xl font-heading font-medium text-sm transition-all duration-300"',
+                      page_link_extra: 'class="bg-white/80 hover:bg-white text-gray-700 shadow-md hover:shadow-lg"',
+                      active_link_extra: 'class="text-white shadow-xl" style="background: linear-gradient(135deg, #C1DDD8 0%, #A8D1BD 100%);"') %>
+      </div>
+    <% end %>
   </div>
 </section>
 

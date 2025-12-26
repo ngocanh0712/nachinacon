@@ -151,6 +151,7 @@ GEM
       racc (~> 1.4)
     nokogiri (1.18.10-x86_64-linux-gnu)
       racc (~> 1.4)
+    pagy (9.4.0)
     pp (0.6.3)
       prettyprint
     prettyprint (0.2.0)
@@ -257,6 +258,7 @@ DEPENDENCIES
   image_processing (~> 1.2)
   importmap-rails
   mysql2 (~> 0.5)
+  pagy (~> 9.0)
   puma (>= 5.0)
   rails (~> 7.1.5)
   sprockets-rails

@@ -34,4 +34,17 @@ class Memory < ApplicationRecord
   def video?
     memory_type == 'video'
   end
+
+  # Unified method to get image URL (prioritize image_path over Active Storage)
+  def display_image_url
+    return image_path if image_path.present?
+    return nil unless media.attached?
+
+    Rails.application.routes.url_helpers.rails_blob_path(media, only_path: true)
+  end
+
+  # Check if memory has any image
+  def has_image?
+    image_path.present? || media.attached?
+  end
 end

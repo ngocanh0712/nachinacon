@@ -11,12 +11,13 @@ class PagesController < ApplicationController
 
   def timeline
     @age_group = params[:age_group]
-    @memories = if @age_group.present?
-                  Memory.by_age_group(@age_group).recent
-                else
-                  Memory.recent
-                end
+    memories = if @age_group.present?
+                 Memory.by_age_group(@age_group).recent
+               else
+                 Memory.recent
+               end
     @age_groups = Memory::AGE_GROUPS
+    @pagy, @memories = pagy(memories, items: 12)
   end
 
   def milestones
@@ -31,5 +32,21 @@ class PagesController < ApplicationController
   def album
     @album = Album.find(params[:id])
     @memories = @album.memories.recent
+  end
+
+  def search
+    @query = params[:q]
+    @age_group = params[:age_group]
+
+    if @query.present? || @age_group.present?
+      @memories = Memory.recent
+      @memories = @memories.where("title LIKE ? OR caption LIKE ?", "%#{@query}%", "%#{@query}%") if @query.present?
+      @memories = @memories.where(age_group: @age_group) if @age_group.present?
+      @pagy, @memories = pagy(@memories, items: 12)
+    else
+      @memories = []
+    end
+
+    @age_groups = Memory::AGE_GROUPS
   end
 end

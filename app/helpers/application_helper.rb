@@ -1,4 +1,5 @@
 module ApplicationHelper
+  include Pagy::Frontend
   # Lazy load images for better performance
   # Automatically adds loading="lazy" and decoding="async" attributes
   def lazy_image_tag(source, options = {})

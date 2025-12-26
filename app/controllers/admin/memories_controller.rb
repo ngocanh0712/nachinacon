@@ -6,6 +6,24 @@ module Admin
 
     def index
       @memories = Memory.recent
+
+      # Search by title or caption
+      if params[:q].present?
+        @memories = @memories.where("title LIKE ? OR caption LIKE ?", "%#{params[:q]}%", "%#{params[:q]}%")
+      end
+
+      # Filter by age group
+      if params[:age_group].present?
+        @memories = @memories.where(age_group: params[:age_group])
+      end
+
+      # Filter by memory type
+      if params[:memory_type].present?
+        @memories = @memories.where(memory_type: params[:memory_type])
+      end
+
+      # Pagination
+      @pagy, @memories = pagy(@memories, items: 12)
     end
 
     def show; end
