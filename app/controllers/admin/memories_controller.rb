@@ -85,7 +85,7 @@ module Admin
 
     def memory_params
       params.require(:memory).permit(:title, :caption, :taken_at, :age_group, :memory_type, :media, :image_path,
-                                     album_ids: [])
+                                     album_ids: [], tag_ids: [])
     end
 
     def delete_existing_image(memory)

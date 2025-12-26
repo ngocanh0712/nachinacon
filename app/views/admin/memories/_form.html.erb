@@ -202,6 +202,44 @@
     }
   </script>
 
+  <!-- Tags -->
+  <% if Tag.any? %>
+    <div>
+      <label class="block text-sm font-semibold text-gray-700 mb-3 font-heading">Tags</label>
+      <div class="flex flex-wrap gap-2">
+        <% Tag.alphabetical.each do |tag| %>
+          <label class="tag-checkbox inline-flex items-center gap-2 px-4 py-2 rounded-full border-2 cursor-pointer transition-all duration-200 hover:shadow-md"
+                 style="border-color: <%= tag.color %>20; background-color: <%= tag.color %>15;">
+            <%= check_box_tag 'memory[tag_ids][]', tag.id, memory.tags.include?(tag),
+                class: "sr-only tag-input" %>
+            <span class="checkmark w-4 h-4 rounded border-2 flex items-center justify-center transition-all"
+                  style="border-color: <%= tag.color %>;">
+              <svg class="w-3 h-3 hidden" fill="currentColor" viewBox="0 0 20 20" style="color: <%= tag.color %>;">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+              </svg>
+            </span>
+            <span class="font-body text-sm font-medium" style="color: <%= tag.color %>;">
+              <%= tag.name %>
+            </span>
+          </label>
+        <% end %>
+      </div>
+    </div>
+
+    <style>
+      .tag-checkbox .tag-input:checked + .checkmark {
+        background-color: currentColor;
+      }
+      .tag-checkbox .tag-input:checked + .checkmark svg {
+        display: block;
+        color: white !important;
+      }
+      .tag-checkbox:has(.tag-input:checked) {
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      }
+    </style>
+  <% end %>
+
   <!-- Albums -->
   <% if Album.any? %>
     <div>

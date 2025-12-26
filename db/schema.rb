@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_12_26_015452) do
+ActiveRecord::Schema[7.1].define(version: 2025_12_26_022417) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -76,6 +76,15 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_26_015452) do
     t.index ["memory_type"], name: "index_memories_on_memory_type"
   end
 
+  create_table "memory_tags", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "memory_id", null: false
+    t.bigint "tag_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["memory_id"], name: "index_memory_tags_on_memory_id"
+    t.index ["tag_id"], name: "index_memory_tags_on_tag_id"
+  end
+
   create_table "milestones", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
     t.text "description"
@@ -96,8 +105,18 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_26_015452) do
     t.index ["key"], name: "index_site_settings_on_key", unique: true
   end
 
+  create_table "tags", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "color", default: "#C1DDD8"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_tags_on_name", unique: true
+  end
+
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "album_memories", "albums"
   add_foreign_key "album_memories", "memories"
+  add_foreign_key "memory_tags", "memories"
+  add_foreign_key "memory_tags", "tags"
 end

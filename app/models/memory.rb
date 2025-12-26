@@ -4,6 +4,8 @@ class Memory < ApplicationRecord
   has_one_attached :media
   has_many :album_memories, dependent: :destroy
   has_many :albums, through: :album_memories
+  has_many :memory_tags, dependent: :destroy
+  has_many :tags, through: :memory_tags
 
   # Age groups for baby memories
   AGE_GROUPS = [

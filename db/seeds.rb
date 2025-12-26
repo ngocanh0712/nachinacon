@@ -47,6 +47,26 @@ SiteSetting::DEFAULTS.each do |key, value|
 end
 puts "✅ Site settings configured!"
 
+# Create default tags
+puts "\n🏷️  Creating default tags..."
+default_tags = [
+  { name: 'Sinh nhật', color: '#F2C2C2' },
+  { name: 'Gia đình', color: '#C1DDD8' },
+  { name: 'Du lịch', color: '#C0DFD0' },
+  { name: 'Học tập', color: '#C9E4F5' },
+  { name: 'Vui chơi', color: '#F5D5C0' },
+  { name: 'Ăn uống', color: '#E8B0B0' },
+  { name: 'Mốc quan trọng', color: '#E8D4F0' }
+]
+
+default_tags.each do |tag_data|
+  tag = Tag.find_or_create_by!(name: tag_data[:name]) do |t|
+    t.color = tag_data[:color]
+  end
+  puts "  ✓ #{tag.name}"
+end
+puts "✅ Tags created!"
+
 exit # Stop here - memories already created, prevent duplicates
 
 # Now create memories with real photos
