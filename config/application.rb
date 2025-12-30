@@ -20,23 +20,54 @@ Bundler.require(*Rails.groups)
 
 # Configure Cloudinary EARLY (before application initialization)
 # This ensures global config is available for Active Storage integrity checks
-if defined?(Cloudinary) && !Rails.env.test?
-  if ENV['CLOUDINARY_URL'].present?
-    Cloudinary.config_from_url(ENV['CLOUDINARY_URL'])
-    puts "🌩️  Cloudinary configured via CLOUDINARY_URL"
-  elsif ENV['CLOUDINARY_CLOUD_NAME'].present? && ENV['CLOUDINARY_API_KEY'].present? && ENV['CLOUDINARY_API_SECRET'].present?
-    Cloudinary.config do |config|
-      config.cloud_name = ENV['CLOUDINARY_CLOUD_NAME']
-      config.api_key = ENV['CLOUDINARY_API_KEY']
-      config.api_secret = ENV['CLOUDINARY_API_SECRET']
-      config.secure = true
-      config.cdn_subdomain = true
-    end
-    puts "🌩️  Cloudinary configured via individual env vars"
-    puts "    Cloud: #{ENV['CLOUDINARY_CLOUD_NAME']}, Key: #{ENV['CLOUDINARY_API_KEY'][0..8]}..."
-  else
-    puts "⚠️  Cloudinary env vars not found at boot time"
+unless ENV['RAILS_ENV'] == 'test' || ENV['RAILS_ENV'] == 'development'
+  puts "\n" + "=" * 80
+  puts "🔍 CLOUDINARY BOOT DEBUG"
+  puts "=" * 80
+  puts "Rails ENV: #{ENV['RAILS_ENV']}"
+  puts "Cloudinary gem loaded: #{defined?(Cloudinary) ? 'YES' : 'NO'}"
+
+  # Debug: Check what env vars are available
+  cloudinary_vars = ENV.select { |k, _| k.start_with?('CLOUDINARY_') }
+  puts "\nCloudinary env vars found: #{cloudinary_vars.count}"
+  cloudinary_vars.each do |key, value|
+    masked_value = value.nil? ? 'NIL' : (value.empty? ? 'EMPTY' : "#{value[0..15]}... (#{value.length} chars)")
+    puts "  #{key}: #{masked_value}"
   end
+
+  if defined?(Cloudinary)
+    if ENV['CLOUDINARY_URL'].present?
+      Cloudinary.config_from_url(ENV['CLOUDINARY_URL'])
+      puts "\n✅ Cloudinary configured via CLOUDINARY_URL"
+    elsif ENV['CLOUDINARY_CLOUD_NAME'].present? && ENV['CLOUDINARY_API_KEY'].present? && ENV['CLOUDINARY_API_SECRET'].present?
+      Cloudinary.config do |config|
+        config.cloud_name = ENV['CLOUDINARY_CLOUD_NAME']
+        config.api_key = ENV['CLOUDINARY_API_KEY']
+        config.api_secret = ENV['CLOUDINARY_API_SECRET']
+        config.secure = true
+        config.cdn_subdomain = true
+      end
+      puts "\n✅ Cloudinary configured via individual env vars"
+      puts "    Cloud: #{Cloudinary.config.cloud_name}"
+      puts "    API Key: #{Cloudinary.config.api_key[0..8]}..."
+    else
+      puts "\n❌ CLOUDINARY ENV VARS NOT FOUND!"
+      puts "Cannot configure Cloudinary - env vars missing"
+    end
+
+    # Verify configuration
+    if Cloudinary.config.cloud_name && Cloudinary.config.api_key
+      puts "\n✅ Cloudinary.config is SET"
+      puts "    cloud_name: #{Cloudinary.config.cloud_name}"
+      puts "    api_key: #{Cloudinary.config.api_key[0..8]}..."
+    else
+      puts "\n❌ Cloudinary.config is NOT SET"
+    end
+  else
+    puts "\n❌ Cloudinary gem not loaded yet"
+  end
+
+  puts "=" * 80 + "\n"
 end
 
 module Nachinacon
