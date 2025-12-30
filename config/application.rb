@@ -18,6 +18,27 @@ require "action_cable/engine"
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
+# Configure Cloudinary EARLY (before application initialization)
+# This ensures global config is available for Active Storage integrity checks
+if defined?(Cloudinary) && !Rails.env.test?
+  if ENV['CLOUDINARY_URL'].present?
+    Cloudinary.config_from_url(ENV['CLOUDINARY_URL'])
+    puts "🌩️  Cloudinary configured via CLOUDINARY_URL"
+  elsif ENV['CLOUDINARY_CLOUD_NAME'].present? && ENV['CLOUDINARY_API_KEY'].present? && ENV['CLOUDINARY_API_SECRET'].present?
+    Cloudinary.config do |config|
+      config.cloud_name = ENV['CLOUDINARY_CLOUD_NAME']
+      config.api_key = ENV['CLOUDINARY_API_KEY']
+      config.api_secret = ENV['CLOUDINARY_API_SECRET']
+      config.secure = true
+      config.cdn_subdomain = true
+    end
+    puts "🌩️  Cloudinary configured via individual env vars"
+    puts "    Cloud: #{ENV['CLOUDINARY_CLOUD_NAME']}, Key: #{ENV['CLOUDINARY_API_KEY'][0..8]}..."
+  else
+    puts "⚠️  Cloudinary env vars not found at boot time"
+  end
+end
+
 module Nachinacon
   class Application < Rails::Application
     # Set secret_key_base from ENV or use fallback
