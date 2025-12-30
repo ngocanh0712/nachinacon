@@ -25,5 +25,6 @@ Rails.application.routes.draw do
     resources :albums
     get 'settings', to: 'settings#index'
     patch 'settings', to: 'settings#update'
+    get 'system/cloudinary', to: 'system#cloudinary_status', as: :cloudinary_status
   end
 end

@@ -1,0 +1,162 @@
+<div class="min-h-screen py-8 px-4">
+  <div class="max-w-4xl mx-auto">
+    <!-- Header -->
+    <div class="mb-8">
+      <%= link_to admin_memories_path, class: "inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-4" do %>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+        </svg>
+        Quay lại
+      <% end %>
+
+      <h1 class="text-3xl font-heading font-bold text-gray-900">Cloudinary Configuration Status</h1>
+      <p class="text-gray-600 mt-2">Kiểm tra trạng thái cấu hình Cloudinary</p>
+    </div>
+
+    <!-- Overall Status -->
+    <div class="bg-white rounded-2xl shadow-lg p-6 mb-6">
+      <% if @connection_status == :success %>
+        <div class="flex items-center gap-3 text-green-600">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <div>
+            <h2 class="text-xl font-bold">✅ Cloudinary đã được cấu hình đúng!</h2>
+            <p class="text-sm text-gray-600">Connection test thành công</p>
+          </div>
+        </div>
+      <% elsif @connection_status == :not_configured %>
+        <div class="flex items-center gap-3 text-red-600">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+          </svg>
+          <div>
+            <h2 class="text-xl font-bold">❌ Cloudinary chưa được cấu hình!</h2>
+            <p class="text-sm text-gray-600">Environment variables chưa được set</p>
+          </div>
+        </div>
+      <% else %>
+        <div class="flex items-center gap-3 text-orange-600">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+          </svg>
+          <div>
+            <h2 class="text-xl font-bold">⚠️ Cloudinary có lỗi!</h2>
+            <p class="text-sm text-gray-600"><%= @connection_error %></p>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Environment Variables -->
+    <div class="bg-white rounded-2xl shadow-lg p-6 mb-6">
+      <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
+        <span class="text-2xl">1️⃣</span>
+        Railway Environment Variables
+      </h3>
+      <div class="space-y-2 font-mono text-sm">
+        <div class="flex items-center justify-between py-2 px-4 bg-gray-50 rounded">
+          <span class="font-semibold">CLOUDINARY_URL:</span>
+          <span class="<%= @env_vars[:cloudinary_url].present? ? 'text-green-600' : 'text-red-600' %>">
+            <%= @env_vars[:cloudinary_url].present? ? "#{@env_vars[:cloudinary_url][0..25]}... ✓" : 'MISSING ✗' %>
+          </span>
+        </div>
+        <div class="flex items-center justify-between py-2 px-4 bg-gray-50 rounded">
+          <span class="font-semibold">CLOUDINARY_CLOUD_NAME:</span>
+          <span class="<%= @env_vars[:cloud_name].present? ? 'text-green-600' : 'text-red-600' %>">
+            <%= @env_vars[:cloud_name].present? ? "#{@env_vars[:cloud_name]} ✓" : 'MISSING ✗' %>
+          </span>
+        </div>
+        <div class="flex items-center justify-between py-2 px-4 bg-gray-50 rounded">
+          <span class="font-semibold">CLOUDINARY_API_KEY:</span>
+          <span class="<%= @env_vars[:api_key].present? ? 'text-green-600' : 'text-red-600' %>">
+            <%= @env_vars[:api_key].present? ? "#{@env_vars[:api_key][0..8]}... ✓" : 'MISSING ✗' %>
+          </span>
+        </div>
+        <div class="flex items-center justify-between py-2 px-4 bg-gray-50 rounded">
+          <span class="font-semibold">CLOUDINARY_API_SECRET:</span>
+          <span class="<%= @env_vars[:api_secret].present? ? 'text-green-600' : 'text-red-600' %>">
+            <%= @env_vars[:api_secret].present? ? '***SET*** ✓' : 'MISSING ✗' %>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cloudinary Gem Config -->
+    <div class="bg-white rounded-2xl shadow-lg p-6 mb-6">
+      <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
+        <span class="text-2xl">2️⃣</span>
+        Cloudinary Gem Configuration
+      </h3>
+      <div class="space-y-2 font-mono text-sm">
+        <div class="flex items-center justify-between py-2 px-4 bg-gray-50 rounded">
+          <span class="font-semibold">Cloud Name:</span>
+          <span class="<%= @gem_config[:cloud_name].present? ? 'text-green-600' : 'text-red-600' %>">
+            <%= @gem_config[:cloud_name].present? ? "#{@gem_config[:cloud_name]} ✓" : 'NOT SET ✗' %>
+          </span>
+        </div>
+        <div class="flex items-center justify-between py-2 px-4 bg-gray-50 rounded">
+          <span class="font-semibold">API Key:</span>
+          <span class="<%= @gem_config[:api_key].present? ? 'text-green-600' : 'text-red-600' %>">
+            <%= @gem_config[:api_key].present? ? "#{@gem_config[:api_key][0..8]}... ✓" : 'NOT SET ✗' %>
+          </span>
+        </div>
+        <div class="flex items-center justify-between py-2 px-4 bg-gray-50 rounded">
+          <span class="font-semibold">API Secret:</span>
+          <span class="<%= @gem_config[:api_secret].present? ? 'text-green-600' : 'text-red-600' %>">
+            <%= @gem_config[:api_secret].present? ? '***SET*** ✓' : 'NOT SET ✗' %>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active Storage Config -->
+    <div class="bg-white rounded-2xl shadow-lg p-6 mb-6">
+      <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
+        <span class="text-2xl">3️⃣</span>
+        Active Storage Configuration
+      </h3>
+      <div class="space-y-2 font-mono text-sm">
+        <div class="flex items-center justify-between py-2 px-4 bg-gray-50 rounded">
+          <span class="font-semibold">Current Service:</span>
+          <span class="text-blue-600 font-bold"><%= @active_storage_service %></span>
+        </div>
+        <% if @storage_config %>
+          <div class="flex items-center justify-between py-2 px-4 bg-gray-50 rounded">
+            <span class="font-semibold">Storage Cloud Name:</span>
+            <span class="<%= @storage_config['cloud_name'].present? ? 'text-green-600' : 'text-red-600' %>">
+              <%= @storage_config['cloud_name'].present? ? "#{@storage_config['cloud_name']} ✓" : 'MISSING ✗' %>
+            </span>
+          </div>
+          <div class="flex items-center justify-between py-2 px-4 bg-gray-50 rounded">
+            <span class="font-semibold">Storage API Key:</span>
+            <span class="<%= @storage_config['api_key'].present? ? 'text-green-600' : 'text-red-600' %>">
+              <%= @storage_config['api_key'].present? ? "#{@storage_config['api_key'][0..8]}... ✓" : 'MISSING ✗' %>
+            </span>
+          </div>
+        <% elsif @storage_config_error %>
+          <div class="py-2 px-4 bg-red-50 rounded text-red-600">
+            Error: <%= @storage_config_error %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Instructions -->
+    <% if @connection_status != :success %>
+      <div class="bg-blue-50 border-2 border-blue-200 rounded-2xl p-6">
+        <h3 class="text-lg font-bold mb-4 text-blue-900">📋 Hướng dẫn fix:</h3>
+        <ol class="list-decimal list-inside space-y-3 text-gray-700">
+          <li class="font-semibold">Vào Cloudinary Dashboard: <a href="https://cloudinary.com/console" target="_blank" class="text-blue-600 underline">https://cloudinary.com/console</a></li>
+          <li>Tìm phần <strong>API Environment variable</strong></li>
+          <li>Copy toàn bộ dòng bắt đầu bằng <code class="bg-gray-200 px-2 py-1 rounded">CLOUDINARY_URL=cloudinary://...</code></li>
+          <li>Vào Railway Dashboard → Project → <strong>Variables</strong></li>
+          <li>Click <strong>+ New Variable</strong></li>
+          <li>Paste giá trị vừa copy (bao gồm cả phần <code class="bg-gray-200 px-2 py-1 rounded">CLOUDINARY_URL=</code>)</li>
+          <li>Railway sẽ tự động redeploy</li>
+          <li>Đợi 1-2 phút, sau đó <strong>refresh trang này</strong> để kiểm tra lại</li>
+        </ol>
+      </div>
+    <% end %>
+  </div>
+</div>
