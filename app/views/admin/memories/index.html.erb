@@ -136,13 +136,7 @@
     </div>
 
     <!-- Pagination -->
-    <% if @pagy.pages > 1 %>
-      <div class="mt-8 flex justify-center">
-        <%== pagy_nav(@pagy, link_extra: 'class="mx-1 px-4 py-2 rounded-lg font-heading font-medium text-sm transition-all duration-200"',
-                      page_link_extra: 'class="hover:bg-gray-100 text-gray-700"',
-                      active_link_extra: 'class="text-white shadow-md" style="background: linear-gradient(135deg, #C1DDD8 0%, #A8D1BD 100%);"') %>
-      </div>
-    <% end %>
+    <%= render 'shared/pagination', pagy: @pagy %>
   <% else %>
     <!-- Empty State -->
     <div class="bg-white rounded-2xl shadow-md p-12 text-center">

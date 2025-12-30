@@ -66,66 +66,7 @@
             </svg>
             <span>Milestones</span>
           <% end %>
-
-          <!-- PWA Install Button -->
-          <button id="installButton" class="hidden group inline-flex items-center justify-center gap-3 text-white font-heading font-semibold px-8 py-4 rounded-xl shadow-xl cursor-pointer transition-all duration-300 hover:shadow-2xl hover:scale-105" style="background: linear-gradient(135deg, #A8CEC8 0%, #8DB8AE 100%);">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 group-hover:translate-y-1 transition-transform">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
-            </svg>
-            <span>Cài đặt App</span>
-          </button>
         </div>
-
-        <script>
-          // PWA Install Button Handler
-          let deferredPrompt;
-          const installButton = document.getElementById('installButton');
-
-          window.addEventListener('beforeinstallprompt', (e) => {
-            // Prevent default browser install prompt
-            e.preventDefault();
-            deferredPrompt = e;
-
-            // Show custom install button
-            installButton.classList.remove('hidden');
-            console.log('✅ PWA install prompt available!');
-          });
-
-          installButton.addEventListener('click', async () => {
-            if (!deferredPrompt) {
-              console.log('❌ No install prompt available');
-              return;
-            }
-
-            // Show install prompt
-            deferredPrompt.prompt();
-
-            // Wait for user choice
-            const { outcome } = await deferredPrompt.userChoice;
-            console.log(`User choice: ${outcome}`);
-
-            if (outcome === 'accepted') {
-              console.log('✅ User accepted the install');
-            } else {
-              console.log('❌ User dismissed the install');
-            }
-
-            // Clear prompt
-            deferredPrompt = null;
-            installButton.classList.add('hidden');
-          });
-
-          // Hide button after successful install
-          window.addEventListener('appinstalled', () => {
-            installButton.classList.add('hidden');
-            console.log('✅ PWA installed successfully');
-
-            // Optional: Show success message
-            setTimeout(() => {
-              alert('🎉 App đã được cài đặt! Bạn có thể mở app từ màn hình chính.');
-            }, 1000);
-          });
-        </script>
       </div>
 
       <!-- Hero Image/Avatar -->
@@ -310,7 +251,7 @@
 </section>
 <% end %>
 <!-- Quick Links Section -->
-<section class="py-16 px-4 md:px-6 lg:px-8 bg-white relative overflow-hidden">
+<section class="hidden md:block py-16 px-4 md:px-6 lg:px-8 bg-white relative overflow-hidden">
   <!-- Background decoration -->
   <div class="absolute top-0 right-0 w-64 h-64 rounded-full blur-3xl opacity-30" style="background: #C1DDD8;"></div>
   <div class="absolute bottom-0 left-0 w-48 h-48 rounded-full blur-3xl opacity-30" style="background: #F2C2C2;"></div>
@@ -544,14 +485,14 @@
       <h2 class="font-accent italic text-3xl md:text-4xl" style="color: #C1DDD8;">Tags</h2>
     </div>
 
-    <div class="flex flex-wrap justify-center gap-3">
+    <div class="flex flex-wrap justify-center gap-2 md:gap-3">
       <% @popular_tags.each do |tag| %>
         <% border_style = "border-color: #{tag.color}40; background-color: #{tag.color}10;" %>
         <% badge_style = "background: #{tag.color}30; color: #{tag.color};" %>
-        <%= link_to timeline_path(tag: tag.id), class: "group inline-flex items-center gap-3 px-6 py-3 rounded-2xl border-2 transition-all duration-300 hover:shadow-lg hover:scale-105", style: border_style do %>
-          <span class="w-3 h-3 rounded-full" style="background: <%= tag.color %>;"></span>
-          <span class="font-heading font-semibold text-gray-800"><%= tag.name %></span>
-          <span class="px-2 py-0.5 rounded-full text-xs font-body font-medium" style="<%= badge_style %>">
+        <%= link_to timeline_path(tag: tag.id), class: "group inline-flex items-center gap-2 md:gap-3 px-3 py-2 md:px-6 md:py-3 rounded-xl md:rounded-2xl border-2 transition-all duration-300 hover:shadow-lg hover:scale-105", style: border_style do %>
+          <span class="w-2 h-2 md:w-3 md:h-3 rounded-full flex-shrink-0" style="background: <%= tag.color %>;"></span>
+          <span class="font-heading font-semibold text-xs md:text-sm text-gray-800"><%= tag.name %></span>
+          <span class="px-1.5 md:px-2 py-0.5 rounded-full text-xs font-body font-medium" style="<%= badge_style %>">
             <%= tag.memory_count %>
           </span>
         <% end %>

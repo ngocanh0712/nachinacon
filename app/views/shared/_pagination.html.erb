@@ -1,0 +1,59 @@
+<% if pagy && pagy.pages > 1 %>
+  <div class="flex items-center justify-center gap-2 mt-12">
+    <!-- Previous Button -->
+    <% if pagy.prev %>
+      <%= link_to pagy_url_for(pagy, pagy.prev), class: "inline-flex items-center justify-center w-10 h-10 rounded-xl font-heading font-semibold text-sm transition-all duration-300 bg-white/80 hover:bg-white text-gray-700 shadow-md hover:shadow-lg hover:scale-105" do %>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+        </svg>
+      <% end %>
+    <% else %>
+      <div class="inline-flex items-center justify-center w-10 h-10 rounded-xl font-heading font-semibold text-sm bg-gray-100 text-gray-400 cursor-not-allowed">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+        </svg>
+      </div>
+    <% end %>
+
+    <!-- Page Numbers -->
+    <div class="flex items-center gap-1">
+      <% pagy.series.each do |item| %>
+        <% if item.is_a?(Integer) %>
+          <% if item == pagy.page %>
+            <div class="inline-flex items-center justify-center min-w-[2.5rem] h-10 px-4 rounded-xl font-heading font-bold text-sm text-white shadow-xl transition-all duration-300" style="background: linear-gradient(135deg, #C1DDD8 0%, #A8D1BD 100%);">
+              <%= item %>
+            </div>
+          <% else %>
+            <%= link_to item, pagy_url_for(pagy, item), class: "inline-flex items-center justify-center min-w-[2.5rem] h-10 px-4 rounded-xl font-heading font-semibold text-sm bg-white/80 hover:bg-white text-gray-700 shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300" %>
+          <% end %>
+        <% elsif item == :gap %>
+          <div class="inline-flex items-center justify-center w-10 h-10 text-gray-400">
+            <span>...</span>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+
+    <!-- Next Button -->
+    <% if pagy.next %>
+      <%= link_to pagy_url_for(pagy, pagy.next), class: "inline-flex items-center justify-center w-10 h-10 rounded-xl font-heading font-semibold text-sm transition-all duration-300 bg-white/80 hover:bg-white text-gray-700 shadow-md hover:shadow-lg hover:scale-105" do %>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+        </svg>
+      <% end %>
+    <% else %>
+      <div class="inline-flex items-center justify-center w-10 h-10 rounded-xl font-heading font-semibold text-sm bg-gray-100 text-gray-400 cursor-not-allowed">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+        </svg>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Pagination Info (Mobile) -->
+  <div class="flex justify-center mt-4 md:hidden">
+    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-body text-gray-600" style="background: rgba(193, 221, 216, 0.1);">
+      <span>Trang <span class="font-semibold" style="color: #5A9A8E;"><%= pagy.page %></span> / <%= pagy.pages %></span>
+    </div>
+  </div>
+<% end %>

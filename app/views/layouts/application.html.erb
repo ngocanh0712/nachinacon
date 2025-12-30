@@ -146,6 +146,14 @@
             Admin Panel
           <% end %>
         <% end %>
+
+        <!-- PWA Install Button (Mobile Only) -->
+        <button id="installButtonMobile" class="hidden flex items-center gap-3 px-4 py-3 rounded-xl font-heading font-semibold transition-colors" style="background: rgba(168, 206, 200, 0.2); color: #5A9A8E;">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+          </svg>
+          Cài đặt App
+        </button>
       </div>
     </div>
   </nav>
@@ -210,6 +218,61 @@
           });
       });
     }
+
+    // PWA Install Button Handler (Mobile Menu)
+    let deferredPrompt;
+    const installButtonMobile = document.getElementById('installButtonMobile');
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      // Prevent default browser install prompt
+      e.preventDefault();
+      deferredPrompt = e;
+
+      // Show custom install button in mobile menu
+      if (installButtonMobile) {
+        installButtonMobile.classList.remove('hidden');
+        console.log('✅ PWA install prompt available!');
+      }
+    });
+
+    if (installButtonMobile) {
+      installButtonMobile.addEventListener('click', async () => {
+        if (!deferredPrompt) {
+          console.log('❌ No install prompt available');
+          return;
+        }
+
+        // Show install prompt
+        deferredPrompt.prompt();
+
+        // Wait for user choice
+        const { outcome } = await deferredPrompt.userChoice;
+        console.log(`User choice: ${outcome}`);
+
+        if (outcome === 'accepted') {
+          console.log('✅ User accepted the install');
+        } else {
+          console.log('❌ User dismissed the install');
+        }
+
+        // Clear prompt
+        deferredPrompt = null;
+        installButtonMobile.classList.add('hidden');
+      });
+    }
+
+    // Hide button after successful install
+    window.addEventListener('appinstalled', () => {
+      if (installButtonMobile) {
+        installButtonMobile.classList.add('hidden');
+        console.log('✅ PWA installed successfully');
+
+        // Optional: Show success message
+        setTimeout(() => {
+          alert('🎉 App đã được cài đặt! Bạn có thể mở app từ màn hình chính.');
+        }, 1000);
+      }
+    });
   </script>
 
 </body>
