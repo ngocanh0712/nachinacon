@@ -10,8 +10,27 @@ unless Rails.env.development? || Rails.env.test?
   Rails.logger.info "Initializing Cloudinary for environment: #{Rails.env}"
   Rails.logger.info "=" * 80
 
-  # Cloudinary prefers CLOUDINARY_URL format
-  if ENV['CLOUDINARY_URL'].present?
+  # CRITICAL FIX: Read credentials from Active Storage config instead of ENV
+  # This ensures we use the SAME credentials that storage.yml has
+  begin
+    storage_config = Rails.configuration.active_storage.configurations[:cloudinary]
+
+    if storage_config && storage_config['cloud_name'].present? && storage_config['api_key'].present?
+      Rails.logger.info "✅ Found Cloudinary credentials in storage.yml"
+      Rails.logger.info "   Configuring Cloudinary.config from storage config..."
+
+      Cloudinary.config do |config|
+        config.cloud_name = storage_config['cloud_name']
+        config.api_key = storage_config['api_key']
+        config.api_secret = storage_config['api_secret']
+        config.secure = true
+        config.cdn_subdomain = true
+      end
+
+      Rails.logger.info "✅ Cloudinary.config successfully set from storage.yml"
+      Rails.logger.info "   Cloud: #{Cloudinary.config.cloud_name}"
+      Rails.logger.info "   API Key: #{Cloudinary.config.api_key[0..8]}..."
+    elsif ENV['CLOUDINARY_URL'].present?
     # CLOUDINARY_URL format: cloudinary://api_key:api_secret@cloud_name
     Rails.logger.info "Cloudinary: Using CLOUDINARY_URL"
     Cloudinary.config_from_url(ENV['CLOUDINARY_URL'])
@@ -29,37 +48,34 @@ unless Rails.env.development? || Rails.env.test?
       config.cdn_subdomain = true
     end
   else
-    # Missing configuration - log detailed error
-    Rails.logger.error "=" * 80
-    Rails.logger.error "CLOUDINARY CONFIGURATION ERROR"
-    Rails.logger.error "=" * 80
-    Rails.logger.error "Missing Cloudinary credentials. Please set ONE of:"
-    Rails.logger.error ""
-    Rails.logger.error "Option 1 (Recommended):"
-    Rails.logger.error "  CLOUDINARY_URL=cloudinary://api_key:api_secret@cloud_name"
-    Rails.logger.error ""
-    Rails.logger.error "Option 2:"
-    Rails.logger.error "  CLOUDINARY_CLOUD_NAME=your_cloud_name"
-    Rails.logger.error "  CLOUDINARY_API_KEY=your_api_key"
-    Rails.logger.error "  CLOUDINARY_API_SECRET=your_api_secret"
-    Rails.logger.error ""
-    Rails.logger.error "Current environment variables:"
-    Rails.logger.error "  CLOUDINARY_URL: #{ENV['CLOUDINARY_URL'].present? ? 'SET' : 'MISSING'}"
-    Rails.logger.error "  CLOUDINARY_CLOUD_NAME: #{ENV['CLOUDINARY_CLOUD_NAME'].present? ? ENV['CLOUDINARY_CLOUD_NAME'] : 'MISSING'}"
-    Rails.logger.error "  CLOUDINARY_API_KEY: #{ENV['CLOUDINARY_API_KEY'].present? ? 'SET' : 'MISSING'}"
-    Rails.logger.error "  CLOUDINARY_API_SECRET: #{ENV['CLOUDINARY_API_SECRET'].present? ? 'SET' : 'MISSING'}"
-    Rails.logger.error "=" * 80
-
-    # Don't raise error, just warn - this allows app to start and show logs
+      # Missing configuration - log detailed error
+      Rails.logger.error "=" * 80
+      Rails.logger.error "CLOUDINARY CONFIGURATION ERROR"
+      Rails.logger.error "=" * 80
+      Rails.logger.error "Missing Cloudinary credentials in BOTH storage.yml and ENV"
+      Rails.logger.error ""
+      Rails.logger.error "Storage config: #{storage_config.inspect}"
+      Rails.logger.error "ENV vars present: CLOUDINARY_URL=#{ENV['CLOUDINARY_URL'].present?}, CLOUD_NAME=#{ENV['CLOUDINARY_CLOUD_NAME'].present?}"
+      Rails.logger.error "=" * 80
+    end
+  rescue => e
+    Rails.logger.error "❌ Error loading Cloudinary config from storage.yml: #{e.message}"
+    Rails.logger.error e.backtrace.first(5).join("\n")
   end
 
-  # Verify configuration loaded
+  # Verify final configuration
   if Cloudinary.config.cloud_name.present? && Cloudinary.config.api_key.present?
-    Rails.logger.info "✅ Cloudinary configured successfully"
+    Rails.logger.info "=" * 80
+    Rails.logger.info "✅✅✅ CLOUDINARY FULLY CONFIGURED ✅✅✅"
     Rails.logger.info "   Cloud Name: #{Cloudinary.config.cloud_name}"
-    Rails.logger.info "   API Key: #{Cloudinary.config.api_key[0..5]}..."
+    Rails.logger.info "   API Key: #{Cloudinary.config.api_key[0..8]}..."
+    Rails.logger.info "   This should fix the 'Must supply api_key' error!"
+    Rails.logger.info "=" * 80
   else
-    Rails.logger.error "❌ Cloudinary configuration incomplete or missing"
+    Rails.logger.error "=" * 80
+    Rails.logger.error "❌ CLOUDINARY STILL NOT CONFIGURED"
+    Rails.logger.error "   Config: #{Cloudinary.config.inspect}"
+    Rails.logger.error "=" * 80
   end
 else
   Rails.logger.info "Cloudinary: Skipping configuration in #{Rails.env} environment (development/test)"
