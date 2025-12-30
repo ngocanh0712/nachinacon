@@ -45,7 +45,8 @@ Rails.application.configure do
   # config.action_dispatch.x_sendfile_header = "X-Sendfile" # for Apache
   # config.action_dispatch.x_sendfile_header = "X-Accel-Redirect" # for NGINX
 
-  # Store uploaded files on Cloudinary (see config/storage.yml for options).
+  # Store uploaded files on Cloudinary for persistent storage
+  # Images stored locally will be lost on Railway redeploy (ephemeral filesystem)
   config.active_storage.service = :cloudinary
 
   # Mount Action Cable outside main process or domain.
