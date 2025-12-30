@@ -3,8 +3,13 @@
 # Cloudinary configuration for Active Storage
 # https://cloudinary.com/documentation/rails_activestorage
 
-# Only configure in production (Railway will have env vars set)
-if Rails.env.production?
+# Configure in all environments except development/test
+# Railway might use 'production', 'staging', or other custom environments
+unless Rails.env.development? || Rails.env.test?
+  Rails.logger.info "=" * 80
+  Rails.logger.info "Initializing Cloudinary for environment: #{Rails.env}"
+  Rails.logger.info "=" * 80
+
   # Cloudinary prefers CLOUDINARY_URL format
   if ENV['CLOUDINARY_URL'].present?
     # CLOUDINARY_URL format: cloudinary://api_key:api_secret@cloud_name
@@ -57,5 +62,5 @@ if Rails.env.production?
     Rails.logger.error "❌ Cloudinary configuration incomplete or missing"
   end
 else
-  Rails.logger.info "Cloudinary: Skipping configuration in #{Rails.env} environment"
+  Rails.logger.info "Cloudinary: Skipping configuration in #{Rails.env} environment (development/test)"
 end

@@ -3,6 +3,8 @@
 module Admin
   class SystemController < BaseController
     def cloudinary_status
+      @rails_env = Rails.env
+
       @env_vars = {
         cloudinary_url: ENV['CLOUDINARY_URL'],
         cloud_name: ENV['CLOUDINARY_CLOUD_NAME'],
