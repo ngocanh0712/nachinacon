@@ -55,7 +55,7 @@
           <% if @album.cover_image_path.present? %>
             <%= image_tag @album.cover_image_path, class: "w-20 h-20 rounded-lg object-cover" %>
           <% elsif @album.cover_photo.attached? %>
-            <%= image_tag @album.cover_photo.variant(resize_to_fill: [80, 80]), class: "w-20 h-20 rounded-lg object-cover" %>
+            <%= image_tag @album.cover_photo.variant(resize_to_fill: [80, 80, { quality: 90 }]), class: "w-20 h-20 rounded-lg object-cover" %>
           <% end %>
           <div class="flex-1 min-w-0">
             <p class="font-heading font-medium text-gray-800 truncate">

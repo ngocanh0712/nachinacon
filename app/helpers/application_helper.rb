@@ -18,12 +18,13 @@ module ApplicationHelper
   def optimized_image_tag(attachment, variant_name = :medium, options = {})
     return unless attachment.attached?
 
-    # Define variants (configured in models)
+    # Define variants with quality parameter to prevent blurry images
+    # Quality 90 provides excellent clarity while keeping file size reasonable
     variant = case variant_name
-    when :thumbnail then { resize_to_limit: [200, 200] }
-    when :medium then { resize_to_limit: [400, 400] }
-    when :large then { resize_to_limit: [800, 800] }
-    else { resize_to_limit: [400, 400] }
+    when :thumbnail then { resize_to_limit: [200, 200], quality: 90 }
+    when :medium then { resize_to_limit: [400, 400], quality: 90 }
+    when :large then { resize_to_limit: [800, 800], quality: 90 }
+    else { resize_to_limit: [400, 400], quality: 90 }
     end
 
     # Use lazy loading by default

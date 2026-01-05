@@ -90,7 +90,7 @@
                 <% if milestone.image_path.present? %>
                   <%= image_tag milestone.image_path, class: "milestone-image w-full h-full object-cover", alt: milestone.name %>
                 <% elsif milestone.photo.attached? %>
-                  <%= image_tag milestone.photo.variant(resize_to_fill: [600, 450]), class: "milestone-image w-full h-full object-cover", alt: milestone.name %>
+                  <%= image_tag milestone.photo.variant(resize_to_fill: [600, 450, { quality: 90 }]), class: "milestone-image w-full h-full object-cover", alt: milestone.name %>
                 <% end %>
               <% else %>
                 <div class="w-full h-full flex items-center justify-center">

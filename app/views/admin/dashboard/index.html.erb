@@ -160,7 +160,7 @@
                       </svg>
                     </div>
                   <% else %>
-                    <%= image_tag memory.media.variant(resize_to_fill: [80, 80]), class: "w-full h-full object-cover" %>
+                    <%= image_tag memory.media.variant(resize_to_fill: [80, 80, { quality: 90 }]), class: "w-full h-full object-cover" %>
                   <% end %>
                 <% else %>
                   <div class="w-full h-full flex items-center justify-center">
