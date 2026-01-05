@@ -50,6 +50,9 @@ gem "pagy", "~> 9.0"
 # Cloudinary for cloud image storage [https://github.com/cloudinary/cloudinary_gem]
 gem "cloudinary", "~> 2.2"
 
+# Active Storage service for Cloudinary [https://github.com/0sc/activestorage-cloudinary-service]
+gem "activestorage-cloudinary-service"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ]
