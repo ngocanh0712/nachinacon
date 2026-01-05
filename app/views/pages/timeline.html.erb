@@ -105,7 +105,7 @@
                data-memory-title="<%= memory.title %>"
                data-memory-date="<%= memory.taken_at.strftime("%d/%m/%Y") %>"
                data-memory-caption="<%= memory.caption %>"
-               data-memory-image="<%= memory.image_path.present? ? memory.image_path : (memory.media.attached? ? url_for(memory.media.variant(resize_to_limit: [800, 800], quality: 90)) : '') %>"
+               data-memory-image="<%= memory.image_path.present? ? memory.image_path : (memory.media.attached? ? url_for(memory.media) : '') %>"
                data-memory-age-group="<%= age_label %>"
                data-memory-age-color="<%= colors.join(';') %>"
                onclick="openMemoryModalFromData(this)">

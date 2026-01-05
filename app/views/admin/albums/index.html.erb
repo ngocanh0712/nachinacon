@@ -23,7 +23,7 @@
               <% if album.cover_image_path.present? %>
                 <%= image_tag album.cover_image_path, class: "w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" %>
               <% elsif album.cover_photo.attached? %>
-                <%= image_tag album.cover_photo.variant(resize_to_fill: [400, 250, { quality: 90 }]), class: "w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" %>
+                <%= image_tag album.cover_photo, class: "w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" %>
               <% end %>
             <% else %>
               <div class="w-full h-full flex items-center justify-center" style="background: linear-gradient(135deg, rgba(192, 223, 208, 0.4) 0%, rgba(193, 221, 216, 0.4) 100%);">

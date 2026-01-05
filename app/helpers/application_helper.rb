@@ -14,24 +14,32 @@ module ApplicationHelper
   end
 
   # Optimized image tag for Active Storage attachments
-  # Automatically uses appropriate variant based on context
+  # Uses original image for best quality, CSS handles sizing
+  # Set use_original: false to use variants (smaller file size but may be blurry)
   def optimized_image_tag(attachment, variant_name = :medium, options = {})
     return unless attachment.attached?
 
-    # Define variants with quality parameter to prevent blurry images
-    # Quality 90 provides excellent clarity while keeping file size reasonable
-    variant = case variant_name
-    when :thumbnail then { resize_to_limit: [200, 200], quality: 90 }
-    when :medium then { resize_to_limit: [400, 400], quality: 90 }
-    when :large then { resize_to_limit: [800, 800], quality: 90 }
-    else { resize_to_limit: [400, 400], quality: 90 }
-    end
+    # Extract use_original option (default: true for better quality)
+    use_original = options.delete(:use_original) != false
 
     # Use lazy loading by default
     options[:loading] ||= "lazy"
     options[:decoding] ||= "async"
 
-    image_tag(attachment.variant(variant), options)
+    if use_original
+      # Use original image - best quality, CSS handles sizing via object-fit
+      image_tag(attachment, options)
+    else
+      # Use variants - smaller file size but may lose quality
+      variant = case variant_name
+      when :thumbnail then { resize_to_limit: [200, 200], quality: 90 }
+      when :medium then { resize_to_limit: [400, 400], quality: 90 }
+      when :large then { resize_to_limit: [800, 800], quality: 90 }
+      else { resize_to_limit: [400, 400], quality: 90 }
+      end
+
+      image_tag(attachment.variant(variant), options)
+    end
   end
 
   def calculate_age(birth_date)
