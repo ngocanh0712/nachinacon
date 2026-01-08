@@ -28,12 +28,7 @@ bin/dev
 
 Truy cập:
 - **Public**: http://localhost:3000
-- **Admin**: http://localhost:3000/admin/login
-
-## Default Admin
-
-- **Email**: admin@nachinacon.com
-- **Password**: password123
+- **Admin**: http://localhost:3000/admin/login3
 
 ## Features
 
