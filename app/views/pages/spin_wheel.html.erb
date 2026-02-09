@@ -1,6 +1,6 @@
 <% content_for :og_tags do %>
-  <meta property="og:title" content="Vong Quay Ky Niem - NaChiNaCon">
-  <meta property="og:description" content="Quay vong quay de kham pha ky niem ngau nhien cua be Nacon">
+  <meta property="og:title" content="Vong Quay Thuong Phat - NaChiNaCon">
+  <meta property="og:description" content="Quay vong quay thuong phat vui ve cung gia dinh!">
 <% end %>
 
 <section class="min-h-screen py-12 px-4 md:px-6 lg:px-8 relative overflow-hidden" style="background: linear-gradient(180deg, #FFFBF8 0%, #F8FDFC 50%, #FDF5F5 100%);">
@@ -12,7 +12,7 @@
 
   <div class="max-w-4xl mx-auto relative z-10" data-controller="spin-wheel">
     <!-- Top Navigation -->
-    <%= render 'shared/game-nav', title: 'Vong Quay', icon: '🎡' %>
+    <%= render 'shared/game-nav', title: 'Vong Quay Thuong Phat', icon: '🎰' %>
 
     <!-- Wheel Container -->
     <div class="flex flex-col items-center gap-8">
@@ -31,31 +31,32 @@
           </defs>
           <circle cx="150" cy="150" r="148" fill="white" filter="url(#wheelShadow)"/>
 
-          <% wheel_colors = ['#F2C2C2', '#C1DDD8', '#C0DFD0', '#E8B0B0', '#DBEAFE', '#FEF3C7', '#D1FAE5', '#EDE9FE'] %>
-          <% 8.times do |i| %>
-            <% angle_start = i * 45 %>
-            <% angle_end = (i + 1) * 45 %>
+          <% segment_count = @items.size %>
+          <% angle_per = 360.0 / segment_count %>
+          <% @items.each_with_index do |item, i| %>
+            <% angle_start = i * angle_per %>
+            <% angle_end = (i + 1) * angle_per %>
             <% rad_start = angle_start * Math::PI / 180 %>
             <% rad_end = angle_end * Math::PI / 180 %>
             <% x1 = 150 + 145 * Math.cos(rad_start) %>
             <% y1 = 150 + 145 * Math.sin(rad_start) %>
             <% x2 = 150 + 145 * Math.cos(rad_end) %>
             <% y2 = 150 + 145 * Math.sin(rad_end) %>
-            <path d="M150,150 L<%= x1 %>,<%= y1 %> A145,145 0 0,1 <%= x2 %>,<%= y2 %> Z"
-                  fill="<%= wheel_colors[i] %>" stroke="white" stroke-width="2"/>
-            <% mid_angle = (angle_start + 22.5) * Math::PI / 180 %>
+            <% large_arc = angle_per > 180 ? 1 : 0 %>
+            <path d="M150,150 L<%= x1 %>,<%= y1 %> A145,145 0 <%= large_arc %>,1 <%= x2 %>,<%= y2 %> Z"
+                  fill="<%= item.color %>" stroke="white" stroke-width="2"/>
+            <% mid_angle = (angle_start + angle_per / 2) * Math::PI / 180 %>
             <% tx = 150 + 90 * Math.cos(mid_angle) %>
             <% ty = 150 + 90 * Math.sin(mid_angle) %>
             <text x="<%= tx %>" y="<%= ty %>" text-anchor="middle" dominant-baseline="middle"
-                  font-size="24" transform="rotate(<%= angle_start + 22.5 %>, <%= tx %>, <%= ty %>)">
-              <% icons = ['📷', '🎉', '⭐', '💖', '🌸', '🎂', '🧸', '✨'] %>
-              <%= icons[i] %>
+                  font-size="24" transform="rotate(<%= angle_start + angle_per / 2 %>, <%= tx %>, <%= ty %>)">
+              <%= item.emoji %>
             </text>
           <% end %>
 
           <!-- Center circle -->
           <circle cx="150" cy="150" r="30" fill="white" stroke="#E8B0B0" stroke-width="3"/>
-          <text x="150" y="155" text-anchor="middle" font-size="20">🎡</text>
+          <text x="150" y="155" text-anchor="middle" font-size="20">🎰</text>
         </svg>
       </div>
 
@@ -64,6 +65,12 @@
               class="game-button px-10 py-4 text-lg" style="font-family:var(--font-heading);">
         🎰 Quay Ngay!
       </button>
+
+      <!-- How to play -->
+      <div class="glass-card rounded-2xl p-5 max-w-sm w-full text-center">
+        <p class="font-heading font-semibold text-sm text-gray-700 mb-2">Cach choi</p>
+        <p class="font-body text-xs text-gray-500">Moi nguoi lan luot quay. Phai thuc hien thu thach khi vong quay dung lai!</p>
+      </div>
     </div>
 
     <!-- Result Modal -->
@@ -72,14 +79,9 @@
       <div class="relative bg-white rounded-3xl shadow-2xl max-w-md w-full overflow-hidden animate-bounce-in" style="z-index:1;">
         <div class="p-1" style="background: linear-gradient(135deg, #C1DDD8, #F2C2C2, #C0DFD0);"></div>
         <div class="p-8 text-center">
-          <div class="text-4xl mb-4">🎉</div>
-          <h3 class="font-accent italic text-2xl mb-2" style="color: #E8B0B0;">Ky niem cua ban!</h3>
-          <div class="rounded-2xl overflow-hidden shadow-lg mb-4 mx-auto" style="max-width:280px;">
-            <img data-spin-wheel-target="resultImage" src="" alt="" class="w-full aspect-square object-cover"/>
-          </div>
-          <h4 data-spin-wheel-target="resultTitle" class="font-heading font-bold text-xl text-gray-800 mb-1"></h4>
-          <p data-spin-wheel-target="resultDate" class="font-body text-sm text-gray-500 mb-2"></p>
-          <p data-spin-wheel-target="resultCaption" class="font-body text-gray-600 text-sm mb-6 line-clamp-3"></p>
+          <div data-spin-wheel-target="resultEmoji" class="text-7xl mb-4"></div>
+          <div data-spin-wheel-target="resultBadge" class="inline-block px-4 py-1.5 rounded-full text-xs font-heading font-bold mb-4"></div>
+          <h3 data-spin-wheel-target="resultLabel" class="font-heading font-bold text-2xl text-gray-800 mb-6"></h3>
 
           <div class="flex gap-3 justify-center">
             <button data-action="click->spin-wheel#closeResult"

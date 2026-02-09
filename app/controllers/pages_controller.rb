@@ -86,25 +86,24 @@ class PagesController < ApplicationController
   end
 
   def spin_wheel
-    @memories = Memory.photos.where.not(image_path: [nil, ''])
-                     .order('RAND()').limit(8)
+    SpinWheelItem.ensure_items!
+    @items = SpinWheelItem.active.ordered.limit(10)
   end
 
   def spin
-    memory = Memory.photos.where.not(image_path: [nil, '']).order('RAND()').first
-    if memory
-      image_url = memory.image_path.present? ? memory.image_path : nil
-      age_label = Memory::AGE_GROUPS.find { |_, v| v == memory.age_group }&.first || memory.age_group
+    SpinWheelItem.ensure_items!
+    item = SpinWheelItem.active.order('RAND()').first
+    if item
       render json: {
-        id: memory.id,
-        title: memory.title,
-        caption: memory.caption,
-        image_url: image_url,
-        date: memory.taken_at.strftime('%d/%m/%Y'),
-        age_group: age_label
+        id: item.id,
+        emoji: item.emoji,
+        label: item.label,
+        category: item.category,
+        category_label: SpinWheelItem::CATEGORY_LABELS[item.category],
+        color: item.color
       }
     else
-      render json: { error: 'No memories found' }, status: :not_found
+      render json: { error: 'No items found' }, status: :not_found
     end
   end
 

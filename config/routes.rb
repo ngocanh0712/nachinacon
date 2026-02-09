@@ -43,6 +43,7 @@ Rails.application.routes.draw do
     resources :memories
     resources :milestones
     resources :albums
+    resources :spin_wheel_items, path: 'spin-wheel'
     get 'settings', to: 'settings#index'
     patch 'settings', to: 'settings#update'
     get 'system/cloudinary', to: 'system#cloudinary_status', as: :cloudinary_status

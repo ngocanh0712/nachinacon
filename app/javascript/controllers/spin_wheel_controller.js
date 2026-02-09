@@ -1,7 +1,15 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["wheel", "spinBtn", "result", "resultImage", "resultTitle", "resultDate", "resultCaption"]
+  static targets = ["wheel", "spinBtn", "result", "resultEmoji", "resultBadge", "resultLabel"]
+
+  // Category badge colors
+  categoryColors = {
+    reward: { bg: '#D1FAE5', text: '#059669' },
+    punishment: { bg: '#FCE7F3', text: '#DB2777' },
+    challenge: { bg: '#DBEAFE', text: '#2563EB' },
+    interaction: { bg: '#FEF3C7', text: '#D97706' }
+  }
 
   connect() {
     this.isSpinning = false
@@ -22,7 +30,7 @@ export default class extends Controller {
     // Apply rotation
     this.wheelTarget.style.transform = `rotate(${totalRotation}deg)`
 
-    // Fetch random memory while spinning
+    // Fetch random item while spinning
     try {
       const response = await fetch('/spin-wheel/spin', {
         method: 'POST',
@@ -54,15 +62,14 @@ export default class extends Controller {
   }
 
   showResult(data) {
-    if (data.image_url) {
-      this.resultImageTarget.src = data.image_url
-      this.resultImageTarget.style.display = 'block'
-    } else {
-      this.resultImageTarget.style.display = 'none'
-    }
-    this.resultTitleTarget.textContent = data.title || ''
-    this.resultDateTarget.textContent = data.date || ''
-    this.resultCaptionTarget.textContent = data.caption || ''
+    this.resultEmojiTarget.textContent = data.emoji || '🎉'
+    this.resultLabelTarget.textContent = data.label || ''
+
+    // Set category badge
+    const colors = this.categoryColors[data.category] || { bg: '#F3F4F6', text: '#6B7280' }
+    this.resultBadgeTarget.textContent = data.category_label || data.category
+    this.resultBadgeTarget.style.background = colors.bg
+    this.resultBadgeTarget.style.color = colors.text
 
     this.resultTarget.classList.remove('hidden')
     document.body.style.overflow = 'hidden'

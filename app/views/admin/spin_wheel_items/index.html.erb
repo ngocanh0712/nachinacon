@@ -1,0 +1,61 @@
+<div class="space-y-8">
+  <!-- Header -->
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="font-heading font-bold text-2xl text-gray-800">Vong Quay Thuong Phat</h1>
+      <p class="font-body text-sm text-gray-500 mt-1"><%= @items.count %> items</p>
+    </div>
+    <%= link_to new_admin_spin_wheel_item_path, class: "inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-heading font-semibold text-gray-800 shadow-md hover:shadow-lg transition-all", style: "background: linear-gradient(135deg, #C1DDD8 0%, #A8CEC8 100%);" do %>
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+      </svg>
+      Them Item
+    <% end %>
+  </div>
+
+  <!-- Items Grid -->
+  <% if @items.any? %>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <% @items.each do |item| %>
+        <div class="bg-white rounded-2xl p-5 shadow-md hover:shadow-lg transition-shadow duration-300 <%= 'opacity-50' unless item.active %>">
+          <div class="flex items-start gap-4">
+            <div class="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 text-2xl" style="background: <%= item.color %>30;">
+              <%= item.emoji %>
+            </div>
+            <div class="flex-1 min-w-0">
+              <h3 class="font-heading font-semibold text-gray-800 truncate"><%= item.label %></h3>
+              <div class="flex items-center gap-2 mt-1">
+                <% cat_colors = { 'reward' => '#059669', 'punishment' => '#DB2777', 'challenge' => '#2563EB', 'interaction' => '#D97706' } %>
+                <span class="inline-block px-2 py-0.5 rounded-full text-xs font-heading font-bold" style="background: <%= cat_colors[item.category] %>15; color: <%= cat_colors[item.category] %>;">
+                  <%= SpinWheelItem::CATEGORY_LABELS[item.category] %>
+                </span>
+                <% unless item.active %>
+                  <span class="text-xs font-heading text-gray-400">Tat</span>
+                <% end %>
+              </div>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 mt-4 pt-4 border-t border-gray-100">
+            <%= link_to edit_admin_spin_wheel_item_path(item), class: "flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg font-heading font-medium text-sm text-gray-700 transition-colors hover:bg-gray-100", style: "background-color: #E0EEEB;" do %>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+              </svg>
+              Sua
+            <% end %>
+            <%= button_to admin_spin_wheel_item_path(item), method: :delete, data: { turbo_confirm: "Xoa item nay?" }, class: "flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg font-heading font-medium text-sm text-gray-700 transition-colors cursor-pointer", style: "background-color: #F8D8D8;" do %>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+              </svg>
+              Xoa
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="bg-white rounded-2xl p-8 text-center shadow-sm">
+      <div class="text-4xl mb-3">🎰</div>
+      <p class="font-body text-gray-500">Chua co item nao. Items mac dinh se duoc tao khi truy cap trang Vong Quay.</p>
+    </div>
+  <% end %>
+</div>
