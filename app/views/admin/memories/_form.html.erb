@@ -84,7 +84,7 @@
           <% if memory.image_path.present? %>
             <%= image_tag memory.image_path, class: "w-20 h-20 rounded-lg object-cover" %>
           <% elsif memory.media.attached? %>
-            <%= image_tag memory.media.variant(resize_to_fill: [80, 80, { quality: 90 }]), class: "w-20 h-20 rounded-lg object-cover" %>
+            <%= image_tag memory.media, class: "w-20 h-20 rounded-lg object-cover" %>
           <% end %>
           <div class="flex-1 min-w-0">
             <p class="font-heading font-medium text-gray-800 truncate">

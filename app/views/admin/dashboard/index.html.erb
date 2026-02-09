@@ -152,15 +152,17 @@
             <div class="flex items-center gap-4">
               <!-- Thumbnail -->
               <div class="w-16 h-16 md:w-20 md:h-20 rounded-xl flex-shrink-0 overflow-hidden" style="background: linear-gradient(135deg, rgba(193,221,216,0.3) 0%, rgba(242,194,194,0.3) 100%);">
-                <% if memory.media.attached? %>
+                <% if memory.image_path.present? || memory.media.attached? %>
                   <% if memory.memory_type == 'video' %>
                     <div class="w-full h-full flex items-center justify-center bg-gray-100">
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-gray-400">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" />
                       </svg>
                     </div>
+                  <% elsif memory.image_path.present? %>
+                    <%= image_tag memory.image_path, class: "w-full h-full object-cover" %>
                   <% else %>
-                    <%= image_tag memory.media.variant(resize_to_fill: [80, 80, { quality: 90 }]), class: "w-full h-full object-cover" %>
+                    <%= image_tag memory.media, class: "w-full h-full object-cover" %>
                   <% end %>
                 <% else %>
                   <div class="w-full h-full flex items-center justify-center">

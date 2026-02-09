@@ -35,7 +35,7 @@
                   <% if milestone.image_path.present? %>
                     <%= image_tag milestone.image_path, class: "w-full h-full object-cover" %>
                   <% elsif milestone.photo.attached? %>
-                    <%= image_tag milestone.photo.variant(resize_to_fill: [80, 80, { quality: 90 }]), class: "w-full h-full object-cover" %>
+                    <%= image_tag milestone.photo, class: "w-full h-full object-cover" %>
                   <% end %>
                 </div>
               <% else %>
@@ -99,7 +99,7 @@
                   <% if milestone.image_path.present? %>
                     <%= image_tag milestone.image_path, class: "w-full h-full object-cover" %>
                   <% elsif milestone.photo.attached? %>
-                    <%= image_tag milestone.photo.variant(resize_to_fill: [80, 80, { quality: 90 }]), class: "w-full h-full object-cover" %>
+                    <%= image_tag milestone.photo, class: "w-full h-full object-cover" %>
                   <% end %>
                 </div>
               <% else %>
