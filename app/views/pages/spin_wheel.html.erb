@@ -1,0 +1,100 @@
+<% content_for :og_tags do %>
+  <meta property="og:title" content="Vong Quay Ky Niem - NaChiNaCon">
+  <meta property="og:description" content="Quay vong quay de kham pha ky niem ngau nhien cua be Nacon">
+<% end %>
+
+<section class="min-h-screen py-12 px-4 md:px-6 lg:px-8 relative overflow-hidden" style="background: linear-gradient(180deg, #FFFBF8 0%, #F8FDFC 50%, #FDF5F5 100%);">
+  <!-- Background decorations -->
+  <div class="absolute inset-0 overflow-hidden pointer-events-none">
+    <div class="absolute top-20 -right-20 w-72 h-72 rounded-full blur-3xl pulse-glow" style="background: rgba(193, 221, 216, 0.25);"></div>
+    <div class="absolute bottom-20 -left-20 w-64 h-64 rounded-full blur-3xl pulse-glow" style="background: rgba(242, 194, 194, 0.25); animation-delay: 2s;"></div>
+  </div>
+
+  <div class="max-w-4xl mx-auto relative z-10" data-controller="spin-wheel">
+    <!-- Top Navigation -->
+    <%= render 'shared/game-nav', title: 'Vong Quay', icon: '🎡' %>
+
+    <!-- Wheel Container -->
+    <div class="flex flex-col items-center gap-8">
+      <div class="spin-wheel-container" style="width:340px;height:340px;">
+        <!-- Arrow pointer -->
+        <div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);z-index:20;">
+          <div style="width:0;height:0;border-left:16px solid transparent;border-right:16px solid transparent;border-top:28px solid #E8B0B0;filter:drop-shadow(0 4px 8px rgba(0,0,0,0.2));"></div>
+        </div>
+
+        <!-- Wheel SVG -->
+        <svg data-spin-wheel-target="wheel" viewBox="0 0 300 300" style="width:320px;height:320px;transition:transform 4s cubic-bezier(0.25, 0.1, 0.25, 1);">
+          <defs>
+            <filter id="wheelShadow" x="-10%" y="-10%" width="120%" height="120%">
+              <feDropShadow dx="0" dy="4" stdDeviation="8" flood-opacity="0.15"/>
+            </filter>
+          </defs>
+          <circle cx="150" cy="150" r="148" fill="white" filter="url(#wheelShadow)"/>
+
+          <% wheel_colors = ['#F2C2C2', '#C1DDD8', '#C0DFD0', '#E8B0B0', '#DBEAFE', '#FEF3C7', '#D1FAE5', '#EDE9FE'] %>
+          <% 8.times do |i| %>
+            <% angle_start = i * 45 %>
+            <% angle_end = (i + 1) * 45 %>
+            <% rad_start = angle_start * Math::PI / 180 %>
+            <% rad_end = angle_end * Math::PI / 180 %>
+            <% x1 = 150 + 145 * Math.cos(rad_start) %>
+            <% y1 = 150 + 145 * Math.sin(rad_start) %>
+            <% x2 = 150 + 145 * Math.cos(rad_end) %>
+            <% y2 = 150 + 145 * Math.sin(rad_end) %>
+            <path d="M150,150 L<%= x1 %>,<%= y1 %> A145,145 0 0,1 <%= x2 %>,<%= y2 %> Z"
+                  fill="<%= wheel_colors[i] %>" stroke="white" stroke-width="2"/>
+            <% mid_angle = (angle_start + 22.5) * Math::PI / 180 %>
+            <% tx = 150 + 90 * Math.cos(mid_angle) %>
+            <% ty = 150 + 90 * Math.sin(mid_angle) %>
+            <text x="<%= tx %>" y="<%= ty %>" text-anchor="middle" dominant-baseline="middle"
+                  font-size="24" transform="rotate(<%= angle_start + 22.5 %>, <%= tx %>, <%= ty %>)">
+              <% icons = ['📷', '🎉', '⭐', '💖', '🌸', '🎂', '🧸', '✨'] %>
+              <%= icons[i] %>
+            </text>
+          <% end %>
+
+          <!-- Center circle -->
+          <circle cx="150" cy="150" r="30" fill="white" stroke="#E8B0B0" stroke-width="3"/>
+          <text x="150" y="155" text-anchor="middle" font-size="20">🎡</text>
+        </svg>
+      </div>
+
+      <!-- Spin Button -->
+      <button data-action="click->spin-wheel#spin" data-spin-wheel-target="spinBtn"
+              class="game-button px-10 py-4 text-lg" style="font-family:var(--font-heading);">
+        🎰 Quay Ngay!
+      </button>
+    </div>
+
+    <!-- Result Modal -->
+    <div data-spin-wheel-target="result" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div class="fixed inset-0 bg-black/50" data-action="click->spin-wheel#closeResult"></div>
+      <div class="relative bg-white rounded-3xl shadow-2xl max-w-md w-full overflow-hidden animate-bounce-in" style="z-index:1;">
+        <div class="p-1" style="background: linear-gradient(135deg, #C1DDD8, #F2C2C2, #C0DFD0);"></div>
+        <div class="p-8 text-center">
+          <div class="text-4xl mb-4">🎉</div>
+          <h3 class="font-accent italic text-2xl mb-2" style="color: #E8B0B0;">Ky niem cua ban!</h3>
+          <div class="rounded-2xl overflow-hidden shadow-lg mb-4 mx-auto" style="max-width:280px;">
+            <img data-spin-wheel-target="resultImage" src="" alt="" class="w-full aspect-square object-cover"/>
+          </div>
+          <h4 data-spin-wheel-target="resultTitle" class="font-heading font-bold text-xl text-gray-800 mb-1"></h4>
+          <p data-spin-wheel-target="resultDate" class="font-body text-sm text-gray-500 mb-2"></p>
+          <p data-spin-wheel-target="resultCaption" class="font-body text-gray-600 text-sm mb-6 line-clamp-3"></p>
+
+          <div class="flex gap-3 justify-center">
+            <button data-action="click->spin-wheel#closeResult"
+                    class="px-6 py-3 rounded-xl font-heading font-semibold text-gray-600 transition-all hover:bg-gray-100" style="background:rgba(243,244,246,0.8);">
+              Dong
+            </button>
+            <button data-action="click->spin-wheel#spinAgain"
+                    class="px-6 py-3 rounded-xl font-heading font-semibold text-white shadow-lg transition-all hover:scale-105"
+                    style="background: linear-gradient(135deg, #C1DDD8, #A8CEC8);">
+              Quay Tiep!
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>

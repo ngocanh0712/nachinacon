@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class PagesController < ApplicationController
+  skip_before_action :verify_authenticity_token, only: [:spin]
+
   def home
     @recent_memories = Memory.includes(:tags).recent.limit(8)
     @achieved_milestones = Milestone.achieved.limit(3)
@@ -61,6 +63,49 @@ class PagesController < ApplicationController
 
   def memory
     @memory = Memory.includes(:tags).find(params[:id])
+  end
+
+  def games
+  end
+
+  def then_vs_now
+    @age_groups = Memory::AGE_GROUPS
+    youngest_group = params[:before] || '0-3m'
+    recent_group = params[:after] || '2-3y'
+
+    @before_memory = Memory.photos.by_age_group(youngest_group)
+                          .where.not(image_path: [nil, ''])
+                          .order('RAND()').first
+
+    @after_memory = Memory.photos.by_age_group(recent_group)
+                         .where.not(image_path: [nil, ''])
+                         .order('RAND()').first
+
+    @selected_before = youngest_group
+    @selected_after = recent_group
+  end
+
+  def spin_wheel
+    @memories = Memory.photos.where.not(image_path: [nil, ''])
+                     .order('RAND()').limit(8)
+  end
+
+  def spin
+    memory = Memory.photos.where.not(image_path: [nil, '']).order('RAND()').first
+    if memory
+      image_url = memory.image_path.present? ? memory.image_path : nil
+      age_label = Memory::AGE_GROUPS.find { |_, v| v == memory.age_group }&.first || memory.age_group
+      render json: {
+        id: memory.id,
+        title: memory.title,
+        caption: memory.caption,
+        image_url: image_url,
+        date: memory.taken_at.strftime('%d/%m/%Y'),
+        age_group: age_label
+      }
+    else
+      render json: { error: 'No memories found' }, status: :not_found
+    end
   end
 
   def search

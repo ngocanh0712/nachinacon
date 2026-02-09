@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_12_26_022417) do
+ActiveRecord::Schema[7.1].define(version: 2026_02_09_034300) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -64,6 +64,19 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_26_022417) do
     t.string "cover_image_path"
   end
 
+  create_table "game_sessions", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "game_type", null: false
+    t.integer "score", default: 0
+    t.integer "moves", default: 0
+    t.integer "time_seconds", default: 0
+    t.string "difficulty"
+    t.json "metadata"
+    t.datetime "completed_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["game_type"], name: "index_game_sessions_on_game_type"
+  end
+
   create_table "memories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "title"
     t.text "caption"
@@ -96,6 +109,16 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_26_022417) do
     t.string "image_path"
   end
 
+  create_table "reactions", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "memory_id", null: false
+    t.string "emoji", null: false
+    t.integer "count", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["memory_id", "emoji"], name: "index_reactions_on_memory_id_and_emoji", unique: true
+    t.index ["memory_id"], name: "index_reactions_on_memory_id"
+  end
+
   create_table "site_settings", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "key", null: false
     t.text "value"
@@ -119,4 +142,5 @@ ActiveRecord::Schema[7.1].define(version: 2025_12_26_022417) do
   add_foreign_key "album_memories", "memories"
   add_foreign_key "memory_tags", "memories"
   add_foreign_key "memory_tags", "tags"
+  add_foreign_key "reactions", "memories"
 end

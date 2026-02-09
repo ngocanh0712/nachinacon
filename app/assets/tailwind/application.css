@@ -847,3 +847,180 @@
     transform: none !important;
   }
 }
+
+/* ============================================
+   GAME UI UTILITIES
+   ============================================ */
+
+/* Game UI Utilities */
+.game-card {
+  @apply rounded-2xl p-6 shadow-xl;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+}
+
+.game-button {
+  @apply px-8 py-4 rounded-xl font-semibold text-white shadow-lg;
+  background: linear-gradient(135deg, #C1DDD8, #A8CEC8);
+  transition: all 0.3s ease;
+}
+
+.game-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 30px rgba(193, 221, 216, 0.4);
+}
+
+/* Reaction button styles */
+.reaction-btn {
+  @apply px-3 py-2 rounded-full;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(5px);
+  transition: all 0.2s ease;
+}
+
+.reaction-btn:hover {
+  transform: scale(1.15);
+}
+
+.reaction-btn.reacted {
+  border: 2px solid #C1DDD8;
+  background: rgba(193, 221, 216, 0.15);
+}
+
+/* Quiz option styles */
+.quiz-option {
+  @apply w-full px-6 py-4 rounded-xl text-lg;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(5px);
+  transition: all 0.2s ease;
+  border: 2px solid transparent;
+}
+
+.quiz-option:hover {
+  transform: scale(1.02);
+  border-color: #C1DDD8;
+}
+
+.quiz-option.correct {
+  background: rgba(34, 197, 94, 0.15);
+  border-color: #22C55E;
+}
+
+.quiz-option.incorrect {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: #EF4444;
+}
+
+/* Memory card flip animation */
+.memory-card {
+  perspective: 1000px;
+  cursor: pointer;
+}
+
+.memory-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+.memory-card.flipped .memory-card-inner {
+  transform: rotateY(180deg);
+}
+
+.memory-card.matched .memory-card-inner {
+  transform: rotateY(180deg);
+}
+
+.memory-card.matched {
+  opacity: 0.7;
+}
+
+.memory-card-front,
+.memory-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.memory-card-back {
+  transform: rotateY(180deg);
+}
+
+/* Comparison slider */
+.comparison-slider {
+  position: relative;
+  overflow: hidden;
+  border-radius: 24px;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+}
+
+/* Spin wheel */
+.spin-wheel-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.spin-wheel {
+  transition: transform 4s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+/* Bounce animation for reactions */
+@keyframes bounce-in {
+  0% { transform: scale(0.3); opacity: 0; }
+  50% { transform: scale(1.15); }
+  70% { transform: scale(0.9); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.animate-bounce-in {
+  animation: bounce-in 0.5s ease;
+}
+
+/* Progress bar for quiz */
+.quiz-progress-bar {
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #C1DDD8, #A8CEC8);
+  transition: width 0.5s ease;
+}
+
+/* Float up animation for emoji reactions */
+@keyframes float-up {
+  0% { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(-50px) scale(1.5); }
+}
+
+/* Shake animation for already-reacted buttons */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-4px); }
+  40% { transform: translateX(4px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+}
+
+/* Reaction button hover state */
+.reaction-btn:hover {
+  transform: scale(1.15);
+  border-color: #E0EEEB;
+  box-shadow: 0 4px 12px rgba(193, 221, 216, 0.3);
+}
+
+.reaction-btn.reacted {
+  border-color: #C1DDD8;
+  background: rgba(193, 221, 216, 0.15);
+}
+
+.reaction-btn.reacted:hover {
+  border-color: #A8CEC8;
+  background: rgba(193, 221, 216, 0.25);
+}

@@ -12,6 +12,25 @@ Rails.application.routes.draw do
   get 'albums/:id', to: 'pages#album', as: :album_detail
   get 'search', to: 'pages#search'
   get 'memories/:id', to: 'pages#memory', as: :memory_detail
+  post 'memories/:id/react', to: 'reactions#create', as: :memory_react
+  get 'memories/:id/reactions', to: 'reactions#index', as: :memory_reactions
+
+  # Fun & Interactive
+  get 'vui-choi', to: 'pages#games', as: :games_hub
+  get 'then-vs-now', to: 'pages#then_vs_now'
+  get 'spin-wheel', to: 'pages#spin_wheel'
+  post 'spin-wheel/spin', to: 'pages#spin'
+
+  # Games
+  namespace :games do
+    get 'memory', to: 'memory#index'
+    post 'memory/start', to: 'memory#start'
+    post 'memory/complete', to: 'memory#complete'
+    get 'guess-age', to: 'guess_age#index'
+    post 'guess-age/start', to: 'guess_age#start'
+    post 'guess-age/check', to: 'guess_age#check_answer'
+    post 'guess-age/complete', to: 'guess_age#complete'
+  end
 
   # Admin authentication
   get 'admin/login', to: 'sessions#new', as: :admin_login

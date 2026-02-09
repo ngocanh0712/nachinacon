@@ -6,6 +6,7 @@ class Memory < ApplicationRecord
   has_many :albums, through: :album_memories
   has_many :memory_tags, dependent: :destroy
   has_many :tags, through: :memory_tags
+  has_many :reactions, dependent: :destroy
 
   # Age groups for baby memories
   AGE_GROUPS = [
@@ -56,5 +57,13 @@ class Memory < ApplicationRecord
   # Check if memory has any image
   def has_image?
     image_path.present? || media.attached?
+  end
+
+  def reaction_counts
+    reactions.pluck(:emoji, :count).to_h
+  end
+
+  def total_reactions
+    reactions.sum(:count)
   end
 end

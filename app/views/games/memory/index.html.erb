@@ -1,0 +1,124 @@
+<% content_for :og_tags do %>
+  <meta property="og:title" content="Memory Game - NaChiNaCon">
+  <meta property="og:description" content="Tro choi lat the ky niem cua be Nacon">
+<% end %>
+
+<section class="min-h-screen py-12 px-4 md:px-6 lg:px-8 relative overflow-hidden" style="background: linear-gradient(180deg, #FFFBF8 0%, #F8FDFC 50%, #FDF5F5 100%);">
+  <div class="absolute inset-0 overflow-hidden pointer-events-none">
+    <div class="absolute top-20 -right-20 w-72 h-72 rounded-full blur-3xl pulse-glow" style="background: rgba(193, 221, 216, 0.25);"></div>
+    <div class="absolute bottom-20 -left-20 w-64 h-64 rounded-full blur-3xl pulse-glow" style="background: rgba(242, 194, 194, 0.25); animation-delay: 2s;"></div>
+  </div>
+
+  <div class="max-w-5xl mx-auto relative z-10" data-controller="memory-game">
+    <!-- Top Navigation -->
+    <%= render 'shared/game-nav', title: 'Memory Game', icon: '🃏' %>
+
+    <!-- Intro/Difficulty Selection -->
+    <div data-memory-game-target="intro" class="text-center mt-6">
+      <div class="glass-card rounded-3xl p-10 shadow-xl max-w-lg mx-auto">
+        <div class="text-6xl mb-6">🃏</div>
+        <h2 class="font-heading font-bold text-2xl text-gray-800 mb-6">Chon do kho</h2>
+
+        <div class="grid grid-cols-3 gap-4 mb-8">
+          <button data-action="click->memory-game#selectDifficulty" data-difficulty="easy"
+                  class="p-4 rounded-2xl border-2 transition-all hover:scale-105 hover:shadow-lg"
+                  style="border-color: #C1DDD8; background: rgba(193, 221, 216, 0.1);">
+            <div class="text-3xl mb-2">🌱</div>
+            <p class="font-heading font-bold text-gray-800">De</p>
+            <p class="font-body text-xs text-gray-500">6 cap</p>
+          </button>
+          <button data-action="click->memory-game#selectDifficulty" data-difficulty="medium"
+                  class="p-4 rounded-2xl border-2 transition-all hover:scale-105 hover:shadow-lg"
+                  style="border-color: #F2C2C2; background: rgba(242, 194, 194, 0.1);">
+            <div class="text-3xl mb-2">🌿</div>
+            <p class="font-heading font-bold text-gray-800">Vua</p>
+            <p class="font-body text-xs text-gray-500">8 cap</p>
+          </button>
+          <button data-action="click->memory-game#selectDifficulty" data-difficulty="hard"
+                  class="p-4 rounded-2xl border-2 transition-all hover:scale-105 hover:shadow-lg"
+                  style="border-color: #E8B0B0; background: rgba(232, 176, 176, 0.1);">
+            <div class="text-3xl mb-2">🌳</div>
+            <p class="font-heading font-bold text-gray-800">Kho</p>
+            <p class="font-body text-xs text-gray-500">10 cap</p>
+          </button>
+        </div>
+
+        <% if @best_scores.any? %>
+          <div class="mt-4 text-left">
+            <p class="font-heading font-semibold text-sm text-gray-600 mb-2">Bang xep hang:</p>
+            <% @best_scores.each_with_index do |score, i| %>
+              <div class="flex items-center gap-2 text-sm font-body text-gray-500">
+                <span><%= ['🥇', '🥈', '🥉', '4.', '5.'][i] %></span>
+                <span><%= score.score %> diem</span>
+                <span class="text-gray-400">(<%= score.moves %> buoc, <%= score.time_seconds %>s)</span>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Game Board -->
+    <div data-memory-game-target="gameBoard" class="hidden">
+      <!-- Stats Bar -->
+      <div class="flex justify-between items-center mb-6 px-2">
+        <div class="flex items-center gap-4">
+          <div class="flex items-center gap-2 px-4 py-2 rounded-xl" style="background: rgba(193, 221, 216, 0.15);">
+            <span>🔄</span>
+            <span data-memory-game-target="movesCount" class="font-heading font-bold text-gray-800">0</span>
+            <span class="font-body text-sm text-gray-500">buoc</span>
+          </div>
+          <div class="flex items-center gap-2 px-4 py-2 rounded-xl" style="background: rgba(242, 194, 194, 0.15);">
+            <span>⏱️</span>
+            <span data-memory-game-target="timer" class="font-heading font-bold text-gray-800">0:00</span>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 px-4 py-2 rounded-xl" style="background: rgba(192, 223, 208, 0.15);">
+          <span>✅</span>
+          <span data-memory-game-target="pairsFound" class="font-heading font-bold text-gray-800">0</span>
+          <span class="font-body text-sm text-gray-500">/ <span data-memory-game-target="totalPairs">0</span></span>
+        </div>
+      </div>
+
+      <!-- Card Grid -->
+      <div data-memory-game-target="grid"
+           class="grid gap-3 md:gap-4 mx-auto"
+           style="max-width: 700px;">
+        <!-- Cards will be inserted dynamically -->
+      </div>
+    </div>
+
+    <!-- Victory Screen -->
+    <div data-memory-game-target="victory" class="hidden text-center">
+      <div class="glass-card rounded-3xl p-10 shadow-xl max-w-md mx-auto">
+        <div class="text-6xl mb-4">🎉</div>
+        <h2 class="font-heading font-bold text-2xl text-gray-800 mb-4">Tuyet voi!</h2>
+        <div class="grid grid-cols-3 gap-4 mb-6">
+          <div class="p-3 rounded-xl" style="background: rgba(193, 221, 216, 0.15);">
+            <p class="font-body text-xs text-gray-500">Diem</p>
+            <p data-memory-game-target="finalScore" class="font-heading font-bold text-xl text-gray-800">0</p>
+          </div>
+          <div class="p-3 rounded-xl" style="background: rgba(242, 194, 194, 0.15);">
+            <p class="font-body text-xs text-gray-500">Buoc di</p>
+            <p data-memory-game-target="finalMoves" class="font-heading font-bold text-xl text-gray-800">0</p>
+          </div>
+          <div class="p-3 rounded-xl" style="background: rgba(192, 223, 208, 0.15);">
+            <p class="font-body text-xs text-gray-500">Thoi gian</p>
+            <p data-memory-game-target="finalTime" class="font-heading font-bold text-xl text-gray-800">0:00</p>
+          </div>
+        </div>
+        <div class="flex gap-3 justify-center">
+          <%= link_to root_path, class: "px-6 py-3 rounded-xl font-heading font-semibold text-gray-600 transition-all hover:bg-gray-100", style: "background:rgba(243,244,246,0.8);" do %>
+            Ve trang chu
+          <% end %>
+          <button data-action="click->memory-game#restart"
+                  class="px-6 py-3 rounded-xl font-heading font-semibold text-white shadow-lg transition-all hover:scale-105"
+                  style="background: linear-gradient(135deg, #C1DDD8, #A8CEC8);">
+            Choi lai!
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>

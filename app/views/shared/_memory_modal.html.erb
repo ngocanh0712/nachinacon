@@ -68,8 +68,24 @@
               <p id="modalCaption" class="font-body text-base text-gray-600 leading-relaxed whitespace-pre-line"></p>
             </div>
 
+            <!-- Reactions -->
+            <div id="modalReactions" style="margin-top:24px;padding-top:20px;border-top:1px solid #F3F4F6;">
+              <div data-controller="reactions" data-reactions-memory-id-value="" id="modalReactionsContainer" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                <% Reaction::EMOJIS.each do |emoji| %>
+                  <button data-reactions-target="btn"
+                          data-action="click->reactions#react"
+                          data-emoji="<%= emoji %>"
+                          class="reaction-btn"
+                          style="display:inline-flex;align-items:center;gap:4px;padding:6px 12px;border-radius:20px;border:2px solid #F3F4F6;background:white;cursor:pointer;font-size:18px;transition:all 0.2s ease;position:relative;">
+                    <span><%= emoji %></span>
+                    <span data-reactions-target="count" style="font-size:12px;font-weight:600;color:#6B7280;display:none;">0</span>
+                  </button>
+                <% end %>
+              </div>
+            </div>
+
             <!-- Share buttons -->
-            <div id="modalShareButtons" style="margin-top:32px;padding-top:24px;border-top:1px solid #F3F4F6;">
+            <div id="modalShareButtons" style="margin-top:16px;padding-top:16px;border-top:1px solid #F3F4F6;">
               <div data-controller="share" data-share-url-value="" data-share-title-value="" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
                 <span class="font-body" style="font-size:14px;color:#9CA3AF;margin-right:4px;">Chia se:</span>
 
@@ -168,8 +184,38 @@
       modalImagePlaceholder.classList.remove('hidden');
     }
 
-    // Update share buttons with memory URL
+    // Update reactions with memory ID
     if (data.memoryId) {
+      const reactionsContainer = document.getElementById('modalReactionsContainer');
+      if (reactionsContainer) {
+        reactionsContainer.setAttribute('data-reactions-memory-id-value', data.memoryId);
+        // Reset reaction counts and states
+        reactionsContainer.querySelectorAll('[data-reactions-target="btn"]').forEach(btn => {
+          const countEl = btn.querySelector('[data-reactions-target="count"]');
+          if (countEl) { countEl.textContent = '0'; countEl.style.display = 'none'; }
+          btn.classList.remove('reacted');
+          const emoji = btn.dataset.emoji;
+          if (localStorage.getItem(`reacted_${data.memoryId}_${emoji}`)) {
+            btn.classList.add('reacted');
+          }
+        });
+        // Load existing reaction counts from server
+        fetch(`/memories/${data.memoryId}/reactions`, {
+          headers: { 'Accept': 'application/json' }
+        }).then(r => r.json()).then(json => {
+          const reactions = json.reactions || {};
+          reactionsContainer.querySelectorAll('[data-reactions-target="btn"]').forEach(btn => {
+            const emoji = btn.dataset.emoji;
+            const count = reactions[emoji];
+            const countEl = btn.querySelector('[data-reactions-target="count"]');
+            if (countEl && count && count > 0) {
+              countEl.textContent = count;
+              countEl.style.display = 'inline';
+            }
+          });
+        }).catch(() => {});
+      }
+
       const shareUrl = window.location.origin + '/memories/' + data.memoryId;
       const shareTitle = data.title || 'NaChiNaCon';
       const encodedUrl = encodeURIComponent(shareUrl);
