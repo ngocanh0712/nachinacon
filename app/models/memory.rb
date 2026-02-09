@@ -28,6 +28,14 @@ class Memory < ApplicationRecord
   scope :by_age_group, ->(group) { where(age_group: group) }
   scope :recent, -> { order(taken_at: :desc) }
   scope :chronological, -> { order(taken_at: :asc) }
+  # Memories from same date range (±3 days) in previous years
+  scope :on_this_day, -> {
+    today = Date.today
+    day_min = [today.day - 3, 1].max
+    day_max = [today.day + 3, 31].min
+    where("MONTH(taken_at) = ? AND DAY(taken_at) BETWEEN ? AND ?", today.month, day_min, day_max)
+      .where("YEAR(taken_at) < ?", today.year)
+  }
 
   def photo?
     memory_type == 'photo'

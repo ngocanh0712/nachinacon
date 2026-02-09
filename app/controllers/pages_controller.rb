@@ -29,6 +29,9 @@ class PagesController < ApplicationController
     # Days since birth
     birth_date = SiteSetting.baby_birth_date
     @days_old = (Date.today - birth_date).to_i
+
+    # Memory Box - "On this day" memories from previous years
+    @memory_box = Memory.includes(:tags).on_this_day.order('RAND()').limit(4)
   end
 
   def timeline
@@ -54,6 +57,10 @@ class PagesController < ApplicationController
   def album
     @album = Album.find(params[:id])
     @memories = @album.memories.recent
+  end
+
+  def memory
+    @memory = Memory.includes(:tags).find(params[:id])
   end
 
   def search

@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   get 'albums', to: 'pages#albums'
   get 'albums/:id', to: 'pages#album', as: :album_detail
   get 'search', to: 'pages#search'
+  get 'memories/:id', to: 'pages#memory', as: :memory_detail
 
   # Admin authentication
   get 'admin/login', to: 'sessions#new', as: :admin_login

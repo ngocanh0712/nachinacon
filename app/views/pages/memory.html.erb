@@ -1,0 +1,109 @@
+<% content_for :og_tags do %>
+  <meta property="og:title" content="<%= @memory.title %> - NaChiNaCon">
+  <meta property="og:description" content="<%= truncate(@memory.caption || 'Kỷ niệm đáng yêu của bé', length: 160) %>">
+  <meta property="og:type" content="article">
+  <% if @memory.has_image? %>
+    <% if @memory.image_path.present? %>
+      <meta property="og:image" content="<%= @memory.image_path %>">
+    <% elsif @memory.media.attached? %>
+      <meta property="og:image" content="<%= url_for(@memory.media) %>">
+    <% end %>
+  <% end %>
+  <meta property="og:url" content="<%= request.original_url %>">
+  <meta property="og:locale" content="vi_VN">
+  <meta property="og:site_name" content="NaChiNaCon">
+<% end %>
+
+<!-- Header -->
+<section class="pt-8 pb-12 px-4 md:px-6 lg:px-8 relative overflow-hidden" style="background: linear-gradient(180deg, #FFFBF8 0%, #F8FDFC 30%, #FDF5F5 70%, #F8FDFC 100%);">
+  <div class="absolute inset-0 overflow-hidden pointer-events-none">
+    <div class="absolute top-10 -right-20 w-64 h-64 rounded-full blur-3xl pulse-glow" style="background: rgba(242, 194, 194, 0.35);"></div>
+    <div class="absolute bottom-10 -left-20 w-56 h-56 rounded-full blur-3xl pulse-glow" style="background: rgba(193, 221, 216, 0.35); animation-delay: 2s;"></div>
+  </div>
+
+  <div class="max-w-4xl mx-auto relative z-10">
+    <!-- Breadcrumb -->
+    <div class="mb-6">
+      <%= link_to timeline_path, class: "inline-flex items-center gap-2 font-heading font-semibold text-gray-500 hover:text-gray-800 transition-colors" do %>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+        </svg>
+        Quay lai Timeline
+      <% end %>
+    </div>
+
+    <!-- Memory Card -->
+    <div class="bg-white rounded-3xl overflow-hidden shadow-xl">
+      <!-- Image -->
+      <% if @memory.has_image? %>
+        <div class="relative w-full max-h-[600px] overflow-hidden bg-gray-100">
+          <% if @memory.image_path.present? %>
+            <%= image_tag @memory.image_path, class: "w-full h-full object-contain", alt: @memory.title %>
+          <% elsif @memory.media.attached? %>
+            <%= image_tag @memory.media, class: "w-full h-full object-contain", alt: @memory.title %>
+          <% end %>
+        </div>
+      <% end %>
+
+      <!-- Content -->
+      <div class="p-8 md:p-10">
+        <!-- Age Badge -->
+        <% age_label = Memory::AGE_GROUPS.find { |label, val| val == @memory.age_group }&.first %>
+        <% if age_label %>
+          <div class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-heading font-bold mb-6 shadow-md" style="background: linear-gradient(135deg, #C0DFD0, #A8CEC8); color: #2D5A4E;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+              <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
+            </svg>
+            <%= age_label %>
+          </div>
+        <% end %>
+
+        <!-- Title -->
+        <h1 class="font-accent italic text-3xl md:text-4xl mb-4 leading-tight" style="color: #2D3748;"><%= @memory.title %></h1>
+
+        <!-- Date -->
+        <div class="flex items-center gap-3 mb-6">
+          <div class="w-10 h-10 rounded-xl flex items-center justify-center shadow-md" style="background: linear-gradient(135deg, #C1DDD8, #A8CEC8);">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-white">
+              <path fill-rule="evenodd" d="M6.75 2.25A.75.75 0 017.5 3v1.5h9V3A.75.75 0 0118 3v1.5h.75a3 3 0 013 3v11.25a3 3 0 01-3 3H5.25a3 3 0 01-3-3V7.5a3 3 0 013-3H6V3a.75.75 0 01.75-.75zm13.5 9a1.5 1.5 0 00-1.5-1.5H5.25a1.5 1.5 0 00-1.5 1.5v7.5a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5v-7.5z" clip-rule="evenodd" />
+            </svg>
+          </div>
+          <div>
+            <p class="font-body text-xs text-gray-500">Ngay ghi nhan</p>
+            <p class="font-heading font-bold text-base text-gray-700"><%= @memory.taken_at.strftime("%d/%m/%Y") %></p>
+          </div>
+        </div>
+
+        <!-- Divider -->
+        <div class="flex items-center gap-3 my-6">
+          <div class="flex-1 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent"></div>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5" style="color: #F2C2C2;">
+            <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
+          </svg>
+          <div class="flex-1 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent"></div>
+        </div>
+
+        <!-- Caption -->
+        <% if @memory.caption.present? %>
+          <p class="font-body text-base text-gray-600 leading-relaxed whitespace-pre-line mb-8"><%= @memory.caption %></p>
+        <% end %>
+
+        <!-- Tags -->
+        <% if @memory.tags.any? %>
+          <div class="flex flex-wrap gap-2 mb-8">
+            <% @memory.tags.each do |tag| %>
+              <span class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full font-heading font-medium text-xs" style="background: rgba(193, 221, 216, 0.3); color: #5A8A7A;">
+                #<%= tag.name %>
+              </span>
+            <% end %>
+          </div>
+        <% end %>
+
+        <!-- Share buttons -->
+        <div class="pt-6 border-t border-gray-100">
+          <%= render 'shared/share-buttons', url: memory_detail_url(@memory), title: @memory.title %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

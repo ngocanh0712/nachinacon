@@ -1,3 +1,17 @@
+<% content_for :og_tags do %>
+  <meta property="og:title" content="<%= @album.name %> - NaChiNaCon">
+  <meta property="og:description" content="<%= truncate(@album.description || 'Album ky niem cua be Nacon', length: 160) %>">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="<%= request.original_url %>">
+  <meta property="og:locale" content="vi_VN">
+  <meta property="og:site_name" content="NaChiNaCon">
+  <% if @album.cover_image_path.present? %>
+    <meta property="og:image" content="<%= @album.cover_image_path %>">
+  <% elsif @album.cover_photo.attached? %>
+    <meta property="og:image" content="<%= url_for(@album.cover_photo) %>">
+  <% end %>
+<% end %>
+
 <!-- Header -->
 <section class="pt-8 pb-12 px-4 md:px-6 lg:px-8 relative overflow-hidden">
   <div class="absolute top-0 right-0 w-64 h-64 rounded-full blur-3xl animate-pulse-soft" style="background-color: rgba(192, 223, 208, 0.3);"></div>

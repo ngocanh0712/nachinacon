@@ -1,0 +1,73 @@
+<%# Memory Box - "Hom nay nam ngoai..."
+     Locals: memories (ActiveRecord collection) %>
+<% box_memories = memories || [] %>
+
+<% if box_memories.any? %>
+<section class="py-12 px-4 md:px-6 lg:px-8 relative overflow-hidden">
+  <!-- Background -->
+  <div class="absolute inset-0" style="background: linear-gradient(135deg, rgba(242, 194, 194, 0.08) 0%, rgba(193, 221, 216, 0.08) 50%, rgba(192, 223, 208, 0.08) 100%);"></div>
+
+  <div class="max-w-6xl mx-auto relative z-10">
+    <!-- Section Header -->
+    <div class="text-center mb-10">
+      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-4" style="background: rgba(242, 194, 194, 0.15);">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4" style="color: #E8B0B0;">
+          <path fill-rule="evenodd" d="M6.75 2.25A.75.75 0 017.5 3v1.5h9V3A.75.75 0 0118 3v1.5h.75a3 3 0 013 3v11.25a3 3 0 01-3 3H5.25a3 3 0 01-3-3V7.5a3 3 0 013-3H6V3a.75.75 0 01.75-.75zm13.5 9a1.5 1.5 0 00-1.5-1.5H5.25a1.5 1.5 0 00-1.5 1.5v7.5a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5v-7.5z" clip-rule="evenodd" />
+        </svg>
+        <span class="font-heading font-semibold text-sm" style="color: #D4A0A0;">Ngay nay</span>
+      </div>
+      <h2 class="font-accent italic text-3xl md:text-4xl mb-3" style="color: #C1DDD8;">Hom nay nam ngoai...</h2>
+      <p class="font-body text-gray-500 max-w-md mx-auto">Nhung ky niem cung ngay nay trong qua khu</p>
+    </div>
+
+    <!-- Memory Cards - Horizontal Scroll on Mobile, Grid on Desktop -->
+    <div class="flex gap-6 overflow-x-auto pb-4 snap-x snap-mandatory md:grid md:grid-cols-2 lg:grid-cols-4 md:overflow-visible md:pb-0 scrollbar-hide">
+      <% box_memories.each do |memory| %>
+        <% years_ago = Date.today.year - memory.taken_at.year %>
+        <div class="flex-shrink-0 w-[280px] md:w-auto snap-center group cursor-pointer"
+             onclick="<%= memory.has_image? ? "openMemoryModalFromData(this)" : "" %>"
+             data-memory-id="<%= memory.id %>"
+             data-memory-image="<%= memory.display_image_url %>"
+             data-memory-title="<%= memory.title %>"
+             data-memory-date="<%= memory.taken_at.strftime('%d/%m/%Y') %>"
+             data-memory-caption="<%= memory.caption %>"
+             data-memory-age-group="<%= Memory::AGE_GROUPS.find { |label, val| val == memory.age_group }&.first %>"
+             data-memory-age-color="#DBEAFE;#3B82F6">
+          <div class="bg-white rounded-2xl overflow-hidden shadow-soft card-hover">
+            <!-- Image -->
+            <div class="aspect-[4/3] overflow-hidden relative">
+              <% if memory.has_image? %>
+                <% if memory.image_path.present? %>
+                  <%= image_tag memory.image_path, class: "w-full h-full object-cover img-hover", loading: "lazy" %>
+                <% elsif memory.media.attached? %>
+                  <%= image_tag memory.media, class: "w-full h-full object-cover img-hover", loading: "lazy" %>
+                <% end %>
+              <% else %>
+                <div class="w-full h-full flex items-center justify-center" style="background: linear-gradient(135deg, rgba(193, 221, 216, 0.3) 0%, rgba(242, 194, 194, 0.3) 100%);">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="w-12 h-12 text-gray-300">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                  </svg>
+                </div>
+              <% end %>
+
+              <!-- Years ago badge -->
+              <div class="absolute top-3 left-3 px-3 py-1.5 rounded-xl text-xs font-heading font-bold shadow-lg" style="background: rgba(255,255,255,0.95); color: #E8B0B0;">
+                <%= years_ago %> nam truoc
+              </div>
+            </div>
+
+            <!-- Content -->
+            <div class="p-4">
+              <p class="font-body text-xs text-gray-400 mb-1"><%= memory.taken_at.strftime("%d/%m/%Y") %></p>
+              <h3 class="font-heading font-semibold text-gray-800 group-hover:text-[#A8CEC8] transition-colors line-clamp-1"><%= memory.title %></h3>
+              <% if memory.caption.present? %>
+                <p class="font-body text-xs text-gray-500 mt-1 line-clamp-2"><%= memory.caption %></p>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>
+<% end %>

@@ -1,3 +1,18 @@
+<% content_for :og_tags do %>
+  <meta property="og:title" content="NaChiNaCon - Ky niem cua be">
+  <meta property="og:description" content="Website luu giu ky niem dang yeu cua be Nacon">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="<%= request.original_url %>">
+  <meta property="og:locale" content="vi_VN">
+  <meta property="og:site_name" content="NaChiNaCon">
+  <% if @featured_memory&.has_image? %>
+    <% if @featured_memory.image_path.present? %>
+      <meta property="og:image" content="<%= @featured_memory.image_path %>">
+    <% elsif @featured_memory.media.attached? %>
+      <meta property="og:image" content="<%= url_for(@featured_memory.media) %>">
+    <% end %>
+  <% end %>
+<% end %>
 
 <!-- Hero Section -->
 <section class="py-16 md:py-24 px-4 md:px-6 lg:px-8 relative overflow-hidden" style="background: linear-gradient(180deg, #FFFBF8 0%, #F8FDFC 30%, #FDF5F5 70%, #F8FDFC 100%);">
@@ -250,6 +265,10 @@
   </div>
 </section>
 <% end %>
+
+<!-- Memory Box - On This Day -->
+<%= render 'shared/memory-box', memories: @memory_box %>
+
 <!-- Quick Links Section -->
 <section class="hidden md:block py-16 px-4 md:px-6 lg:px-8 bg-white relative overflow-hidden">
   <!-- Background decoration -->
@@ -354,6 +373,7 @@
              end %>
           <div class="memory-card group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl cursor-pointer border border-gray-100 transition-all duration-300"
                data-turbo="false"
+               data-memory-id="<%= memory.id %>"
                data-memory-title="<%= memory.title %>"
                data-memory-date="<%= memory.taken_at.strftime("%d/%m/%Y") %>"
                data-memory-caption="<%= memory.caption %>"
