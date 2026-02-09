@@ -22,9 +22,9 @@ export default class extends Controller {
 
     const storageKey = `reacted_${memoryId}_${emoji}`
 
-    // Check localStorage to prevent spam
+    // Already reacted: play animation only, no server call
     if (localStorage.getItem(storageKey)) {
-      this.shakeButton(button)
+      this.animateReaction(button, emoji)
       return
     }
 
