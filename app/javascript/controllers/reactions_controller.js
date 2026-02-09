@@ -56,9 +56,40 @@ export default class extends Controller {
       // Animate
       this.animateReaction(button, emoji)
 
+      // Sync card reactions outside modal
+      this.syncCardReactions(memoryId)
+
     } catch (error) {
       console.error('Reaction error:', error)
     }
+  }
+
+  // Update the reaction display on the memory card outside the modal
+  syncCardReactions(memoryId) {
+    const cardReactionsEl = document.querySelector(`.card-reactions[data-card-memory-id="${memoryId}"]`)
+    if (!cardReactionsEl) return
+
+    // Collect current counts from modal buttons
+    const counts = {}
+    this.btnTargets.forEach(btn => {
+      const emoji = btn.dataset.emoji
+      const countEl = btn.querySelector('[data-reactions-target="count"]')
+      if (countEl && countEl.style.display !== 'none') {
+        const count = parseInt(countEl.textContent) || 0
+        if (count > 0) counts[emoji] = count
+      }
+    })
+
+    // Sort by count descending, take top 3
+    const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 3)
+
+    // Rebuild card reactions HTML
+    cardReactionsEl.innerHTML = sorted.map(([emoji, count]) =>
+      `<span class="inline-flex items-center gap-0.5 text-xs" style="color:#6B7280;">` +
+        `<span>${emoji}</span>` +
+        `<span class="font-heading font-semibold" style="font-size:10px;">${count}</span>` +
+      `</span>`
+    ).join('')
   }
 
   animateReaction(button, emoji) {

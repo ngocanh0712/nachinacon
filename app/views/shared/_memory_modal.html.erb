@@ -213,6 +213,17 @@
               countEl.style.display = 'inline';
             }
           });
+          // Sync card reactions outside modal with server data
+          const cardReactionsEl = document.querySelector(`.card-reactions[data-card-memory-id="${data.memoryId}"]`);
+          if (cardReactionsEl) {
+            const sorted = Object.entries(reactions).filter(([,c]) => c > 0).sort((a, b) => b[1] - a[1]).slice(0, 3);
+            cardReactionsEl.innerHTML = sorted.map(([emoji, count]) =>
+              `<span class="inline-flex items-center gap-0.5 text-xs" style="color:#6B7280;">` +
+                `<span>${emoji}</span>` +
+                `<span class="font-heading font-semibold" style="font-size:10px;">${count}</span>` +
+              `</span>`
+            ).join('');
+          }
         }).catch(() => {});
       }
 

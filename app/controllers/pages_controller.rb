@@ -4,7 +4,7 @@ class PagesController < ApplicationController
   skip_before_action :verify_authenticity_token, only: [:spin]
 
   def home
-    @recent_memories = Memory.includes(:tags).recent.limit(8)
+    @recent_memories = Memory.includes(:tags, :reactions).recent.limit(8)
     @achieved_milestones = Milestone.achieved.limit(3)
     @pending_milestones = Milestone.pending.limit(3)
 
@@ -33,15 +33,15 @@ class PagesController < ApplicationController
     @days_old = (Date.today - birth_date).to_i
 
     # Memory Box - "On this day" memories from previous years
-    @memory_box = Memory.includes(:tags).on_this_day.order('RAND()').limit(4)
+    @memory_box = Memory.includes(:tags, :reactions).on_this_day.order('RAND()').limit(4)
   end
 
   def timeline
     @age_group = params[:age_group]
     memories = if @age_group.present?
-                 Memory.includes(:tags).by_age_group(@age_group).recent
+                 Memory.includes(:tags, :reactions).by_age_group(@age_group).recent
                else
-                 Memory.includes(:tags).recent
+                 Memory.includes(:tags, :reactions).recent
                end
     @age_groups = Memory::AGE_GROUPS
     @pagy, @memories = pagy(memories, items: 12)

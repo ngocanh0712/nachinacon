@@ -63,6 +63,17 @@
               <% if memory.caption.present? %>
                 <p class="font-body text-xs text-gray-500 mt-1 line-clamp-2"><%= memory.caption %></p>
               <% end %>
+
+              <!-- Reactions -->
+              <% top_reactions = memory.reactions.select { |r| r.count > 0 }.sort_by { |r| -r.count }.first(3) %>
+              <div class="card-reactions flex items-center gap-1 mt-2" data-card-memory-id="<%= memory.id %>">
+                <% top_reactions.each do |reaction| %>
+                  <span class="inline-flex items-center gap-0.5 text-xs" style="color:#6B7280;">
+                    <span><%= reaction.emoji %></span>
+                    <span class="font-heading font-semibold" style="font-size:10px;"><%= reaction.count %></span>
+                  </span>
+                <% end %>
+              </div>
             </div>
           </div>
         </div>
