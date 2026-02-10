@@ -20,7 +20,7 @@ export default class extends Controller {
     if (this.isSpinning) return
     this.isSpinning = true
     this.spinBtnTarget.disabled = true
-    this.spinBtnTarget.textContent = '🎰 Dang quay...'
+    this.spinBtnTarget.textContent = '🎰 Đang quay...'
 
     // Random rotation: at least 5 full rotations + random offset
     const extraRotation = Math.floor(Math.random() * 360)

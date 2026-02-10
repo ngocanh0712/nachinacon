@@ -1,6 +1,6 @@
 <% content_for :og_tags do %>
-  <meta property="og:title" content="Vong Quay Thuong Phat - NaChiNaCon">
-  <meta property="og:description" content="Quay vong quay thuong phat vui ve cung gia dinh!">
+  <meta property="og:title" content="Vòng Quay Thưởng Phạt - NaChiNaCon">
+  <meta property="og:description" content="Quay vòng quay thưởng phạt vui vẻ cùng gia đình!">
 <% end %>
 
 <section class="min-h-screen py-12 px-4 md:px-6 lg:px-8 relative overflow-hidden" style="background: linear-gradient(180deg, #FFFBF8 0%, #F8FDFC 50%, #FDF5F5 100%);">
@@ -12,7 +12,7 @@
 
   <div class="max-w-4xl mx-auto relative z-10" data-controller="spin-wheel">
     <!-- Top Navigation -->
-    <%= render 'shared/game-nav', title: 'Vong Quay Thuong Phat', icon: '🎰' %>
+    <%= render 'shared/game-nav', title: 'Vòng Quay Thưởng Phạt', icon: '🎰' %>
 
     <!-- Wheel Container -->
     <div class="flex flex-col items-center gap-8">
@@ -68,8 +68,8 @@
 
       <!-- How to play -->
       <div class="glass-card rounded-2xl p-5 max-w-sm w-full text-center">
-        <p class="font-heading font-semibold text-sm text-gray-700 mb-2">Cach choi</p>
-        <p class="font-body text-xs text-gray-500">Moi nguoi lan luot quay. Phai thuc hien thu thach khi vong quay dung lai!</p>
+        <p class="font-heading font-semibold text-sm text-gray-700 mb-2">Cách chơi</p>
+        <p class="font-body text-xs text-gray-500">Mỗi người lần lượt quay. Phải thực hiện thử thách khi vòng quay dừng lại!</p>
       </div>
     </div>
 
@@ -86,12 +86,12 @@
           <div class="flex gap-3 justify-center">
             <button data-action="click->spin-wheel#closeResult"
                     class="px-6 py-3 rounded-xl font-heading font-semibold text-gray-600 transition-all hover:bg-gray-100" style="background:rgba(243,244,246,0.8);">
-              Dong
+              Đóng
             </button>
             <button data-action="click->spin-wheel#spinAgain"
                     class="px-6 py-3 rounded-xl font-heading font-semibold text-white shadow-lg transition-all hover:scale-105"
                     style="background: linear-gradient(135deg, #C1DDD8, #A8CEC8);">
-              Quay Tiep!
+              Quay Tiếp!
             </button>
           </div>
         </div>

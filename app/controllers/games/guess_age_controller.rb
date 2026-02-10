@@ -58,10 +58,10 @@ module Games
 
       # Encouraging messages based on score
       message = case score
-                when 9..10 then 'Tuyet voi! Ban hieu Nacon rat ro!'
-                when 7..8 then 'Rat gioi! Ban la nguoi quan sat tot!'
-                when 5..6 then 'Kha lam! Co gang them nhe!'
-                else 'Khong sao, hay thu lai nhe!'
+                when 9..10 then 'Tuyệt vời! Bạn hiểu Nacon rất rõ!'
+                when 7..8 then 'Rất giỏi! Bạn là người quan sát tốt!'
+                when 5..6 then 'Khá lắm! Cố gắng thêm nhé!'
+                else 'Không sao, hãy thử lại nhé!'
                 end
 
       render json: {

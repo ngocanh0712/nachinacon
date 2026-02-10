@@ -17,7 +17,7 @@ module Admin
       @item.position = SpinWheelItem.maximum(:position).to_i + 1
 
       if @item.save
-        flash[:notice] = 'Item da duoc tao!'
+        flash[:notice] = 'Item đã được tạo!'
         redirect_to admin_spin_wheel_items_path
       else
         render :new, status: :unprocessable_entity
@@ -28,7 +28,7 @@ module Admin
 
     def update
       if @item.update(item_params)
-        flash[:notice] = 'Item da duoc cap nhat!'
+        flash[:notice] = 'Item đã được cập nhật!'
         redirect_to admin_spin_wheel_items_path
       else
         render :edit, status: :unprocessable_entity
@@ -37,7 +37,7 @@ module Admin
 
     def destroy
       @item.destroy
-      flash[:notice] = 'Item da duoc xoa.'
+      flash[:notice] = 'Item đã được xóa.'
       redirect_to admin_spin_wheel_items_path
     end
 

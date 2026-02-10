@@ -1,6 +1,6 @@
 <% content_for :og_tags do %>
-  <meta property="og:title" content="Doan Tuoi Nacon - NaChiNaCon">
-  <meta property="og:description" content="Ban co doan duoc Nacon bao nhieu tuoi trong anh nay khong?">
+  <meta property="og:title" content="Đoán Tuổi Nacon - NaChiNaCon">
+  <meta property="og:description" content="Bạn có đoán được Nacon bao nhiêu tuổi trong ảnh này không?">
 <% end %>
 
 <section class="min-h-screen py-12 px-4 md:px-6 lg:px-8 relative overflow-hidden" style="background: linear-gradient(180deg, #FFFBF8 0%, #F8FDFC 50%, #FDF5F5 100%);">
@@ -11,22 +11,22 @@
 
   <div class="max-w-2xl mx-auto relative z-10" data-controller="guess-age">
     <!-- Top Navigation -->
-    <%= render 'shared/game-nav', title: 'Doan Tuoi Nacon', icon: '🧒' %>
+    <%= render 'shared/game-nav', title: 'Đoán Tuổi Nacon', icon: '🧒' %>
 
     <!-- Intro Screen -->
     <div data-guess-age-target="intro" class="text-center mt-6">
       <div class="glass-card rounded-3xl p-10 shadow-xl max-w-md mx-auto">
         <div class="text-6xl mb-6">🧒</div>
-        <h2 class="font-heading font-bold text-2xl text-gray-800 mb-4">Ban san sang chua?</h2>
-        <p class="font-body text-gray-600 mb-2">10 cau hoi - Nhin anh va chon dung giai doan tuoi</p>
+        <h2 class="font-heading font-bold text-2xl text-gray-800 mb-4">Bạn sẵn sàng chưa?</h2>
+        <p class="font-body text-gray-600 mb-2">10 câu hỏi - Nhìn ảnh và chọn đúng giai đoạn tuổi</p>
         <% if @best_score %>
           <p class="font-body text-sm mb-6" style="color: #A8CEC8;">
-            Ky luc: <strong><%= @best_score.score %>/10</strong> diem
+            Kỷ lục: <strong><%= @best_score.score %>/10</strong> điểm
           </p>
         <% end %>
         <button data-action="click->guess-age#startGame"
                 class="game-button text-lg" style="font-family:var(--font-heading);">
-          🎮 Bat dau!
+          🎮 Bắt đầu!
         </button>
       </div>
     </div>
@@ -36,8 +36,8 @@
       <!-- Progress -->
       <div class="mb-6">
         <div class="flex justify-between items-center mb-2">
-          <span data-guess-age-target="questionNum" class="font-heading font-semibold text-sm text-gray-600">Cau 1/10</span>
-          <span data-guess-age-target="scoreDisplay" class="font-heading font-bold text-sm" style="color: #A8CEC8;">0 diem</span>
+          <span data-guess-age-target="questionNum" class="font-heading font-semibold text-sm text-gray-600">Câu 1/10</span>
+          <span data-guess-age-target="scoreDisplay" class="font-heading font-bold text-sm" style="color: #A8CEC8;">0 điểm</span>
         </div>
         <div class="w-full h-2 rounded-full" style="background: rgba(193,221,216,0.2);">
           <div data-guess-age-target="progressBar" class="quiz-progress-bar" style="width: 10%;"></div>
@@ -54,7 +54,7 @@
 
           <!-- Options -->
           <div class="p-5 flex flex-col justify-center">
-            <p class="font-heading font-semibold text-gray-700 mb-4 text-center text-sm">Nacon bao nhieu tuoi trong anh nay?</p>
+            <p class="font-heading font-semibold text-gray-700 mb-4 text-center text-sm">Nacon bao nhiêu tuổi trong ảnh này?</p>
             <div data-guess-age-target="options" class="grid grid-cols-2 gap-2">
             </div>
             <div data-guess-age-target="feedback" class="hidden mt-3 p-3 rounded-xl text-center">
@@ -69,22 +69,22 @@
     <div data-guess-age-target="results" class="hidden text-center">
       <div class="glass-card rounded-3xl p-10 shadow-xl max-w-md mx-auto">
         <div class="text-6xl mb-4" data-guess-age-target="resultsEmoji">🎉</div>
-        <h2 class="font-heading font-bold text-2xl text-gray-800 mb-2">Ket qua!</h2>
+        <h2 class="font-heading font-bold text-2xl text-gray-800 mb-2">Kết quả!</h2>
         <div class="my-6">
           <div class="inline-flex items-center justify-center w-24 h-24 rounded-full shadow-xl" style="background: linear-gradient(135deg, #C1DDD8, #A8CEC8);">
             <span data-guess-age-target="finalScore" class="font-heading font-extrabold text-3xl text-white">0</span>
           </div>
-          <p class="font-body text-gray-500 mt-2">tren 10 diem</p>
+          <p class="font-body text-gray-500 mt-2">trên 10 điểm</p>
         </div>
         <p data-guess-age-target="resultsMessage" class="font-body text-gray-600 mb-6"></p>
         <div class="flex gap-3 justify-center">
           <%= link_to root_path, class: "px-6 py-3 rounded-xl font-heading font-semibold text-gray-600 transition-all hover:bg-gray-100", style: "background:rgba(243,244,246,0.8);" do %>
-            Ve trang chu
+            Về trang chủ
           <% end %>
           <button data-action="click->guess-age#restart"
                   class="px-6 py-3 rounded-xl font-heading font-semibold text-white shadow-lg transition-all hover:scale-105"
                   style="background: linear-gradient(135deg, #C1DDD8, #A8CEC8);">
-            Choi lai!
+            Chơi lại!
           </button>
         </div>
       </div>

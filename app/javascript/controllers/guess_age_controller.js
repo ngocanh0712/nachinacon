@@ -45,8 +45,8 @@ export default class extends Controller {
     }
 
     const q = this.questions[this.currentQuestion]
-    this.questionNumTarget.textContent = `Cau ${this.currentQuestion + 1}/${this.questions.length}`
-    this.scoreDisplayTarget.textContent = `${this.score} diem`
+    this.questionNumTarget.textContent = `Câu ${this.currentQuestion + 1}/${this.questions.length}`
+    this.scoreDisplayTarget.textContent = `${this.score} điểm`
     this.progressBarTarget.style.width = `${((this.currentQuestion + 1) / this.questions.length) * 100}%`
     this.questionImageTarget.src = q.image_url
     this.feedbackTarget.classList.add('hidden')
@@ -91,16 +91,16 @@ export default class extends Controller {
         button.classList.add('correct')
         this.score++
         this.feedbackTarget.style.background = 'rgba(34, 197, 94, 0.1)'
-        this.feedbackTextTarget.textContent = '✅ Dung roi!'
+        this.feedbackTextTarget.textContent = '✅ Đúng rồi!'
         this.feedbackTextTarget.style.color = '#16A34A'
       } else {
         button.classList.add('incorrect')
         this.feedbackTarget.style.background = 'rgba(239, 68, 68, 0.1)'
-        this.feedbackTextTarget.textContent = `❌ Sai roi! Dap an dung: ${data.correct_label}`
+        this.feedbackTextTarget.textContent = `❌ Sai rồi! Đáp án đúng: ${data.correct_label}`
         this.feedbackTextTarget.style.color = '#DC2626'
       }
       this.feedbackTarget.classList.remove('hidden')
-      this.scoreDisplayTarget.textContent = `${this.score} diem`
+      this.scoreDisplayTarget.textContent = `${this.score} điểm`
 
       // Next question after delay
       setTimeout(() => {
@@ -132,7 +132,7 @@ export default class extends Controller {
       const data = await response.json()
       this.resultsMessageTarget.textContent = data.message
     } catch {
-      this.resultsMessageTarget.textContent = 'Cam on ban da choi!'
+      this.resultsMessageTarget.textContent = 'Cảm ơn bạn đã chơi!'
     }
 
     // Confetti if good score

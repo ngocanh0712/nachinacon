@@ -1,6 +1,6 @@
 <% content_for :og_tags do %>
   <meta property="og:title" content="<%= @album.name %> - NaChiNaCon">
-  <meta property="og:description" content="<%= truncate(@album.description || 'Album ky niem cua be Nacon', length: 160) %>">
+  <meta property="og:description" content="<%= truncate(@album.description || 'Album kỷ niệm của bé Nacon', length: 160) %>">
   <meta property="og:type" content="website">
   <meta property="og:url" content="<%= request.original_url %>">
   <meta property="og:locale" content="vi_VN">
