@@ -104,7 +104,7 @@
         ['#F5D0FE', '#D946EF']
       ] %>
 
-      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 md:gap-6 mb-4">
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 md:gap-6 mb-4" data-controller="scroll-animate">
         <% @memories.each_with_index do |memory, index| %>
           <% colors = card_colors[index % card_colors.length] %>
           <% age_label = Memory::AGE_GROUPS.find { |_, v| v == memory.age_group }&.first || memory.age_group %>

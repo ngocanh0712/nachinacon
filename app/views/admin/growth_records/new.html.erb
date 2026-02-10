@@ -1,0 +1,12 @@
+<div class="max-w-2xl mx-auto space-y-6">
+  <div class="flex items-center gap-3">
+    <%= link_to admin_growth_records_path, class: "w-10 h-10 rounded-xl flex items-center justify-center hover:bg-gray-100 transition-colors" do %>
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-gray-600">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+      </svg>
+    <% end %>
+    <h1 class="font-heading font-bold text-2xl text-gray-800">Thêm Dữ Liệu Mới</h1>
+  </div>
+
+  <%= render 'form', record: @record %>
+</div>

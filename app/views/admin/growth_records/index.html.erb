@@ -1,0 +1,58 @@
+<div class="space-y-8">
+  <!-- Header -->
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="font-heading font-bold text-2xl text-gray-800">Biểu Đồ Tăng Trưởng Cho Nacon</h1>
+      <p class="font-body text-sm text-gray-500 mt-1"><%= @records.count %> lần đo</p>
+    </div>
+    <%= link_to new_admin_growth_record_path, class: "inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-heading font-semibold text-gray-800 shadow-md hover:shadow-lg transition-all", style: "background: linear-gradient(135deg, #C1DDD8 0%, #A8CEC8 100%);" do %>
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+      </svg>
+      Thêm Dữ Liệu
+    <% end %>
+  </div>
+
+  <!-- Records Table -->
+  <% if @records.any? %>
+    <div class="bg-white rounded-2xl shadow-md overflow-hidden">
+      <table class="w-full">
+        <thead>
+          <tr class="border-b border-gray-100" style="background: #F8FDFC;">
+            <th class="px-5 py-3 text-left font-heading font-semibold text-sm text-gray-600">Ngày</th>
+            <th class="px-5 py-3 text-center font-heading font-semibold text-sm text-gray-600">Chiều cao (cm)</th>
+            <th class="px-5 py-3 text-center font-heading font-semibold text-sm text-gray-600">Cân nặng (kg)</th>
+            <th class="px-5 py-3 text-right font-heading font-semibold text-sm text-gray-600">Thao tác</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @records.each do |record| %>
+            <tr class="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
+              <td class="px-5 py-4 font-heading font-semibold text-sm text-gray-800">
+                <%= record.recorded_on.strftime("%d/%m/%Y") %>
+                <span class="block font-body text-xs text-gray-400"><%= record.age_in_months %> tháng tuổi</span>
+              </td>
+              <td class="px-5 py-4 text-center font-body text-sm text-gray-700"><%= record.height_cm || '-' %></td>
+              <td class="px-5 py-4 text-center font-body text-sm text-gray-700"><%= record.weight_kg || '-' %></td>
+              <td class="px-5 py-4 text-right">
+                <div class="flex items-center justify-end gap-2">
+                  <%= link_to edit_admin_growth_record_path(record), class: "px-3 py-1.5 rounded-lg font-heading font-medium text-sm text-gray-700 transition-colors hover:bg-gray-100", style: "background-color: #E0EEEB;" do %>
+                    Sửa
+                  <% end %>
+                  <%= button_to admin_growth_record_path(record), method: :delete, data: { turbo_confirm: "Xóa dữ liệu này?" }, class: "px-3 py-1.5 rounded-lg font-heading font-medium text-sm text-gray-700 transition-colors cursor-pointer", style: "background-color: #F8D8D8;" do %>
+                    Xóa
+                  <% end %>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <div class="bg-white rounded-2xl p-8 text-center shadow-sm">
+      <div class="text-4xl mb-3">📈</div>
+      <p class="font-body text-gray-500">Chưa có dữ liệu tăng trưởng. Hãy thêm lần đo đầu tiên!</p>
+    </div>
+  <% end %>
+</div>

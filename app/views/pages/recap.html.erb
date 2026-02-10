@@ -1,0 +1,140 @@
+<section class="py-12 px-4 md:px-6 lg:px-8 relative overflow-hidden" style="background: linear-gradient(180deg, #FFFBF8 0%, #F8FDFC 50%, #FDF5F5 100%);">
+  <div class="absolute inset-0 overflow-hidden pointer-events-none">
+    <div class="absolute top-10 right-10 w-64 h-64 rounded-full blur-3xl" style="background: rgba(193, 221, 216, 0.2);"></div>
+    <div class="absolute bottom-10 left-10 w-48 h-48 rounded-full blur-3xl" style="background: rgba(242, 194, 194, 0.2);"></div>
+  </div>
+
+  <div class="max-w-4xl mx-auto relative z-10">
+    <!-- Header with navigation -->
+    <div class="text-center mb-10">
+      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-4" style="background: rgba(242, 194, 194, 0.2);">
+        <span style="color: #E8B0B0;">📊</span>
+        <span class="font-heading font-semibold text-sm" style="color: #D4A0A0;">Tổng kết</span>
+      </div>
+
+      <div class="flex items-center justify-center gap-4 mb-4">
+        <% if @prev_month %>
+          <%= link_to recap_month_path(year: @prev_month.year, month: @prev_month.month), class: "w-10 h-10 rounded-xl flex items-center justify-center hover:bg-white/50 transition-colors" do %>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-gray-600">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+            </svg>
+          <% end %>
+        <% else %>
+          <div class="w-10 h-10"></div>
+        <% end %>
+
+        <h1 class="font-accent italic text-3xl md:text-4xl" style="color: #C1DDD8;">
+          Tháng <%= @current_date.month %>/<%= @current_date.year %>
+        </h1>
+
+        <% if @next_month %>
+          <%= link_to recap_month_path(year: @next_month.year, month: @next_month.month), class: "w-10 h-10 rounded-xl flex items-center justify-center hover:bg-white/50 transition-colors" do %>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-gray-600">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+            </svg>
+          <% end %>
+        <% else %>
+          <div class="w-10 h-10"></div>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10" data-controller="scroll-animate">
+      <div class="glass-card rounded-2xl p-5 text-center shadow-lg">
+        <div class="text-3xl mb-2">📸</div>
+        <p class="font-heading font-bold text-2xl text-gray-800"><%= @total_memories %></p>
+        <p class="font-body text-xs text-gray-500">Kỷ niệm</p>
+      </div>
+      <div class="glass-card rounded-2xl p-5 text-center shadow-lg">
+        <div class="text-3xl mb-2">🖼️</div>
+        <p class="font-heading font-bold text-2xl text-gray-800"><%= @photo_count %></p>
+        <p class="font-body text-xs text-gray-500">Ảnh</p>
+      </div>
+      <div class="glass-card rounded-2xl p-5 text-center shadow-lg">
+        <div class="text-3xl mb-2">⭐</div>
+        <p class="font-heading font-bold text-2xl text-gray-800"><%= @milestones_achieved.count %></p>
+        <p class="font-body text-xs text-gray-500">Milestones</p>
+      </div>
+      <div class="glass-card rounded-2xl p-5 text-center shadow-lg">
+        <div class="text-3xl mb-2">🎂</div>
+        <p class="font-heading font-bold text-2xl text-gray-800"><%= @baby_age[0] > 0 ? "#{@baby_age[0]}t #{@baby_age[1]}th" : "#{@baby_age[1]} tháng" %></p>
+        <p class="font-body text-xs text-gray-500">Tuổi bé</p>
+      </div>
+    </div>
+
+    <!-- Most Reacted Memory -->
+    <% if @most_reacted %>
+      <div class="mb-10" data-controller="scroll-animate">
+        <h2 class="font-heading font-bold text-xl text-gray-800 mb-4 flex items-center gap-2">
+          <span>❤️</span> Kỷ niệm được yêu thích nhất
+        </h2>
+        <div class="glass-card rounded-2xl overflow-hidden shadow-lg">
+          <% if @most_reacted.image_path.present? %>
+            <div class="w-full max-h-72 overflow-hidden">
+              <%= image_tag @most_reacted.image_path, class: "w-full h-full object-cover", alt: @most_reacted.title %>
+            </div>
+          <% end %>
+          <div class="p-6">
+            <h3 class="font-heading font-bold text-xl text-gray-800 mb-2"><%= @most_reacted.title %></h3>
+            <% if @most_reacted.caption.present? %>
+              <p class="font-body text-gray-500 mb-3 leading-relaxed"><%= @most_reacted.caption %></p>
+            <% end %>
+            <p class="font-body text-sm text-gray-400"><%= @most_reacted.taken_at.strftime("%d/%m/%Y") %></p>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+    <!-- Milestones -->
+    <% if @milestones_achieved.any? %>
+      <div class="mb-10" data-controller="scroll-animate">
+        <h2 class="font-heading font-bold text-xl text-gray-800 mb-4 flex items-center gap-2">
+          <span>🏆</span> Milestones đạt được
+        </h2>
+        <div class="space-y-3">
+          <% @milestones_achieved.each do |milestone| %>
+            <div class="glass-card rounded-xl p-4 shadow-sm flex items-center gap-4">
+              <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: linear-gradient(135deg, #D1FAE5, #10B981);">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-white">
+                  <path fill-rule="evenodd" d="M19.916 4.626a.75.75 0 01.208 1.04l-9 13.5a.75.75 0 01-1.154.114l-6-6a.75.75 0 011.06-1.06l5.353 5.353 8.493-12.739a.75.75 0 011.04-.208z" clip-rule="evenodd" />
+                </svg>
+              </div>
+              <div>
+                <p class="font-heading font-semibold text-gray-800"><%= milestone.name %></p>
+                <p class="font-body text-xs text-gray-500"><%= milestone.achieved_at&.strftime("%d/%m/%Y") %></p>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+
+    <!-- Month Selector -->
+    <% if @available_months.any? %>
+      <div class="text-center" data-controller="scroll-animate">
+        <h3 class="font-heading font-semibold text-sm text-gray-500 mb-3">Xem tháng khác</h3>
+        <div class="flex flex-wrap justify-center gap-2">
+          <% @available_months.each do |mk| %>
+            <% y, m = mk.split('-').map(&:to_i) %>
+            <% active = y == @current_date.year && m == @current_date.month %>
+            <%= link_to recap_month_path(year: y, month: m),
+                  class: "px-4 py-2 rounded-xl font-heading font-semibold text-sm transition-all #{active ? 'text-white shadow-lg' : 'glass-card text-gray-600 hover:shadow-md'}",
+                  style: active ? "background: linear-gradient(135deg, #C1DDD8, #A8CEC8);" : "" do %>
+              <%= "#{m}/#{y}" %>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+
+    <!-- Empty state -->
+    <% if @total_memories == 0 && @milestones_achieved.empty? %>
+      <div class="text-center py-16 glass-card rounded-3xl shadow-xl">
+        <div class="text-5xl mb-4">📊</div>
+        <h3 class="font-heading font-bold text-xl text-gray-700 mb-2">Chưa có dữ liệu</h3>
+        <p class="font-body text-gray-500">Không có kỷ niệm hay milestones trong tháng này.</p>
+      </div>
+    <% end %>
+  </div>
+</section>

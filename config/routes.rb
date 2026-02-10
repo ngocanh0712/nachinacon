@@ -15,6 +15,11 @@ Rails.application.routes.draw do
   post 'memories/:id/react', to: 'reactions#create', as: :memory_react
   get 'memories/:id/reactions', to: 'reactions#index', as: :memory_reactions
 
+  # New features
+  get 'recap', to: 'pages#recap'
+  get 'recap/:year/:month', to: 'pages#recap', as: :recap_month
+  get 'tang-truong', to: 'pages#growth_chart', as: :growth_chart
+
   # Fun & Interactive
   get 'vui-choi', to: 'pages#games', as: :games_hub
   get 'then-vs-now', to: 'pages#then_vs_now'
@@ -44,6 +49,7 @@ Rails.application.routes.draw do
     resources :milestones
     resources :albums
     resources :spin_wheel_items, path: 'spin-wheel'
+    resources :growth_records, path: 'growth'
     get 'settings', to: 'settings#index'
     patch 'settings', to: 'settings#update'
     get 'system/cloudinary', to: 'system#cloudinary_status', as: :cloudinary_status

@@ -1,0 +1,101 @@
+<section class="py-12 px-4 md:px-6 lg:px-8 relative overflow-hidden" style="background: linear-gradient(180deg, #FFFBF8 0%, #F8FDFC 50%, #FDF5F5 100%);">
+  <div class="absolute inset-0 overflow-hidden pointer-events-none">
+    <div class="absolute top-10 right-10 w-64 h-64 rounded-full blur-3xl" style="background: rgba(193, 221, 216, 0.2);"></div>
+    <div class="absolute bottom-10 left-10 w-48 h-48 rounded-full blur-3xl" style="background: rgba(242, 194, 194, 0.2);"></div>
+  </div>
+
+  <%
+    records_data = @records.map { |r|
+      {
+        age_months: r.age_in_months,
+        height_cm: r.height_cm&.to_f,
+        weight_kg: r.weight_kg&.to_f,
+        date: r.recorded_on.strftime('%d/%m/%Y')
+      }
+    }
+  %>
+
+  <div class="max-w-5xl mx-auto relative z-10"
+       data-controller="growth-chart"
+       data-growth-chart-records-value="<%= records_data.to_json %>">
+
+    <!-- Header -->
+    <div class="text-center mb-10">
+      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-4" style="background: rgba(193, 221, 216, 0.2);">
+        <span style="color: #A8CEC8;">📈</span>
+        <span class="font-heading font-semibold text-sm" style="color: #7BB4AA;">Theo dõi</span>
+      </div>
+      <h1 class="font-accent italic text-3xl md:text-4xl mb-3" style="color: #C1DDD8;">Biểu Đồ Tăng Trưởng Cho Nacon</h1>
+    </div>
+
+    <% if @records.any? %>
+      <% latest = @records.last %>
+      <!-- Latest Measurements Summary -->
+      <div class="grid grid-cols-2 gap-4 mb-8 max-w-md mx-auto" data-controller="scroll-animate">
+        <div class="glass-card rounded-2xl p-5 text-center shadow-lg">
+          <div class="text-2xl mb-1">📏</div>
+          <p class="font-heading font-bold text-2xl" style="color: #5A9A8E;"><%= latest.height_cm ? "#{latest.height_cm} cm" : '-' %></p>
+          <p class="font-body text-xs text-gray-500">Chiều cao</p>
+        </div>
+        <div class="glass-card rounded-2xl p-5 text-center shadow-lg">
+          <div class="text-2xl mb-1">⚖️</div>
+          <p class="font-heading font-bold text-2xl" style="color: #D4A0A0;"><%= latest.weight_kg ? "#{latest.weight_kg} kg" : '-' %></p>
+          <p class="font-body text-xs text-gray-500">Cân nặng</p>
+        </div>
+      </div>
+
+      <!-- Charts: 2-col grid on desktop -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6" data-controller="scroll-animate">
+        <div class="glass-card rounded-2xl p-5 shadow-lg">
+          <h3 class="font-heading font-semibold text-gray-800 mb-3 flex items-center gap-2">
+            <span>📏</span> Chiều Cao
+          </h3>
+          <canvas data-growth-chart-target="heightCanvas"></canvas>
+        </div>
+
+        <div class="glass-card rounded-2xl p-5 shadow-lg">
+          <h3 class="font-heading font-semibold text-gray-800 mb-3 flex items-center gap-2">
+            <span>⚖️</span> Cân Nặng
+          </h3>
+          <canvas data-growth-chart-target="weightCanvas"></canvas>
+        </div>
+      </div>
+
+      <!-- Data Table -->
+      <div class="glass-card rounded-2xl p-5 shadow-lg" data-controller="scroll-animate">
+        <h3 class="font-heading font-semibold text-gray-800 mb-3">Lịch sử đo</h3>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b border-gray-200">
+                <th class="py-2 px-2 text-left font-heading font-semibold text-gray-600 text-xs">Ngày</th>
+                <th class="py-2 px-2 text-center font-heading font-semibold text-gray-600 text-xs">Tháng</th>
+                <th class="py-2 px-2 text-center font-heading font-semibold text-gray-600 text-xs">Cao (cm)</th>
+                <th class="py-2 px-2 text-center font-heading font-semibold text-gray-600 text-xs">Nặng (kg)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @records.each do |record| %>
+                <tr class="border-b border-gray-100">
+                  <td class="py-2 px-2 font-body text-gray-700 text-xs"><%= record.recorded_on.strftime("%d/%m/%y") %></td>
+                  <td class="py-2 px-2 text-center font-body text-gray-600 text-xs"><%= record.age_in_months %></td>
+                  <td class="py-2 px-2 text-center font-heading font-semibold text-xs" style="color: #5A9A8E;"><%= record.height_cm || '-' %></td>
+                  <td class="py-2 px-2 text-center font-heading font-semibold text-xs" style="color: #D4A0A0;"><%= record.weight_kg || '-' %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    <% else %>
+      <div class="text-center py-16 glass-card rounded-3xl shadow-xl">
+        <div class="text-5xl mb-4">📈</div>
+        <h3 class="font-heading font-bold text-xl text-gray-700 mb-2">Chưa có dữ liệu</h3>
+        <p class="font-body text-gray-500 mb-6">Qua Admin thêm dữ liệu đo lường để xem biểu đồ tăng trưởng của Nacon</p>
+        <%= link_to root_path, class: "inline-flex items-center gap-2 px-6 py-3 rounded-xl font-heading font-semibold text-white shadow-lg", style: "background: linear-gradient(135deg, #C1DDD8, #A8CEC8);" do %>
+          Về Trang Chủ
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</section>

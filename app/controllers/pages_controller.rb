@@ -107,6 +107,39 @@ class PagesController < ApplicationController
     end
   end
 
+  def recap
+    birth_date = SiteSetting.baby_birth_date
+    year = (params[:year] || Date.today.year).to_i
+    month = (params[:month] || Date.today.month).to_i
+    @current_date = Date.new(year, month, 1)
+    @end_date = @current_date.end_of_month
+
+    memories = Memory.where(taken_at: @current_date..@end_date)
+    @total_memories = memories.count
+    @photo_count = memories.where.not(image_path: [nil, '']).count
+    @milestones_achieved = Milestone.achieved.where(achieved_at: @current_date..@end_date)
+    @most_reacted = memories.joins(:reactions)
+                            .select('memories.*, SUM(reactions.count) as total_reactions')
+                            .group('memories.id')
+                            .order('total_reactions DESC')
+                            .first
+
+    @baby_age = helpers.calculate_age_at(birth_date, @current_date)
+
+    @available_months = Memory.select("DISTINCT DATE_FORMAT(taken_at, '%Y-%m') as month_key")
+                              .order('month_key DESC')
+                              .map { |m| m.month_key }
+
+    @prev_month = @current_date - 1.month
+    @next_month = @current_date + 1.month
+    @next_month = nil if @next_month > Date.today
+  end
+
+  def growth_chart
+    @records = GrowthRecord.chronological if defined?(GrowthRecord)
+    @records ||= []
+  end
+
   def search
     @query = params[:q]
     @age_group = params[:age_group]

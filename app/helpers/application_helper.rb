@@ -42,6 +42,23 @@ module ApplicationHelper
     end
   end
 
+  def calculate_age_at(birth_date, target_date)
+    years = target_date.year - birth_date.year
+    months = target_date.month - birth_date.month
+    if months < 0
+      years -= 1
+      months += 12
+    end
+    if target_date.day < birth_date.day
+      months -= 1
+      if months < 0
+        months += 12
+        years -= 1
+      end
+    end
+    [years, months]
+  end
+
   def calculate_age(birth_date)
     today = Date.today
     years = today.year - birth_date.year

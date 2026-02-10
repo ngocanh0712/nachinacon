@@ -63,6 +63,43 @@
           </div>
         </div>
 
+        <!-- Birthday Countdown -->
+        <div class="inline-block glass-card rounded-2xl px-6 py-4 shadow-xl mb-8"
+             data-controller="birthday-countdown"
+             data-birthday-countdown-birth-date-value="<%= SiteSetting.get('baby_birth_date') %>">
+          <div data-birthday-countdown-target="countdown">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="text-xl">🎂</span>
+              <span class="font-heading font-semibold text-sm text-gray-600">Sinh nhật tiếp theo</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <div class="text-center">
+                <span data-birthday-countdown-target="days" class="font-heading font-bold text-2xl text-gray-800">--</span>
+                <p class="font-body text-xs text-gray-400">ngày</p>
+              </div>
+              <span class="font-heading font-bold text-gray-300">:</span>
+              <div class="text-center">
+                <span data-birthday-countdown-target="hours" class="font-heading font-bold text-2xl text-gray-800">--</span>
+                <p class="font-body text-xs text-gray-400">giờ</p>
+              </div>
+              <span class="font-heading font-bold text-gray-300">:</span>
+              <div class="text-center">
+                <span data-birthday-countdown-target="minutes" class="font-heading font-bold text-2xl text-gray-800">--</span>
+                <p class="font-body text-xs text-gray-400">phút</p>
+              </div>
+              <span class="font-heading font-bold text-gray-300">:</span>
+              <div class="text-center">
+                <span data-birthday-countdown-target="seconds" class="font-heading font-bold text-2xl" style="color: #E8B0B0;">--</span>
+                <p class="font-body text-xs text-gray-400">giây</p>
+              </div>
+            </div>
+          </div>
+          <div data-birthday-countdown-target="message" class="hidden text-center">
+            <span class="text-3xl">🎉🎂🎉</span>
+            <p class="font-heading font-bold text-xl mt-2" style="color: #E8B0B0;">Chúc mừng sinh nhật bé!</p>
+          </div>
+        </div>
+
         <p class="font-body text-lg md:text-xl text-gray-600 mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed">
           Ghi lại từng khoảnh khắc quý giá của hoàng tử nhỏ. Từ nụ cười đầu tiên đến bước chân đầu tiên, mỗi kỷ niệm đều là báu vật.
         </p>
@@ -198,7 +235,7 @@
   </div>
 
   <div class="max-w-6xl mx-auto relative z-10">
-    <div class="text-center mb-10">
+    <div class="text-center mb-10" data-controller="scroll-animate">
       <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-4" style="background: rgba(193, 221, 216, 0.2);">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4" style="color: #A8CEC8;">
           <path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
@@ -208,7 +245,7 @@
       <h2 class="font-accent italic text-3xl md:text-4xl mb-3" style="color: #E8B0B0;">Kỷ Niệm Đặc Biệt</h2>
     </div>
 
-    <div class="glass-card rounded-3xl overflow-hidden shadow-2xl max-w-4xl mx-auto">
+    <div class="glass-card rounded-3xl overflow-hidden shadow-2xl max-w-4xl mx-auto" data-controller="scroll-animate" data-scroll-animate-delay-value="150">
       <div class="grid md:grid-cols-2 gap-8">
         <!-- Image -->
         <div class="relative overflow-hidden group aspect-square md:aspect-auto">
@@ -276,7 +313,7 @@
   <div class="absolute bottom-0 left-0 w-48 h-48 rounded-full blur-3xl opacity-30" style="background: #F2C2C2;"></div>
 
   <div class="max-w-6xl mx-auto relative z-10">
-    <div class="text-center mb-12">
+    <div class="text-center mb-12" data-controller="scroll-animate">
       <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-4" style="background: rgba(242, 194, 194, 0.2);">
         <span style="color: #E8B0B0;">✨</span>
         <span class="font-heading font-semibold text-sm" style="color: #D4A0A0;">Khám phá</span>
@@ -285,7 +322,7 @@
       <p class="font-heading font-bold text-2xl md:text-3xl text-gray-800">Quý Giá Của Nacon</p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6" data-controller="scroll-animate" data-scroll-animate-delay-value="150">
       <!-- Timeline Card -->
       <%= link_to timeline_path, class: "group card-3d glass-card rounded-3xl p-8 shadow-xl cursor-pointer border border-white/50" do %>
         <div class="w-18 h-18 rounded-2xl flex items-center justify-center mb-6 shadow-lg relative overflow-hidden" style="background: linear-gradient(135deg, #E0EEEB, #C1DDD8);">
@@ -339,7 +376,7 @@
   </div>
 
   <div class="max-w-6xl mx-auto relative z-10">
-    <div class="text-center mb-12">
+    <div class="text-center mb-12" data-controller="scroll-animate">
       <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-4" style="background: rgba(193, 221, 216, 0.2);">
         <span style="color: #A8CEC8;">🎮</span>
         <span class="font-heading font-semibold text-sm" style="color: #7BB4AA;">Vui chơi</span>
@@ -348,7 +385,7 @@
       <p class="font-body text-gray-500 max-w-md mx-auto">Khám phá kỷ niệm của bé theo những cách thú vị hơn!</p>
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5" data-controller="scroll-animate" data-scroll-animate-delay-value="150">
       <!-- Memory Game -->
       <%= link_to games_memory_path, class: "group glass-card rounded-2xl p-6 shadow-lg cursor-pointer border border-white/50 transition-all duration-300 hover:shadow-xl hover:scale-[1.02]" do %>
         <div class="w-14 h-14 rounded-2xl flex items-center justify-center mb-4 shadow-md text-3xl" style="background: linear-gradient(135deg, #C1DDD8, #A8CEC8);">
@@ -400,6 +437,32 @@
           <span class="group-hover:translate-x-1 transition-transform">→</span>
         </div>
       <% end %>
+
+      <!-- Monthly Recap -->
+      <%= link_to recap_path, class: "group glass-card rounded-2xl p-6 shadow-lg cursor-pointer border border-white/50 transition-all duration-300 hover:shadow-xl hover:scale-[1.02]" do %>
+        <div class="w-14 h-14 rounded-2xl flex items-center justify-center mb-4 shadow-md text-3xl" style="background: linear-gradient(135deg, #C0DFD0, #A8D1BD);">
+          📊
+        </div>
+        <h3 class="font-heading font-bold text-lg text-gray-800 mb-2">Tổng Kết Tháng</h3>
+        <p class="font-body text-sm text-gray-500 mb-3 leading-relaxed">Tổng kết kỷ niệm và milestones theo từng tháng.</p>
+        <div class="flex items-center gap-1 font-heading font-semibold text-xs" style="color: #8BB8AA;">
+          <span>Xem ngay</span>
+          <span class="group-hover:translate-x-1 transition-transform">→</span>
+        </div>
+      <% end %>
+
+      <!-- Growth Chart -->
+      <%= link_to growth_chart_path, class: "group glass-card rounded-2xl p-6 shadow-lg cursor-pointer border border-white/50 transition-all duration-300 hover:shadow-xl hover:scale-[1.02]" do %>
+        <div class="w-14 h-14 rounded-2xl flex items-center justify-center mb-4 shadow-md text-3xl" style="background: linear-gradient(135deg, #C1DDD8, #A8CEC8);">
+          📈
+        </div>
+        <h3 class="font-heading font-bold text-lg text-gray-800 mb-2">Biểu Đồ Tăng Trưởng Cho Nacon</h3>
+        <p class="font-body text-sm text-gray-500 mb-3 leading-relaxed">Theo dõi chiều cao, cân nặng và vòng đầu của bé.</p>
+        <div class="flex items-center gap-1 font-heading font-semibold text-xs" style="color: #A8CEC8;">
+          <span>Xem ngay</span>
+          <span class="group-hover:translate-x-1 transition-transform">→</span>
+        </div>
+      <% end %>
     </div>
   </div>
 </section>
@@ -411,7 +474,7 @@
   <div class="absolute bottom-20 left-10 w-24 h-24 rounded-full blur-2xl opacity-40" style="background: #F2C2C2;"></div>
 
   <div class="max-w-6xl mx-auto relative z-10">
-    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-10">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-10" data-controller="scroll-animate">
       <div>
         <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-3" style="background: rgba(193, 221, 216, 0.2);">
           <div class="w-1.5 h-1.5 rounded-full" style="background: #A8CEC8;"></div>
@@ -528,7 +591,7 @@
   <div class="absolute bottom-0 right-1/4 w-40 h-40 rounded-full blur-3xl opacity-20" style="background: #C1DDD8;"></div>
 
   <div class="max-w-6xl mx-auto relative z-10">
-    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-12">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-12" data-controller="scroll-animate">
       <div>
         <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-3" style="background: rgba(16, 185, 129, 0.1);">
           <span style="color: #10B981;">✓</span>
@@ -581,7 +644,7 @@
 <% if @popular_tags.any? %>
 <section class="py-16 px-4 md:px-6 lg:px-8 bg-white">
   <div class="max-w-6xl mx-auto">
-    <div class="text-center mb-12">
+    <div class="text-center mb-12" data-controller="scroll-animate">
       <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-4" style="background: rgba(242, 194, 194, 0.2);">
         <span class="text-lg" style="color: #E8B0B0;">🏷️</span>
         <span class="font-heading font-semibold text-sm" style="color: #D4A0A0;">Chủ đề phổ biến</span>

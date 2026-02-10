@@ -79,7 +79,7 @@
     </div>
 
     <% if @achieved.any? %>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" data-controller="scroll-animate">
         <% @achieved.each_with_index do |milestone, index| %>
           <% gradients = [
             ['#FFE4E6', '#FDF2F2', '#F2C2C2'],

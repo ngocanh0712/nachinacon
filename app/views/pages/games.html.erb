@@ -21,7 +21,7 @@
     </div>
 
     <!-- Game Cards Grid -->
-    <div class="grid sm:grid-cols-2 gap-6">
+    <div class="grid sm:grid-cols-2 gap-6" data-controller="scroll-animate">
       <!-- Memory Game -->
       <%= link_to games_memory_path, class: "glass-card rounded-2xl p-6 shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-[1.02] group block", style: "text-decoration:none;" do %>
         <div class="flex items-start gap-4">
@@ -88,6 +88,43 @@
           <div>
             <h3 class="font-heading font-bold text-lg text-gray-800 mb-1 group-hover:text-gray-900">Then vs Now</h3>
             <p class="font-body text-sm text-gray-500">So sánh ảnh trước và bây giờ - xem bé lớn nhanh thế nào!</p>
+          </div>
+        </div>
+        <div class="mt-4 flex items-center gap-2 font-heading font-semibold text-sm" style="color: #8BB8AA;">
+          <span>Xem ngay</span>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4 transition-transform group-hover:translate-x-1">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+          </svg>
+        </div>
+      <% end %>
+      <!-- Monthly Recap -->
+      <%= link_to recap_path, class: "glass-card rounded-2xl p-6 shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-[1.02] group block", style: "text-decoration:none;" do %>
+        <div class="flex items-start gap-4">
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0" style="background: rgba(193, 221, 216, 0.2);">
+            <span class="text-2xl">📊</span>
+          </div>
+          <div>
+            <h3 class="font-heading font-bold text-lg text-gray-800 mb-1 group-hover:text-gray-900">Tổng Kết Tháng</h3>
+            <p class="font-body text-sm text-gray-500">Tổng kết kỷ niệm và milestones theo từng tháng.</p>
+          </div>
+        </div>
+        <div class="mt-4 flex items-center gap-2 font-heading font-semibold text-sm" style="color: #7BB4AA;">
+          <span>Xem ngay</span>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4 transition-transform group-hover:translate-x-1">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+          </svg>
+        </div>
+      <% end %>
+
+      <!-- Growth Chart -->
+      <%= link_to growth_chart_path, class: "glass-card rounded-2xl p-6 shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-[1.02] group block", style: "text-decoration:none;" do %>
+        <div class="flex items-start gap-4">
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0" style="background: rgba(192, 223, 208, 0.2);">
+            <span class="text-2xl">📈</span>
+          </div>
+          <div>
+            <h3 class="font-heading font-bold text-lg text-gray-800 mb-1 group-hover:text-gray-900">Biểu Đồ Tăng Trưởng Cho Nacon</h3>
+            <p class="font-body text-sm text-gray-500">Theo dõi chiều cao, cân nặng và vòng đầu của bé.</p>
           </div>
         </div>
         <div class="mt-4 flex items-center gap-2 font-heading font-semibold text-sm" style="color: #8BB8AA;">
