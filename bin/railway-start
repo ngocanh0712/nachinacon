@@ -1,16 +1,6 @@
 #!/bin/bash
-set -x
-
 echo "==== RAILWAY START SCRIPT ===="
-echo "DATABASE_URL present: ${DATABASE_URL:+yes}"
 
 RAILS_PORT=${PORT:-3000}
-echo "Starting server on port: $RAILS_PORT"
-
-# Run db:migrate (skip if fails - table may already exist)
-echo "Running db:migrate..."
-./bin/rails db:migrate 2>&1 || echo "WARNING: db:migrate failed (exit: $?), continuing anyway..."
-echo "db:migrate done!"
-
-echo "Starting Rails server on port $RAILS_PORT..."
+echo "Starting Rails server on port $RAILS_PORT (skipping db:migrate for now)..."
 exec ./bin/rails server -b 0.0.0.0 -p "${RAILS_PORT}"
