@@ -36,11 +36,11 @@
     <div class="bg-white rounded-3xl overflow-hidden shadow-xl">
       <!-- Image -->
       <% if @memory.has_image? %>
-        <div class="relative w-full max-h-[480px] overflow-hidden bg-gray-50">
+        <div class="relative w-full flex items-center justify-center bg-gray-50">
           <% if @memory.image_path.present? %>
-            <%= image_tag @memory.image_path, class: "w-full h-full object-contain", alt: @memory.title %>
+            <%= image_tag @memory.image_path, class: "w-full max-h-[600px] object-contain", alt: @memory.title %>
           <% elsif @memory.media.attached? %>
-            <%= image_tag @memory.media, class: "w-full h-full object-contain", alt: @memory.title %>
+            <%= image_tag @memory.media, class: "w-full max-h-[600px] object-contain", alt: @memory.title %>
           <% end %>
         </div>
       <% end %>
