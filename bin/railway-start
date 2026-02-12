@@ -2,5 +2,9 @@
 echo "==== RAILWAY START SCRIPT ===="
 
 RAILS_PORT=${PORT:-3000}
-echo "Starting Rails server on port $RAILS_PORT (skipping db:migrate for now)..."
+
+echo "Running db:migrate..."
+./bin/rails db:migrate 2>&1 || echo "WARNING: db:migrate failed (exit: $?)"
+
+echo "Starting Rails server on port $RAILS_PORT..."
 exec ./bin/rails server -b 0.0.0.0 -p "${RAILS_PORT}"
