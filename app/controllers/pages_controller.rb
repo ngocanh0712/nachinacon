@@ -63,6 +63,11 @@ class PagesController < ApplicationController
 
   def memory
     @memory = Memory.includes(:tags).find(params[:id])
+    @related = Memory.where(age_group: @memory.age_group)
+                     .where.not(id: @memory.id)
+                     .where.not(image_path: [nil, ''])
+                     .order('RAND()')
+                     .limit(6)
   end
 
   def games
