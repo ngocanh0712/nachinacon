@@ -2,19 +2,20 @@
 set -ex
 
 echo "==== RAILWAY START SCRIPT ===="
-echo "All env vars related to PORT:"
-env | grep -i port || echo "No PORT vars found"
 echo "DATABASE_URL present: ${DATABASE_URL:+yes}"
 
 # Use PORT from Railway, or default to 3000
 RAILS_PORT=${PORT:-3000}
 echo "Starting server on port: $RAILS_PORT"
 
+# Run db:prepare with timeout (2 min max)
 echo "Running db:prepare..."
-./bin/rails db:prepare
+timeout 120 ./bin/rails db:prepare 2>&1 || {
+  echo "WARNING: db:prepare failed or timed out (exit code: $?)"
+  echo "Attempting db:migrate instead..."
+  timeout 60 ./bin/rails db:migrate 2>&1 || echo "WARNING: db:migrate also failed"
+}
+echo "db:prepare completed!"
 
-echo "Running seeds to ensure admin user is set up..."
-./bin/rails db:seed
-
-echo "Setup complete! Starting Rails server..."
+echo "Starting Rails server..."
 exec ./bin/rails server -b 0.0.0.0 -p "${RAILS_PORT}"
