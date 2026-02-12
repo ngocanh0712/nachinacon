@@ -1,21 +1,16 @@
 #!/bin/bash
-set -ex
+set -x
 
 echo "==== RAILWAY START SCRIPT ===="
 echo "DATABASE_URL present: ${DATABASE_URL:+yes}"
 
-# Use PORT from Railway, or default to 3000
 RAILS_PORT=${PORT:-3000}
 echo "Starting server on port: $RAILS_PORT"
 
-# Run db:prepare with timeout (2 min max)
-echo "Running db:prepare..."
-timeout 120 ./bin/rails db:prepare 2>&1 || {
-  echo "WARNING: db:prepare failed or timed out (exit code: $?)"
-  echo "Attempting db:migrate instead..."
-  timeout 60 ./bin/rails db:migrate 2>&1 || echo "WARNING: db:migrate also failed"
-}
-echo "db:prepare completed!"
+# Run db:migrate (skip if fails - table may already exist)
+echo "Running db:migrate..."
+./bin/rails db:migrate 2>&1 || echo "WARNING: db:migrate failed (exit: $?), continuing anyway..."
+echo "db:migrate done!"
 
-echo "Starting Rails server..."
+echo "Starting Rails server on port $RAILS_PORT..."
 exec ./bin/rails server -b 0.0.0.0 -p "${RAILS_PORT}"
