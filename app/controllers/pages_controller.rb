@@ -34,6 +34,9 @@ class PagesController < ApplicationController
 
     # Memory Box - "On this day" memories from previous years
     @memory_box = Memory.includes(:tags, :reactions).on_this_day.order('RAND()').limit(4)
+
+    # Health tips - bài viết chăm sóc sức khoẻ mới nhất
+    @health_tips = HealthTip.published.ordered.limit(3)
   end
 
   def timeline
@@ -143,6 +146,21 @@ class PagesController < ApplicationController
   def growth_chart
     @records = GrowthRecord.chronological if defined?(GrowthRecord)
     @records ||= []
+  end
+
+  def health_tips
+    @category = params[:category]
+    @health_tips = HealthTip.published.ordered
+    @health_tips = @health_tips.by_category(@category) if @category.present?
+    @categories = HealthTip::CATEGORIES
+  end
+
+  def health_tip
+    @health_tip = HealthTip.published.find(params[:id])
+    @related_tips = HealthTip.published
+                             .where(category: @health_tip.category)
+                             .where.not(id: @health_tip.id)
+                             .ordered.limit(3)
   end
 
   def search

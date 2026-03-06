@@ -15,6 +15,10 @@ Rails.application.routes.draw do
   post 'memories/:id/react', to: 'reactions#create', as: :memory_react
   get 'memories/:id/reactions', to: 'reactions#index', as: :memory_reactions
 
+  # Health tips
+  get 'suc-khoe', to: 'pages#health_tips', as: :health_tips
+  get 'suc-khoe/:id', to: 'pages#health_tip', as: :health_tip_detail
+
   # New features
   get 'recap', to: 'pages#recap'
   get 'recap/:year/:month', to: 'pages#recap', as: :recap_month
@@ -50,6 +54,7 @@ Rails.application.routes.draw do
     resources :albums
     resources :spin_wheel_items, path: 'spin-wheel'
     resources :growth_records, path: 'growth'
+    resources :health_tips, path: 'health-tips'
     get 'settings', to: 'settings#index'
     patch 'settings', to: 'settings#update'
     get 'system/cloudinary', to: 'system#cloudinary_status', as: :cloudinary_status

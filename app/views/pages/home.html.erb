@@ -640,6 +640,63 @@
   </div>
 </section>
 
+<!-- Health Tips Section -->
+<% if @health_tips.any? %>
+<section class="py-16 px-4 md:px-6 lg:px-8 relative overflow-hidden" style="background: linear-gradient(180deg, #FFFBF8 0%, #FDF5F5 50%, #FFFBF8 100%);">
+  <div class="absolute inset-0 overflow-hidden pointer-events-none">
+    <div class="absolute top-10 left-10 w-48 h-48 rounded-full blur-3xl opacity-30" style="background: #F2C2C2;"></div>
+    <div class="absolute bottom-10 right-10 w-40 h-40 rounded-full blur-3xl opacity-30" style="background: #C1DDD8;"></div>
+  </div>
+
+  <div class="max-w-6xl mx-auto relative z-10">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-10" data-controller="scroll-animate">
+      <div>
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-3" style="background: rgba(242, 194, 194, 0.2);">
+          <span style="color: #E8B0B0;">🏥</span>
+          <span class="font-heading font-semibold text-xs" style="color: #D4A0A0;">Kiến thức hữu ích</span>
+        </div>
+        <p class="font-accent text-xl md:text-2xl mb-2" style="color: #E8B0B0;">Chăm sóc</p>
+        <h2 class="font-accent italic text-3xl md:text-4xl" style="color: #C1DDD8;">Sức Khoẻ Mẹ & Bé</h2>
+      </div>
+      <%= link_to health_tips_path, class: "group mt-4 md:mt-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-heading font-semibold text-sm transition-all duration-300 hover:shadow-lg", style: "background: rgba(242, 194, 194, 0.2); color: #D4A0A0;" do %>
+        <span>Xem tất cả</span>
+        <span class="group-hover:translate-x-1 transition-transform">→</span>
+      <% end %>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6" data-controller="scroll-animate" data-scroll-animate-delay-value="150">
+      <% @health_tips.each do |tip| %>
+        <%= link_to health_tip_detail_path(tip), class: "group glass-card rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] border border-white/50" do %>
+          <div class="aspect-video overflow-hidden relative" style="background: linear-gradient(135deg, <%= tip.category_color %>15, <%= tip.category_color %>05);">
+            <% if tip.image_url.present? %>
+              <img src="<%= tip.image_url %>" alt="<%= tip.title %>" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+            <% else %>
+              <div class="w-full h-full flex items-center justify-center">
+                <span class="text-6xl opacity-30"><%= tip.category_icon %></span>
+              </div>
+            <% end %>
+            <div class="absolute top-3 left-3">
+              <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-heading font-semibold text-white shadow-lg" style="background: <%= tip.category_color %>;">
+                <span><%= tip.category_icon %></span>
+                <span><%= tip.category_label %></span>
+              </span>
+            </div>
+          </div>
+          <div class="p-5">
+            <h3 class="font-heading font-bold text-lg text-gray-800 mb-2 line-clamp-2 group-hover:text-gray-900"><%= tip.title %></h3>
+            <p class="font-body text-sm text-gray-500 line-clamp-2 leading-relaxed"><%= truncate(strip_tags(tip.content), length: 120) %></p>
+            <div class="flex items-center gap-1 mt-3 font-heading font-semibold text-xs group-hover:translate-x-1 transition-transform" style="color: <%= tip.category_color %>;">
+              <span>Đọc thêm</span>
+              <span>→</span>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</section>
+<% end %>
+
 <!-- Popular Tags Cloud -->
 <% if @popular_tags.any? %>
 <section class="py-16 px-4 md:px-6 lg:px-8 bg-white">

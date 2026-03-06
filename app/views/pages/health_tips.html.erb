@@ -1,0 +1,92 @@
+<% content_for :og_tags do %>
+  <meta property="og:title" content="Chăm Sóc Sức Khoẻ Mẹ & Bé - NaChiNaCon">
+  <meta property="og:description" content="Tổng hợp kiến thức chăm sóc sức khoẻ cho mẹ và bé">
+  <meta property="og:type" content="website">
+<% end %>
+
+<!-- Header -->
+<section class="py-12 md:py-16 px-4 md:px-6 lg:px-8 relative overflow-hidden" style="background: linear-gradient(180deg, #FFFBF8 0%, #F8FDFC 50%, #FDF5F5 100%);">
+  <div class="absolute inset-0 overflow-hidden pointer-events-none">
+    <div class="absolute top-10 right-10 w-64 h-64 rounded-full blur-3xl pulse-glow" style="background: rgba(242, 194, 194, 0.25);"></div>
+    <div class="absolute bottom-10 left-10 w-48 h-48 rounded-full blur-3xl pulse-glow" style="background: rgba(193, 221, 216, 0.25); animation-delay: 2s;"></div>
+  </div>
+
+  <div class="max-w-6xl mx-auto relative z-10">
+    <div class="text-center mb-10">
+      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-4" style="background: rgba(242, 194, 194, 0.2);">
+        <span class="text-lg">🏥</span>
+        <span class="font-heading font-semibold text-sm" style="color: #D4A0A0;">Kiến thức sức khoẻ</span>
+      </div>
+      <h1 class="font-accent italic text-3xl md:text-5xl mb-3" style="color: #E8B0B0;">Chăm Sóc Sức Khoẻ</h1>
+      <p class="font-heading font-bold text-2xl md:text-3xl text-gray-800 mb-4">Mẹ & Bé</p>
+      <p class="font-body text-gray-500 max-w-lg mx-auto">Tổng hợp kiến thức chăm sóc sức khoẻ từ các nguồn uy tín, giúp mẹ yên tâm chăm sóc bé yêu.</p>
+    </div>
+
+    <!-- Category Filter -->
+    <div class="flex flex-wrap justify-center gap-2 mb-8">
+      <%= link_to health_tips_path, class: "inline-flex items-center gap-2 px-4 py-2 rounded-full font-heading font-semibold text-sm transition-all duration-300 #{@category.blank? ? 'text-white shadow-lg' : 'text-gray-600 bg-white shadow-sm hover:shadow-md'}", style: @category.blank? ? "background: linear-gradient(135deg, #C1DDD8, #A8CEC8);" : "" do %>
+        Tất cả
+      <% end %>
+      <% @categories.each do |key, label| %>
+        <% color = HealthTip::CATEGORY_COLORS[key] %>
+        <%= link_to health_tips_path(category: key), class: "inline-flex items-center gap-2 px-4 py-2 rounded-full font-heading font-semibold text-sm transition-all duration-300 #{@category == key ? 'text-white shadow-lg' : 'bg-white shadow-sm hover:shadow-md'}", style: @category == key ? "background: #{color};" : "color: #{color};" do %>
+          <span><%= HealthTip::CATEGORY_ICONS[key] %></span>
+          <span><%= label %></span>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</section>
+
+<!-- Health Tips Grid -->
+<section class="py-12 px-4 md:px-6 lg:px-8" style="background: linear-gradient(180deg, #F8FDFC 0%, #FFFBF8 100%);">
+  <div class="max-w-6xl mx-auto">
+    <% if @health_tips.any? %>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <% @health_tips.each do |tip| %>
+          <%= link_to health_tip_detail_path(tip), class: "group glass-card rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] border border-white/50" do %>
+            <!-- Image -->
+            <div class="aspect-video overflow-hidden relative" style="background: linear-gradient(135deg, <%= tip.category_color %>15, <%= tip.category_color %>05);">
+              <% if tip.image_url.present? %>
+                <img src="<%= tip.image_url %>" alt="<%= tip.title %>" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+              <% else %>
+                <div class="w-full h-full flex items-center justify-center">
+                  <span class="text-6xl opacity-30"><%= tip.category_icon %></span>
+                </div>
+              <% end %>
+              <!-- Category Badge -->
+              <div class="absolute top-3 left-3">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-heading font-semibold text-white shadow-lg" style="background: <%= tip.category_color %>;">
+                  <span><%= tip.category_icon %></span>
+                  <span><%= tip.category_label %></span>
+                </span>
+              </div>
+            </div>
+
+            <!-- Content -->
+            <div class="p-5">
+              <h3 class="font-heading font-bold text-lg text-gray-800 mb-2 line-clamp-2 group-hover:text-gray-900"><%= tip.title %></h3>
+              <p class="font-body text-sm text-gray-500 line-clamp-3 mb-4 leading-relaxed"><%= truncate(strip_tags(tip.content), length: 150) %></p>
+
+              <div class="flex items-center justify-between">
+                <span class="font-body text-xs text-gray-400"><%= tip.created_at.strftime("%d/%m/%Y") %></span>
+                <span class="inline-flex items-center gap-1 font-heading font-semibold text-xs group-hover:translate-x-1 transition-transform" style="color: <%= tip.category_color %>;">
+                  Đọc thêm
+                  <span>→</span>
+                </span>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="text-center py-16 glass-card rounded-3xl shadow-xl">
+        <div class="w-24 h-24 rounded-full mx-auto mb-6 flex items-center justify-center floating" style="background: linear-gradient(135deg, #F8D8D8, #F2C2C2);">
+          <span class="text-5xl">🏥</span>
+        </div>
+        <h3 class="font-heading font-bold text-xl text-gray-700 mb-2">Chưa có bài viết nào</h3>
+        <p class="font-body text-gray-500">Các bài viết chăm sóc sức khoẻ sẽ được cập nhật sớm!</p>
+      </div>
+    <% end %>
+  </div>
+</section>
