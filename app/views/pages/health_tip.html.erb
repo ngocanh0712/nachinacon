@@ -73,10 +73,10 @@
     <h2 class="font-heading font-bold text-xl text-gray-800 mb-6">Bài viết liên quan</h2>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       <% @related_tips.each do |tip| %>
-        <%= link_to health_tip_detail_path(tip), class: "group glass-card rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 border border-white/50" do %>
+        <%= link_to health_tip_detail_path(tip), class: "group bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 border border-gray-100" do %>
           <div class="aspect-video overflow-hidden" style="background: linear-gradient(135deg, <%= tip.category_color %>15, <%= tip.category_color %>05);">
             <% if tip.image_url.present? %>
-              <img src="<%= tip.image_url %>" alt="<%= tip.title %>" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+              <img src="<%= tip.image_url %>" alt="<%= tip.title %>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
             <% else %>
               <div class="w-full h-full flex items-center justify-center">
                 <span class="text-5xl opacity-30"><%= tip.category_icon %></span>
