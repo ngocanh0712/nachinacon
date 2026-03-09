@@ -641,35 +641,6 @@
 
 
 
-<!-- Popular Tags Cloud -->
-<% if @popular_tags.any? %>
-<section class="py-16 px-4 md:px-6 lg:px-8 bg-white">
-  <div class="max-w-6xl mx-auto">
-    <div class="text-center mb-12" data-controller="scroll-animate">
-      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-4" style="background: rgba(242, 194, 194, 0.2);">
-        <span class="text-lg" style="color: #E8B0B0;">🏷️</span>
-        <span class="font-heading font-semibold text-sm" style="color: #D4A0A0;">Chủ đề phổ biến</span>
-      </div>
-      <h2 class="font-accent italic text-3xl md:text-4xl" style="color: #C1DDD8;">Tags</h2>
-    </div>
-
-    <div class="flex flex-wrap justify-center gap-2 md:gap-3">
-      <% @popular_tags.each do |tag| %>
-        <% border_style = "border-color: #{tag.color}40; background-color: #{tag.color}10;" %>
-        <% badge_style = "background: #{tag.color}30; color: #{tag.color};" %>
-        <%= link_to timeline_path(tag: tag.id), class: "group inline-flex items-center gap-2 md:gap-3 px-3 py-2 md:px-6 md:py-3 rounded-xl md:rounded-2xl border-2 transition-all duration-300 hover:shadow-lg hover:scale-105", style: border_style do %>
-          <span class="w-2 h-2 md:w-3 md:h-3 rounded-full flex-shrink-0" style="background: <%= tag.color %>;"></span>
-          <span class="font-heading font-semibold text-xs md:text-sm text-gray-800"><%= tag.name %></span>
-          <span class="px-1.5 md:px-2 py-0.5 rounded-full text-xs font-body font-medium" style="<%= badge_style %>">
-            <%= tag.memory_count %>
-          </span>
-        <% end %>
-      <% end %>
-    </div>
-  </div>
-</section>
-<% end %>
-
 <!-- Health Tips Section -->
 <% if @health_tips.any? %>
 <section class="py-16 px-4 md:px-6 lg:px-8 relative overflow-hidden" style="background: linear-gradient(180deg, #FFFBF8 0%, #FDF5F5 50%, #FFFBF8 100%);">
@@ -728,3 +699,32 @@
 <% end %>
 
 <%= render 'shared/memory_modal' %>
+<!-- Popular Tags Cloud -->
+<% if @popular_tags.any? %>
+<section class="py-16 px-4 md:px-6 lg:px-8 bg-white">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-12" data-controller="scroll-animate">
+      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-4" style="background: rgba(242, 194, 194, 0.2);">
+        <span class="text-lg" style="color: #E8B0B0;">🏷️</span>
+        <span class="font-heading font-semibold text-sm" style="color: #D4A0A0;">Chủ đề phổ biến</span>
+      </div>
+      <h2 class="font-accent italic text-3xl md:text-4xl" style="color: #C1DDD8;">Tags</h2>
+    </div>
+
+    <div class="flex flex-wrap justify-center gap-2 md:gap-3">
+      <% @popular_tags.each do |tag| %>
+        <% border_style = "border-color: #{tag.color}40; background-color: #{tag.color}10;" %>
+        <% badge_style = "background: #{tag.color}30; color: #{tag.color};" %>
+        <%= link_to timeline_path(tag: tag.id), class: "group inline-flex items-center gap-2 md:gap-3 px-3 py-2 md:px-6 md:py-3 rounded-xl md:rounded-2xl border-2 transition-all duration-300 hover:shadow-lg hover:scale-105", style: border_style do %>
+          <span class="w-2 h-2 md:w-3 md:h-3 rounded-full flex-shrink-0" style="background: <%= tag.color %>;"></span>
+          <span class="font-heading font-semibold text-xs md:text-sm text-gray-800"><%= tag.name %></span>
+          <span class="px-1.5 md:px-2 py-0.5 rounded-full text-xs font-body font-medium" style="<%= badge_style %>">
+            <%= tag.memory_count %>
+          </span>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</section>
+<% end %>
+
