@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_03_06_082845) do
+ActiveRecord::Schema[7.1].define(version: 2026_03_09_033515) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -140,6 +140,18 @@ ActiveRecord::Schema[7.1].define(version: 2026_03_06_082845) do
     t.datetime "updated_at", null: false
     t.index ["memory_id", "emoji"], name: "index_reactions_on_memory_id_and_emoji", unique: true
     t.index ["memory_id"], name: "index_reactions_on_memory_id"
+  end
+
+  create_table "recipes", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "title"
+    t.text "content"
+    t.string "category"
+    t.string "image_url"
+    t.string "source_url"
+    t.boolean "published", default: true
+    t.integer "position", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "site_settings", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|

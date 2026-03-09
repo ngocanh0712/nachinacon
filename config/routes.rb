@@ -19,6 +19,10 @@ Rails.application.routes.draw do
   get 'suc-khoe', to: 'pages#health_tips', as: :health_tips
   get 'suc-khoe/:id', to: 'pages#health_tip', as: :health_tip_detail
 
+  # Recipes
+  get 'am-thuc', to: 'pages#recipes', as: :recipes
+  get 'am-thuc/:id', to: 'pages#recipe', as: :recipe_detail
+
   # New features
   get 'recap', to: 'pages#recap'
   get 'recap/:year/:month', to: 'pages#recap', as: :recap_month
@@ -55,6 +59,7 @@ Rails.application.routes.draw do
     resources :spin_wheel_items, path: 'spin-wheel'
     resources :growth_records, path: 'growth'
     resources :health_tips, path: 'health-tips'
+    resources :recipes, path: 'am-thuc'
     get 'settings', to: 'settings#index'
     patch 'settings', to: 'settings#update'
     get 'system/cloudinary', to: 'system#cloudinary_status', as: :cloudinary_status

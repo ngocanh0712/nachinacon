@@ -1,0 +1,65 @@
+<%= form_with(model: [:admin, recipe], class: "space-y-6") do |f| %>
+  <% if recipe.errors.any? %>
+    <div class="bg-red-50 border border-red-200 rounded-xl p-4">
+      <p class="font-heading font-semibold text-red-700 mb-2">Có lỗi xảy ra:</p>
+      <ul class="list-disc list-inside font-body text-sm text-red-600">
+        <% recipe.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <!-- Title -->
+  <div>
+    <label class="block font-heading font-semibold text-sm text-gray-700 mb-2">Tên món ăn *</label>
+    <%= f.text_field :title, class: "w-full px-4 py-3 rounded-xl border border-gray-200 font-body text-gray-700 focus:outline-none focus:ring-2 transition-all", placeholder: "VD: Phở Bò Hà Nội" %>
+  </div>
+
+  <!-- Category -->
+  <div>
+    <label class="block font-heading font-semibold text-sm text-gray-700 mb-2">Danh mục *</label>
+    <%= f.select :category, Recipe::CATEGORIES.map { |k, v| ["#{Recipe::CATEGORY_ICONS[k]} #{v}", k] }, { prompt: "Chọn danh mục" }, class: "w-full px-4 py-3 rounded-xl border border-gray-200 font-body text-gray-700 focus:outline-none focus:ring-2 transition-all" %>
+  </div>
+
+  <!-- Content -->
+  <div>
+    <label class="block font-heading font-semibold text-sm text-gray-700 mb-2">Công thức & Cách làm *</label>
+    <%= f.text_area :content, rows: 15, class: "w-full px-4 py-3 rounded-xl border border-gray-200 font-body text-gray-700 focus:outline-none focus:ring-2 transition-all", placeholder: "Nguyên liệu:\n- ...\n\nCách làm:\n1. ..." %>
+  </div>
+
+  <!-- Image URL -->
+  <div>
+    <label class="block font-heading font-semibold text-sm text-gray-700 mb-2">Link ảnh minh hoạ</label>
+    <%= f.text_field :image_url, class: "w-full px-4 py-3 rounded-xl border border-gray-200 font-body text-gray-700 focus:outline-none focus:ring-2 transition-all", placeholder: "https://example.com/image.jpg" %>
+  </div>
+
+  <!-- Source URL -->
+  <div>
+    <label class="block font-heading font-semibold text-sm text-gray-700 mb-2">Link nguồn tham khảo</label>
+    <%= f.text_field :source_url, class: "w-full px-4 py-3 rounded-xl border border-gray-200 font-body text-gray-700 focus:outline-none focus:ring-2 transition-all", placeholder: "https://example.com/nguon" %>
+  </div>
+
+  <div class="grid grid-cols-2 gap-4">
+    <!-- Position -->
+    <div>
+      <label class="block font-heading font-semibold text-sm text-gray-700 mb-2">Thứ tự hiển thị</label>
+      <%= f.number_field :position, class: "w-full px-4 py-3 rounded-xl border border-gray-200 font-body text-gray-700 focus:outline-none focus:ring-2 transition-all", placeholder: "0" %>
+    </div>
+
+    <!-- Published -->
+    <div>
+      <label class="block font-heading font-semibold text-sm text-gray-700 mb-2">Trạng thái</label>
+      <div class="flex items-center gap-3 px-4 py-3">
+        <%= f.check_box :published, class: "w-5 h-5 rounded border-gray-300 text-orange-500 focus:ring-orange-500" %>
+        <span class="font-body text-gray-700">Xuất bản</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Submit -->
+  <div class="flex items-center gap-3 pt-4">
+    <%= f.submit recipe.new_record? ? "Tạo công thức" : "Cập nhật", class: "px-6 py-3 rounded-xl font-heading font-semibold text-white shadow-lg hover:shadow-xl transition-shadow cursor-pointer", style: "background: linear-gradient(135deg, #F97316 0%, #DC2626 100%);" %>
+    <%= link_to "Huỷ", admin_recipes_path, class: "px-6 py-3 rounded-xl font-heading font-semibold text-gray-600 bg-gray-100 hover:bg-gray-200 transition-all" %>
+  </div>
+<% end %>

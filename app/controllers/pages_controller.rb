@@ -37,6 +37,9 @@ class PagesController < ApplicationController
 
     # Health tips - bài viết chăm sóc sức khoẻ mới nhất
     @health_tips = HealthTip.published.ordered.limit(3)
+
+    # Recipes - công thức ẩm thực mới nhất
+    @recipes = Recipe.published.ordered.limit(3)
   end
 
   def timeline
@@ -160,6 +163,21 @@ class PagesController < ApplicationController
     @related_tips = HealthTip.published
                              .where(category: @health_tip.category)
                              .where.not(id: @health_tip.id)
+                             .ordered.limit(3)
+  end
+
+  def recipes
+    @category = params[:category]
+    @recipes = Recipe.published.ordered
+    @recipes = @recipes.by_category(@category) if @category.present?
+    @categories = Recipe::CATEGORIES
+  end
+
+  def recipe
+    @recipe = Recipe.published.find(params[:id])
+    @related_recipes = Recipe.published
+                             .where(category: @recipe.category)
+                             .where.not(id: @recipe.id)
                              .ordered.limit(3)
   end
 

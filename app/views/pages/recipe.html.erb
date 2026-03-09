@@ -1,0 +1,105 @@
+<% content_for :og_tags do %>
+  <meta property="og:title" content="<%= @recipe.title %> - NaChiNaCon">
+  <meta property="og:description" content="<%= truncate(strip_tags(@recipe.content), length: 200) %>">
+  <meta property="og:type" content="article">
+  <% if @recipe.image_url.present? %>
+    <meta property="og:image" content="<%= @recipe.image_url %>">
+  <% end %>
+<% end %>
+
+<!-- Article Header -->
+<section class="py-12 px-4 md:px-6 lg:px-8 relative overflow-hidden" style="background: linear-gradient(180deg, #FFFBF0 0%, #FFF8ED 100%);">
+  <div class="absolute inset-0 overflow-hidden pointer-events-none">
+    <div class="absolute top-10 right-10 w-48 h-48 rounded-full blur-3xl" style="background: <%= @recipe.category_color %>20;"></div>
+  </div>
+
+  <div class="max-w-3xl mx-auto relative z-10">
+    <!-- Breadcrumb -->
+    <div class="flex items-center gap-2 mb-6 text-sm">
+      <%= link_to recipes_path, class: "font-heading font-semibold text-gray-500 hover:text-gray-700 transition-colors" do %>
+        Ẩm thực
+      <% end %>
+      <span class="text-gray-300">›</span>
+      <span class="font-heading font-semibold" style="color: <%= @recipe.category_color %>;"><%= @recipe.category_label %></span>
+    </div>
+
+    <!-- Category Badge -->
+    <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-heading font-semibold text-white shadow-md mb-4" style="background: <%= @recipe.category_color %>;">
+      <span><%= @recipe.category_icon %></span>
+      <span><%= @recipe.category_label %></span>
+    </span>
+
+    <h1 class="font-heading font-bold text-2xl md:text-4xl text-gray-800 mb-4 leading-tight"><%= @recipe.title %></h1>
+
+    <div class="flex items-center gap-4 text-sm text-gray-500">
+      <span class="font-body"><%= @recipe.created_at.strftime("%d/%m/%Y") %></span>
+      <% if @recipe.source_url.present? %>
+        <span class="text-gray-300">|</span>
+        <%= link_to @recipe.source_url, target: "_blank", rel: "noopener noreferrer", class: "font-heading font-semibold hover:underline", style: "color: #{@recipe.category_color};" do %>
+          Nguồn tham khảo ↗
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</section>
+
+<!-- Article Content -->
+<section class="py-8 px-4 md:px-6 lg:px-8">
+  <div class="max-w-3xl mx-auto">
+    <% if @recipe.image_url.present? %>
+      <div class="rounded-2xl overflow-hidden shadow-lg mb-8">
+        <img src="<%= @recipe.image_url %>" alt="<%= @recipe.title %>" class="w-full h-auto object-cover max-h-96">
+      </div>
+    <% end %>
+
+    <!-- Article body -->
+    <div class="prose prose-lg max-w-none font-body text-gray-700 leading-relaxed">
+      <%= simple_format(@recipe.content) %>
+    </div>
+
+    <% if @recipe.source_url.present? %>
+      <div class="mt-8 p-4 rounded-xl border border-gray-200" style="background: rgba(249, 115, 22, 0.05);">
+        <p class="font-heading font-semibold text-sm text-gray-600 mb-1">Nguồn tham khảo:</p>
+        <%= link_to @recipe.source_url, @recipe.source_url, target: "_blank", rel: "noopener noreferrer", class: "font-body text-sm break-all hover:underline", style: "color: #{@recipe.category_color};" %>
+      </div>
+    <% end %>
+  </div>
+</section>
+
+<!-- Related Recipes -->
+<% if @related_recipes.any? %>
+<section class="py-12 px-4 md:px-6 lg:px-8 bg-white">
+  <div class="max-w-6xl mx-auto">
+    <h2 class="font-heading font-bold text-xl text-gray-800 mb-6">Món ăn liên quan</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <% @related_recipes.each do |r| %>
+        <%= link_to recipe_detail_path(r), class: "group bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 border border-gray-100" do %>
+          <div class="aspect-video overflow-hidden" style="background: linear-gradient(135deg, <%= r.category_color %>15, <%= r.category_color %>05);">
+            <% if r.image_url.present? %>
+              <img src="<%= r.image_url %>" alt="<%= r.title %>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+            <% else %>
+              <div class="w-full h-full flex items-center justify-center">
+                <span class="text-5xl opacity-30"><%= r.category_icon %></span>
+              </div>
+            <% end %>
+          </div>
+          <div class="p-4">
+            <h3 class="font-heading font-bold text-gray-800 mb-1 line-clamp-2"><%= r.title %></h3>
+            <p class="font-body text-sm text-gray-500 line-clamp-2"><%= truncate(strip_tags(r.content), length: 100) %></p>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</section>
+<% end %>
+
+<!-- Back Link -->
+<section class="py-8 px-4 md:px-6 lg:px-8">
+  <div class="max-w-3xl mx-auto">
+    <%= link_to recipes_path, class: "inline-flex items-center gap-2 font-heading font-semibold text-sm text-gray-500 hover:text-gray-700 transition-colors" do %>
+      <span>←</span>
+      <span>Quay lại danh sách</span>
+    <% end %>
+  </div>
+</section>
