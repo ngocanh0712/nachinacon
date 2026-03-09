@@ -53,9 +53,7 @@
     <% end %>
 
     <!-- Article body — content được lưu dưới dạng HTML (admin-controlled) -->
-    <div class="prose prose-lg max-w-none font-body text-gray-700 leading-relaxed
-                prose-h3:font-heading prose-h3:font-bold prose-h3:text-gray-800
-                prose-strong:font-semibold prose-li:my-1">
+    <div class="article-content font-body">
       <%= @recipe.content.html_safe %>
     </div>
 
