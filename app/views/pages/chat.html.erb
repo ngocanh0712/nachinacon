@@ -34,8 +34,8 @@
     <div class="sticky bottom-0 pt-3 pb-2" style="background: linear-gradient(0deg, #F6F2EC 80%, transparent);">
       <form id="chatForm" onsubmit="sendMessage(event)" class="flex items-center gap-3">
         <input type="text" id="chatInput"
-               class="flex-1 px-4 py-3 rounded-2xl border border-gray-200 bg-white font-body text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-opacity-50 transition-all shadow-sm"
-               style="--tw-ring-color: #C1DDD8;"
+               class="flex-1 px-4 py-3 rounded-2xl border border-gray-200 bg-white font-body text-base md:text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-opacity-50 transition-all shadow-sm"
+               style="--tw-ring-color: #C1DDD8; font-size: 16px;"
                placeholder="Nhắn gì cho <%= @baby_name %> đi..."
                autocomplete="off">
         <button type="submit" id="chatSendBtn"
