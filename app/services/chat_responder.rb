@@ -7,7 +7,7 @@ require 'json'
 # Builds system prompt with baby data from DB, sends user message to Gemini.
 # Falls back to simple keyword matching if API key missing or API error.
 class ChatResponder
-  GEMINI_MODEL = 'gemini-2.0-flash'
+  GEMINI_MODEL = 'gemini-2.0-flash-lite'
   GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/#{GEMINI_MODEL}:generateContent"
 
   def initialize(message)
