@@ -148,7 +148,7 @@ class ChatResponder
   end
 
   def ai_suggestions
-    ['Bé bao nhiêu tuổi?', 'Hôm nay bé thế nào?', 'Milestone gần nhất?']
+    []
   end
 
   # No API key configured
