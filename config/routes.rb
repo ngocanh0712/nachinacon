@@ -23,6 +23,9 @@ Rails.application.routes.draw do
   get 'am-thuc', to: 'pages#recipes', as: :recipes
   get 'am-thuc/:id', to: 'pages#recipe', as: :recipe_detail
 
+  # Daily Journal
+  get 'nhat-ky', to: 'pages#daily_journals', as: :daily_journals
+
   # New features
   get 'recap', to: 'pages#recap'
   get 'recap/:year/:month', to: 'pages#recap', as: :recap_month
@@ -60,6 +63,7 @@ Rails.application.routes.draw do
     resources :growth_records, path: 'growth'
     resources :health_tips, path: 'health-tips'
     resources :recipes, path: 'am-thuc'
+    resources :daily_journals, path: 'nhat-ky'
     get 'settings', to: 'settings#index'
     patch 'settings', to: 'settings#update'
     get 'system/cloudinary', to: 'system#cloudinary_status', as: :cloudinary_status

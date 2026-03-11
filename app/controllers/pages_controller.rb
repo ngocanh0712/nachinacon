@@ -32,8 +32,9 @@ class PagesController < ApplicationController
     birth_date = SiteSetting.baby_birth_date
     @days_old = (Date.today - birth_date).to_i
 
-    # Memory Box - "On this day" memories from previous years
+    # Memory Box - "On this day" memories + milestones from previous years
     @memory_box = Memory.includes(:tags, :reactions).on_this_day.order('RAND()').limit(4)
+    @milestones_on_this_day = Milestone.on_this_day.limit(4)
 
     # Health tips - bài viết chăm sóc sức khoẻ mới nhất
     @health_tips = HealthTip.published.ordered.limit(3)
@@ -179,6 +180,25 @@ class PagesController < ApplicationController
                              .where(category: @recipe.category)
                              .where.not(id: @recipe.id)
                              .ordered.limit(3)
+  end
+
+  def daily_journals
+    year = (params[:year] || Date.today.year).to_i
+    month = (params[:month] || Date.today.month).to_i
+    @current_date = Date.new(year, month, 1)
+
+    # Calendar data
+    @days_in_month = @current_date.end_of_month.day
+    @start_day_offset = @current_date.wday # Sunday = 0
+    @journals_by_date = DailyJournal.by_month(year, month).index_by(&:date)
+
+    # Navigation
+    @prev_month = @current_date - 1.month
+    @next_month = @current_date + 1.month
+    @next_month = nil if @next_month > Date.today
+
+    # Recent entries
+    @recent_journals = DailyJournal.recent
   end
 
   def search

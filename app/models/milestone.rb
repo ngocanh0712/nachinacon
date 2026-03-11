@@ -24,6 +24,15 @@ class Milestone < ApplicationRecord
   scope :achieved, -> { where.not(achieved_at: nil).order(achieved_at: :asc) }
   scope :pending, -> { where(achieved_at: nil) }
   scope :recent, -> { achieved.order(achieved_at: :desc) }
+  # Milestones achieved on same day (±3 days) in previous years
+  scope :on_this_day, -> {
+    today = Date.today
+    day_min = [today.day - 3, 1].max
+    day_max = [today.day + 3, 31].min
+    achieved
+      .where("MONTH(achieved_at) = ? AND DAY(achieved_at) BETWEEN ? AND ?", today.month, day_min, day_max)
+      .where("YEAR(achieved_at) < ?", today.year)
+  }
 
   def achieved?
     achieved_at.present?

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_03_09_033515) do
+ActiveRecord::Schema[7.1].define(version: 2026_03_11_025204) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -62,6 +62,19 @@ ActiveRecord::Schema[7.1].define(version: 2026_03_09_033515) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "cover_image_path"
+  end
+
+  create_table "daily_journals", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.date "date", null: false
+    t.integer "mood", default: 0, null: false
+    t.decimal "sleep_hours", precision: 3, scale: 1
+    t.text "eat_note"
+    t.text "activity_note"
+    t.text "note"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["date"], name: "index_daily_journals_on_date", unique: true
+    t.index ["mood"], name: "index_daily_journals_on_mood"
   end
 
   create_table "game_sessions", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|

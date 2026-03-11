@@ -1,8 +1,9 @@
-<%# Memory Box - "Hom nay nam ngoai..."
-     Locals: memories (ActiveRecord collection) %>
+<%# Memory Box - "Hôm nay năm ngoái..."
+     Locals: memories (ActiveRecord collection), milestones (optional) %>
 <% box_memories = memories || [] %>
+<% box_milestones = defined?(milestones) && milestones ? milestones : [] %>
 
-<% if box_memories.any? %>
+<% if box_memories.any? || box_milestones.any? %>
 <section class="py-12 px-4 md:px-6 lg:px-8 relative overflow-hidden">
   <!-- Background -->
   <div class="absolute inset-0" style="background: linear-gradient(135deg, rgba(242, 194, 194, 0.08) 0%, rgba(193, 221, 216, 0.08) 50%, rgba(192, 223, 208, 0.08) 100%);"></div>
@@ -14,13 +15,39 @@
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4" style="color: #E8B0B0;">
           <path fill-rule="evenodd" d="M6.75 2.25A.75.75 0 017.5 3v1.5h9V3A.75.75 0 0118 3v1.5h.75a3 3 0 013 3v11.25a3 3 0 01-3 3H5.25a3 3 0 01-3-3V7.5a3 3 0 013-3H6V3a.75.75 0 01.75-.75zm13.5 9a1.5 1.5 0 00-1.5-1.5H5.25a1.5 1.5 0 00-1.5 1.5v7.5a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5v-7.5z" clip-rule="evenodd" />
         </svg>
-        <span class="font-heading font-semibold text-sm" style="color: #D4A0A0;">Ngay nay</span>
+        <span class="font-heading font-semibold text-sm" style="color: #D4A0A0;">Ngày này</span>
       </div>
-      <h2 class="font-accent italic text-3xl md:text-4xl mb-3" style="color: #C1DDD8;">Hom nay nam ngoai...</h2>
-      <p class="font-body text-gray-500 max-w-md mx-auto">Nhung ky niem cung ngay nay trong qua khu</p>
+      <h2 class="font-accent italic text-3xl md:text-4xl mb-3" style="color: #C1DDD8;">Hôm nay năm ngoái...</h2>
+      <p class="font-body text-gray-500 max-w-md mx-auto">Những kỷ niệm cùng ngày này trong quá khứ</p>
     </div>
 
-    <!-- Memory Cards - Horizontal Scroll on Mobile, Grid on Desktop -->
+    <%# Milestones on this day %>
+    <% if box_milestones.any? %>
+      <div class="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory md:flex md:justify-center md:overflow-visible md:pb-0 mb-6 scrollbar-hide">
+        <% box_milestones.each do |milestone| %>
+          <% years_ago = Date.today.year - milestone.achieved_at.year %>
+          <div class="flex-shrink-0 w-[240px] md:w-auto snap-center">
+            <div class="bg-white rounded-2xl p-4 shadow-soft border-l-4" style="border-color: #F2C2C2;">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full flex items-center justify-center text-lg" style="background: rgba(242, 194, 194, 0.2);">
+                  <span>&#11088;</span>
+                </div>
+                <div>
+                  <p class="font-heading font-semibold text-sm text-gray-800"><%= milestone.name %></p>
+                  <p class="font-body text-xs text-gray-400"><%= milestone.achieved_at.strftime("%d/%m/%Y") %></p>
+                </div>
+              </div>
+              <div class="mt-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-heading font-bold" style="background: rgba(242, 194, 194, 0.15); color: #E8B0B0;">
+                <%= years_ago %> năm trước
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+
+    <%# Memory Cards - Horizontal Scroll on Mobile, Grid on Desktop %>
+    <% if box_memories.any? %>
     <div class="flex gap-6 overflow-x-auto pb-4 snap-x snap-mandatory md:grid md:grid-cols-2 lg:grid-cols-4 md:overflow-visible md:pb-0 scrollbar-hide">
       <% box_memories.each do |memory| %>
         <% years_ago = Date.today.year - memory.taken_at.year %>
@@ -79,6 +106,7 @@
         </div>
       <% end %>
     </div>
+    <% end %>
   </div>
 </section>
 <% end %>

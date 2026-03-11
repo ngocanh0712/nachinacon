@@ -1,0 +1,296 @@
+<% content_for :og_tags do %>
+  <meta property="og:title" content="Nhật ký hàng ngày - NaChiNaCon">
+  <meta property="og:description" content="Nhật ký hàng ngày của bé NaCon">
+  <meta property="og:type" content="website">
+<% end %>
+
+<!-- Hero Section -->
+<section class="py-12 md:py-16 px-4 md:px-6 lg:px-8 relative overflow-hidden" style="background: linear-gradient(180deg, #FFFBF8 0%, #F8FDFC 50%, #F6F2EC 100%);">
+  <div class="absolute inset-0 overflow-hidden pointer-events-none">
+    <div class="absolute top-10 -right-10 w-48 h-48 rounded-full blur-3xl pulse-glow" style="background: rgba(193, 221, 216, 0.3);"></div>
+    <div class="absolute bottom-10 -left-10 w-40 h-40 rounded-full blur-3xl pulse-glow" style="background: rgba(242, 194, 194, 0.3); animation-delay: 2s;"></div>
+  </div>
+
+  <div class="max-w-6xl mx-auto relative z-10 text-center">
+    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-4" style="background: rgba(193, 221, 216, 0.2);">
+      <span>📔</span>
+      <span class="font-heading font-semibold text-sm" style="color: #7BA8A0;">Nhật ký</span>
+    </div>
+    <h1 class="font-accent italic text-4xl md:text-5xl mb-3" style="color: #C1DDD8;">Nhật ký hàng ngày</h1>
+    <p class="font-body text-gray-500 max-w-md mx-auto">Ghi chép từng ngày, từng khoảnh khắc</p>
+  </div>
+</section>
+
+<!-- Calendar Section -->
+<section class="py-8 px-4 md:px-6 lg:px-8">
+  <div class="max-w-4xl mx-auto">
+    <!-- Month Navigation -->
+    <div class="flex items-center justify-between mb-6">
+      <%= link_to daily_journals_path(month: @prev_month.month, year: @prev_month.year), class: "flex items-center gap-1 px-4 py-2 rounded-xl font-heading font-semibold text-sm text-gray-600 hover:bg-gray-100 transition-colors" do %>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+        </svg>
+        Trước
+      <% end %>
+
+      <h2 class="font-heading font-bold text-xl text-gray-800">
+        Tháng <%= @current_date.month %>/<%= @current_date.year %>
+      </h2>
+
+      <% if @next_month %>
+        <%= link_to daily_journals_path(month: @next_month.month, year: @next_month.year), class: "flex items-center gap-1 px-4 py-2 rounded-xl font-heading font-semibold text-sm text-gray-600 hover:bg-gray-100 transition-colors" do %>
+          Sau
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+          </svg>
+        <% end %>
+      <% else %>
+        <div class="px-4 py-2"></div>
+      <% end %>
+    </div>
+
+    <!-- Calendar Grid -->
+    <div class="bg-white rounded-2xl shadow-md overflow-hidden">
+      <!-- Day Headers -->
+      <div class="grid grid-cols-7 border-b border-gray-100">
+        <% %w[CN T2 T3 T4 T5 T6 T7].each do |day_name| %>
+          <div class="py-3 text-center font-heading font-semibold text-xs text-gray-500 uppercase">
+            <%= day_name %>
+          </div>
+        <% end %>
+      </div>
+
+      <!-- Calendar Days -->
+      <div class="grid grid-cols-7">
+        <%# Empty cells for days before month starts %>
+        <% @start_day_offset.times do %>
+          <div class="min-h-[80px] md:min-h-[100px] border-b border-r border-gray-50 bg-gray-50/50"></div>
+        <% end %>
+
+        <%# Days of the month %>
+        <% (1..@days_in_month).each do |day| %>
+          <% date = Date.new(@current_date.year, @current_date.month, day) %>
+          <% journal = @journals_by_date[date] %>
+          <% is_today = date == Date.today %>
+
+          <div class="min-h-[80px] md:min-h-[100px] border-b border-r border-gray-50 p-1.5 md:p-2 relative transition-colors <%= is_today ? '' : 'hover:bg-gray-50' %>"
+               style="<%= is_today ? 'background: rgba(193, 221, 216, 0.1);' : '' %>"
+               <% if journal %>
+               data-journal-id="<%= journal.id %>"
+               onclick="showJournalDetail(this)"
+               data-journal-date="<%= journal.date.strftime('%d/%m/%Y') %>"
+               data-journal-mood-emoji="<%= journal.mood_emoji %>"
+               data-journal-mood-label="<%= journal.mood_label %>"
+               data-journal-mood-color="<%= journal.mood_color %>"
+               data-journal-sleep="<%= journal.sleep_hours %>"
+               data-journal-eat="<%= journal.eat_note %>"
+               data-journal-activity="<%= journal.activity_note %>"
+               data-journal-note="<%= journal.note %>"
+               class="cursor-pointer"
+               <% end %>>
+
+            <!-- Day number -->
+            <div class="flex items-center justify-between">
+              <span class="font-heading text-xs md:text-sm <%= is_today ? 'font-bold' : 'font-medium' %> <%= date > Date.today ? 'text-gray-300' : 'text-gray-600' %>"
+                    <% if is_today %>style="color: #C1DDD8;"<% end %>>
+                <%= day %>
+              </span>
+              <% if is_today %>
+                <span class="w-1.5 h-1.5 rounded-full" style="background: #C1DDD8;"></span>
+              <% end %>
+            </div>
+
+            <% if journal %>
+              <!-- Mood emoji -->
+              <div class="mt-1 text-center">
+                <span class="text-lg md:text-xl"><%= journal.mood_emoji %></span>
+              </div>
+              <!-- Preview text (desktop only) -->
+              <p class="hidden md:block font-body text-[10px] text-gray-400 mt-0.5 line-clamp-2 leading-tight"><%= journal.preview_text %></p>
+            <% end %>
+          </div>
+        <% end %>
+
+        <%# Empty cells to fill remaining grid %>
+        <% remaining = (7 - (@start_day_offset + @days_in_month) % 7) % 7 %>
+        <% remaining.times do %>
+          <div class="min-h-[80px] md:min-h-[100px] border-b border-r border-gray-50 bg-gray-50/50"></div>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Mood Legend -->
+    <div class="flex items-center justify-center gap-4 mt-6 flex-wrap">
+      <% DailyJournal::MOODS.each_key do |key| %>
+        <div class="flex items-center gap-1.5">
+          <span class="text-sm"><%= DailyJournal::MOOD_EMOJIS[key] %></span>
+          <span class="font-body text-xs text-gray-500"><%= DailyJournal::MOOD_LABELS[key] %></span>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>
+
+<!-- Recent Entries List -->
+<% if @recent_journals.any? %>
+<section class="py-8 px-4 md:px-6 lg:px-8">
+  <div class="max-w-4xl mx-auto">
+    <h3 class="font-heading font-bold text-lg text-gray-800 mb-4">Ghi chép gần đây</h3>
+    <div class="space-y-3">
+      <% @recent_journals.each do |journal| %>
+        <div class="bg-white rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+             data-journal-id="<%= journal.id %>"
+             onclick="showJournalDetail(this)"
+             data-journal-date="<%= journal.date.strftime('%d/%m/%Y') %>"
+             data-journal-mood-emoji="<%= journal.mood_emoji %>"
+             data-journal-mood-label="<%= journal.mood_label %>"
+             data-journal-mood-color="<%= journal.mood_color %>"
+             data-journal-sleep="<%= journal.sleep_hours %>"
+             data-journal-eat="<%= journal.eat_note %>"
+             data-journal-activity="<%= journal.activity_note %>"
+             data-journal-note="<%= journal.note %>">
+          <div class="flex items-center gap-3">
+            <span class="text-2xl"><%= journal.mood_emoji %></span>
+            <div class="flex-1">
+              <div class="flex items-center gap-2">
+                <span class="font-heading font-semibold text-sm text-gray-800"><%= journal.date.strftime("%d/%m/%Y") %></span>
+                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-heading font-medium" style="background: <%= journal.mood_color %>15; color: <%= journal.mood_color %>;">
+                  <%= journal.mood_label %>
+                </span>
+                <% if journal.sleep_hours.present? %>
+                  <span class="font-body text-xs text-gray-400">Ngủ <%= journal.sleep_hours %>h</span>
+                <% end %>
+              </div>
+              <p class="font-body text-sm text-gray-500 mt-1 line-clamp-1"><%= journal.preview_text %></p>
+            </div>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-gray-300">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+            </svg>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>
+<% end %>
+
+<!-- Journal Detail Modal -->
+<div id="journalModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4" style="background: rgba(0,0,0,0.4);" onclick="if(event.target===this)closeJournalModal()">
+  <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[80vh] overflow-y-auto">
+    <div class="p-6">
+      <!-- Header -->
+      <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center gap-3">
+          <span id="modalMoodEmoji" class="text-3xl"></span>
+          <div>
+            <h3 id="modalDate" class="font-heading font-bold text-lg text-gray-800"></h3>
+            <span id="modalMoodLabel" class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-heading font-medium"></span>
+          </div>
+        </div>
+        <button onclick="closeJournalModal()" class="p-2 rounded-lg hover:bg-gray-100 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-gray-400">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Content -->
+      <div class="space-y-4">
+        <div id="modalSleep" class="hidden">
+          <div class="flex items-center gap-2 mb-1">
+            <span>😴</span>
+            <span class="font-heading font-semibold text-sm text-gray-700">Giấc ngủ</span>
+          </div>
+          <p class="font-body text-sm text-gray-600 pl-7"><span id="modalSleepValue"></span> giờ</p>
+        </div>
+
+        <div id="modalEat" class="hidden">
+          <div class="flex items-center gap-2 mb-1">
+            <span>🍼</span>
+            <span class="font-heading font-semibold text-sm text-gray-700">Ăn uống</span>
+          </div>
+          <p id="modalEatValue" class="font-body text-sm text-gray-600 pl-7 whitespace-pre-line"></p>
+        </div>
+
+        <div id="modalActivity" class="hidden">
+          <div class="flex items-center gap-2 mb-1">
+            <span>🎮</span>
+            <span class="font-heading font-semibold text-sm text-gray-700">Hoạt động</span>
+          </div>
+          <p id="modalActivityValue" class="font-body text-sm text-gray-600 pl-7 whitespace-pre-line"></p>
+        </div>
+
+        <div id="modalNote" class="hidden">
+          <div class="flex items-center gap-2 mb-1">
+            <span>📝</span>
+            <span class="font-heading font-semibold text-sm text-gray-700">Ghi chú</span>
+          </div>
+          <p id="modalNoteValue" class="font-body text-sm text-gray-600 pl-7 whitespace-pre-line"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function showJournalDetail(el) {
+    const modal = document.getElementById('journalModal');
+    document.getElementById('modalDate').textContent = el.dataset.journalDate;
+    document.getElementById('modalMoodEmoji').textContent = el.dataset.journalMoodEmoji;
+
+    const label = document.getElementById('modalMoodLabel');
+    label.textContent = el.dataset.journalMoodLabel;
+    label.style.background = el.dataset.journalMoodColor + '15';
+    label.style.color = el.dataset.journalMoodColor;
+
+    // Sleep
+    const sleepSection = document.getElementById('modalSleep');
+    if (el.dataset.journalSleep && el.dataset.journalSleep !== '') {
+      sleepSection.classList.remove('hidden');
+      document.getElementById('modalSleepValue').textContent = el.dataset.journalSleep;
+    } else {
+      sleepSection.classList.add('hidden');
+    }
+
+    // Eat
+    const eatSection = document.getElementById('modalEat');
+    if (el.dataset.journalEat && el.dataset.journalEat !== '') {
+      eatSection.classList.remove('hidden');
+      document.getElementById('modalEatValue').textContent = el.dataset.journalEat;
+    } else {
+      eatSection.classList.add('hidden');
+    }
+
+    // Activity
+    const actSection = document.getElementById('modalActivity');
+    if (el.dataset.journalActivity && el.dataset.journalActivity !== '') {
+      actSection.classList.remove('hidden');
+      document.getElementById('modalActivityValue').textContent = el.dataset.journalActivity;
+    } else {
+      actSection.classList.add('hidden');
+    }
+
+    // Note
+    const noteSection = document.getElementById('modalNote');
+    if (el.dataset.journalNote && el.dataset.journalNote !== '') {
+      noteSection.classList.remove('hidden');
+      document.getElementById('modalNoteValue').textContent = el.dataset.journalNote;
+    } else {
+      noteSection.classList.add('hidden');
+    }
+
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+  }
+
+  function closeJournalModal() {
+    const modal = document.getElementById('journalModal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+  }
+
+  // Close on escape
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeJournalModal();
+  });
+</script>
