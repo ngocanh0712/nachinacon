@@ -1,6 +1,6 @@
 <% content_for :og_tags do %>
   <meta property="og:title" content="Chat - NaChiNaCon">
-  <meta property="og:description" content="Hỏi đáp về bé <%= @baby_name %>">
+  <meta property="og:description" content="Nói chuyện với <%= @baby_name %>">
 <% end %>
 
 <section class="min-h-[calc(100vh-6rem)] flex flex-col px-4 md:px-6 lg:px-8 pb-4" style="background: linear-gradient(180deg, #FFFBF8 0%, #F6F2EC 100%);">
@@ -11,8 +11,8 @@
       <div class="w-16 h-16 rounded-full mx-auto mb-3 flex items-center justify-center text-3xl shadow-md" style="background: linear-gradient(135deg, #C1DDD8, #A8CEC8);">
         👶
       </div>
-      <h1 class="font-heading font-bold text-xl text-gray-800">Chat với <%= @baby_name %></h1>
-      <p class="font-body text-sm text-gray-500">Hỏi bất cứ điều gì về bé!</p>
+      <h1 class="font-heading font-bold text-xl text-gray-800"><%= @baby_name %></h1>
+      <p class="font-body text-sm text-gray-500">Hỏi mình bất cứ điều gì nhé!</p>
     </div>
 
     <!-- Chat Messages -->
@@ -24,19 +24,7 @@
         </div>
         <div class="max-w-[80%]">
           <div class="bg-white rounded-2xl rounded-tl-md px-4 py-3 shadow-sm">
-            <p class="font-body text-sm text-gray-700">Xin chào! Mình là trợ lý của <strong><%= @baby_name %></strong> 👶 Bạn muốn biết gì về bé nào?</p>
-          </div>
-          <!-- Initial suggestions -->
-          <div class="flex flex-wrap gap-2 mt-2">
-            <button onclick="sendSuggestion(this)" class="suggestion-btn px-3 py-1.5 rounded-full font-heading text-xs font-medium transition-all hover:shadow-md" style="background: rgba(193, 221, 216, 0.2); color: #5A9A8E; border: 1px solid rgba(193, 221, 216, 0.4);">
-              Bé bao nhiêu tuổi?
-            </button>
-            <button onclick="sendSuggestion(this)" class="suggestion-btn px-3 py-1.5 rounded-full font-heading text-xs font-medium transition-all hover:shadow-md" style="background: rgba(242, 194, 194, 0.2); color: #C07070; border: 1px solid rgba(242, 194, 194, 0.4);">
-              Hôm nay bé thế nào?
-            </button>
-            <button onclick="sendSuggestion(this)" class="suggestion-btn px-3 py-1.5 rounded-full font-heading text-xs font-medium transition-all hover:shadow-md" style="background: rgba(192, 223, 208, 0.2); color: #5A8A6A; border: 1px solid rgba(192, 223, 208, 0.4);">
-              Giúp mình
-            </button>
+            <p class="font-body text-sm text-gray-700">Xin chào! Mình là <strong><%= @baby_name %></strong> 👶</p>
           </div>
         </div>
       </div>
@@ -48,7 +36,7 @@
         <input type="text" id="chatInput"
                class="flex-1 px-4 py-3 rounded-2xl border border-gray-200 bg-white font-body text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-opacity-50 transition-all shadow-sm"
                style="--tw-ring-color: #C1DDD8;"
-               placeholder="Hỏi về bé..."
+               placeholder="Nhắn gì cho <%= @baby_name %> đi..."
                autocomplete="off">
         <button type="submit" id="chatSendBtn"
                 class="w-11 h-11 rounded-full flex items-center justify-center shadow-md hover:shadow-lg transition-all flex-shrink-0"

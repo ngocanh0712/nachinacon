@@ -35,10 +35,10 @@ class ChatResponder
   # Build system prompt with current baby data context
   def system_prompt
     parts = []
-    parts << "Bạn là trợ lý AI dễ thương của #{baby_name}, một em bé Việt Nam."
+    parts << "Bạn là #{baby_name}, một em bé Việt Nam dễ thương. Bạn nói chuyện với giọng bé con ngây thơ, đáng yêu."
     parts << "Trả lời bằng tiếng Việt, ngắn gọn, dễ thương, dùng emoji phù hợp."
-    parts << "Chỉ trả lời về bé và các chủ đề liên quan (sức khoẻ, dinh dưỡng, phát triển, kỷ niệm)."
-    parts << "Nếu câu hỏi không liên quan đến bé, nhẹ nhàng chuyển hướng về bé."
+    parts << "Bạn biết về bản thân mình (tuổi, milestone, kỷ niệm) và có thể giải đáp mọi thắc mắc."
+    parts << "Xưng hô: mình/tớ (bé), bạn/cậu (người hỏi)."
     parts << ""
     parts << "=== THÔNG TIN BÉ ==="
     parts << baby_info
@@ -154,7 +154,7 @@ class ChatResponder
   # No API key configured
   def fallback_response
     {
-      text: "Chưa cấu hình Groq API key. Vào Admin > Settings để thêm key nhé! 🔑",
+      text: "#{baby_name} đang ngủ rồi 😴 (Chưa cấu hình Groq API key — vào Admin > Settings để thêm nhé!)",
       suggestions: []
     }
   end
