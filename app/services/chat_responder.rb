@@ -100,43 +100,68 @@ class ChatResponder
     parts.join(' ')
   end
 
-  # Call Gemini Flash API
+  # Call Gemini Flash API via HTTPS
   def ai_response
     uri = URI("#{GEMINI_URL}?key=#{api_key}")
-    body = {
+
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+    http.open_timeout = 10
+    http.read_timeout = 15
+
+    request = Net::HTTP::Post.new(uri)
+    request['Content-Type'] = 'application/json'
+    request.body = {
       system_instruction: { parts: [{ text: system_prompt }] },
       contents: [{ parts: [{ text: @message }] }],
       generationConfig: {
         temperature: 0.7,
         maxOutputTokens: 300
       }
-    }
+    }.to_json
 
-    response = Net::HTTP.post(uri, body.to_json, 'Content-Type' => 'application/json')
+    response = http.request(request)
     data = JSON.parse(response.body)
+
+    # Check for API-level error
+    if data['error']
+      error_msg = data.dig('error', 'message') || 'Unknown API error'
+      Rails.logger.error("Gemini API error: #{error_msg}")
+      return error_response("Lỗi Gemini API: #{error_msg}")
+    end
 
     text = data.dig('candidates', 0, 'content', 'parts', 0, 'text')
 
     if text.present?
       { text: text, suggestions: ai_suggestions }
     else
-      # API returned empty/error, use fallback
-      Rails.logger.warn("Gemini API error: #{data}")
-      fallback_response
+      Rails.logger.warn("Gemini API empty response: #{data}")
+      error_response('AI không trả lời được câu hỏi này. Thử hỏi câu khác nhé!')
     end
+  rescue Net::OpenTimeout, Net::ReadTimeout
+    error_response('AI đang bận, thử lại sau nhé! ⏳')
   rescue StandardError => e
-    Rails.logger.error("ChatResponder AI error: #{e.message}")
-    fallback_response
+    Rails.logger.error("ChatResponder error: #{e.class} - #{e.message}")
+    error_response("Lỗi kết nối AI: #{e.message}")
   end
 
   def ai_suggestions
     ['Bé bao nhiêu tuổi?', 'Hôm nay bé thế nào?', 'Milestone gần nhất?']
   end
 
+  # No API key configured
   def fallback_response
     {
-      text: "Xin chào! Mình là trợ lý của #{baby_name} 👶 Hiện tại chưa kết nối AI. Vui lòng cấu hình Gemini API key trong Admin > Settings.",
-      suggestions: ['Bé bao nhiêu tuổi?', 'Hôm nay bé thế nào?']
+      text: "Chưa cấu hình Gemini API key. Vào Admin > Settings để thêm key nhé! 🔑",
+      suggestions: []
+    }
+  end
+
+  # API call failed — show actual error
+  def error_response(message)
+    {
+      text: "#{message} 😅",
+      suggestions: ai_suggestions
     }
   end
 end
