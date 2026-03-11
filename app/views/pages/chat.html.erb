@@ -8,8 +8,8 @@
 
     <!-- Chat Header -->
     <div class="text-center py-6">
-      <div class="w-16 h-16 rounded-full mx-auto mb-3 flex items-center justify-center text-3xl shadow-md" style="background: linear-gradient(135deg, #C1DDD8, #A8CEC8);">
-        👶
+      <div class="w-16 h-16 rounded-full mx-auto mb-3 overflow-hidden shadow-md">
+        <%= image_tag 'nacon-avatar.jpg', class: 'w-full h-full object-cover', alt: @baby_name %>
       </div>
       <h1 class="font-heading font-bold text-xl text-gray-800"><%= @baby_name %></h1>
       <p class="font-body text-sm text-gray-500">Hỏi mình bất cứ điều gì nhé!</p>
@@ -19,8 +19,8 @@
     <div id="chatMessages" class="flex-1 overflow-y-auto space-y-4 pb-4 scroll-smooth">
       <!-- Bot welcome message -->
       <div class="flex items-start gap-3">
-        <div class="w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center text-sm" style="background: linear-gradient(135deg, #C1DDD8, #A8CEC8);">
-          👶
+        <div class="w-8 h-8 rounded-full flex-shrink-0 overflow-hidden">
+          <%= image_tag 'nacon-avatar.jpg', class: 'w-full h-full object-cover', alt: @baby_name %>
         </div>
         <div class="max-w-[80%]">
           <div class="bg-white rounded-2xl rounded-tl-md px-4 py-3 shadow-sm">
@@ -54,6 +54,7 @@
   const chatMessages = document.getElementById('chatMessages');
   const chatInput = document.getElementById('chatInput');
   const chatForm = document.getElementById('chatForm');
+  const avatarUrl = '<%= asset_path("nacon-avatar.jpg") %>';
 
   function scrollToBottom() {
     chatMessages.scrollTop = chatMessages.scrollHeight;
@@ -98,8 +99,8 @@
     }
 
     div.innerHTML = `
-      <div class="w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center text-sm" style="background: linear-gradient(135deg, #C1DDD8, #A8CEC8);">
-        👶
+      <div class="w-8 h-8 rounded-full flex-shrink-0 overflow-hidden">
+        <img src="${avatarUrl}" class="w-full h-full object-cover" alt="Nacon">
       </div>
       <div class="max-w-[80%]">
         <div class="bg-white rounded-2xl rounded-tl-md px-4 py-3 shadow-sm">
@@ -118,8 +119,8 @@
     div.id = 'typingIndicator';
     div.className = 'flex items-start gap-3';
     div.innerHTML = `
-      <div class="w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center text-sm" style="background: linear-gradient(135deg, #C1DDD8, #A8CEC8);">
-        👶
+      <div class="w-8 h-8 rounded-full flex-shrink-0 overflow-hidden">
+        <img src="${avatarUrl}" class="w-full h-full object-cover" alt="Nacon">
       </div>
       <div class="bg-white rounded-2xl rounded-tl-md px-4 py-3 shadow-sm">
         <div class="flex items-center gap-1">
