@@ -133,21 +133,21 @@
         </div>
         <div>
           <h2 class="font-heading font-semibold text-lg text-gray-800">AI Chat</h2>
-          <p class="font-body text-xs text-gray-500">Cấu hình Google Gemini cho chatbot</p>
+          <p class="font-body text-xs text-gray-500">Cấu hình Groq AI cho chatbot (miễn phí)</p>
         </div>
       </div>
 
       <div class="space-y-4">
         <div>
-          <label for="gemini_api_key" class="block font-body text-sm font-medium text-gray-700 mb-2">
-            Gemini API Key
+          <label for="groq_api_key" class="block font-body text-sm font-medium text-gray-700 mb-2">
+            Groq API Key
           </label>
-          <%= password_field_tag 'settings[gemini_api_key]', @settings['gemini_api_key'],
-              id: 'gemini_api_key',
+          <%= password_field_tag 'settings[groq_api_key]', @settings['groq_api_key'],
+              id: 'groq_api_key',
               class: 'w-full px-4 py-3 font-body text-sm border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#C1DDD8] focus:border-transparent transition-all',
-              placeholder: 'AIzaSy...' %>
+              placeholder: 'gsk_...' %>
           <p class="font-body text-xs text-gray-500 mt-1">
-            Lấy API key miễn phí tại <a href="https://aistudio.google.com/apikey" target="_blank" class="underline" style="color: #5A9A8E;">Google AI Studio</a>. Để trống nếu không dùng AI chat.
+            Lấy API key miễn phí tại <a href="https://console.groq.com/keys" target="_blank" class="underline" style="color: #5A9A8E;">Groq Console</a>. Để trống nếu không dùng AI chat.
           </p>
         </div>
       </div>

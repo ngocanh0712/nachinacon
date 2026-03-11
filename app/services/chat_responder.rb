@@ -3,12 +3,12 @@
 require 'net/http'
 require 'json'
 
-# AI chatbot using Google Gemini Flash API.
-# Builds system prompt with baby data from DB, sends user message to Gemini.
-# Falls back to simple keyword matching if API key missing or API error.
+# AI chatbot using Groq API (OpenAI-compatible, Llama 3).
+# Builds system prompt with baby data from DB, sends user message to Groq.
+# Falls back message if API key missing or API error.
 class ChatResponder
-  GEMINI_MODEL = 'gemini-2.0-flash-lite'
-  GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/#{GEMINI_MODEL}:generateContent"
+  GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions'
+  GROQ_MODEL = 'llama-3.3-70b-versatile'
 
   def initialize(message)
     @message = message.to_s.strip
@@ -25,7 +25,7 @@ class ChatResponder
   private
 
   def api_key
-    @api_key ||= ENV['GEMINI_API_KEY'].presence || SiteSetting.get('gemini_api_key').presence
+    @api_key ||= ENV['GROQ_API_KEY'].presence || SiteSetting.get('groq_api_key').presence
   end
 
   def baby_name
@@ -100,9 +100,9 @@ class ChatResponder
     parts.join(' ')
   end
 
-  # Call Gemini Flash API via HTTPS
+  # Call Groq API (OpenAI-compatible format)
   def ai_response
-    uri = URI("#{GEMINI_URL}?key=#{api_key}")
+    uri = URI(GROQ_URL)
 
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
@@ -111,13 +111,15 @@ class ChatResponder
 
     request = Net::HTTP::Post.new(uri)
     request['Content-Type'] = 'application/json'
+    request['Authorization'] = "Bearer #{api_key}"
     request.body = {
-      system_instruction: { parts: [{ text: system_prompt }] },
-      contents: [{ parts: [{ text: @message }] }],
-      generationConfig: {
-        temperature: 0.7,
-        maxOutputTokens: 300
-      }
+      model: GROQ_MODEL,
+      messages: [
+        { role: 'system', content: system_prompt },
+        { role: 'user', content: @message }
+      ],
+      temperature: 0.7,
+      max_tokens: 300
     }.to_json
 
     response = http.request(request)
@@ -126,16 +128,16 @@ class ChatResponder
     # Check for API-level error
     if data['error']
       error_msg = data.dig('error', 'message') || 'Unknown API error'
-      Rails.logger.error("Gemini API error: #{error_msg}")
-      return error_response("Lỗi Gemini API: #{error_msg}")
+      Rails.logger.error("Groq API error: #{error_msg}")
+      return error_response("Lỗi Groq API: #{error_msg}")
     end
 
-    text = data.dig('candidates', 0, 'content', 'parts', 0, 'text')
+    text = data.dig('choices', 0, 'message', 'content')
 
     if text.present?
-      { text: text, suggestions: ai_suggestions }
+      { text: text.strip, suggestions: ai_suggestions }
     else
-      Rails.logger.warn("Gemini API empty response: #{data}")
+      Rails.logger.warn("Groq API empty response: #{data}")
       error_response('AI không trả lời được câu hỏi này. Thử hỏi câu khác nhé!')
     end
   rescue Net::OpenTimeout, Net::ReadTimeout
@@ -152,7 +154,7 @@ class ChatResponder
   # No API key configured
   def fallback_response
     {
-      text: "Chưa cấu hình Gemini API key. Vào Admin > Settings để thêm key nhé! 🔑",
+      text: "Chưa cấu hình Groq API key. Vào Admin > Settings để thêm key nhé! 🔑",
       suggestions: []
     }
   end

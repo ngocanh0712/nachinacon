@@ -9,7 +9,7 @@ module Admin
         'site_title' => SiteSetting.get('site_title'),
         'hero_title' => SiteSetting.get('hero_title'),
         'hero_subtitle' => SiteSetting.get('hero_subtitle'),
-        'gemini_api_key' => SiteSetting.get('gemini_api_key')
+        'groq_api_key' => SiteSetting.get('groq_api_key')
       }
     end
 
@@ -17,7 +17,7 @@ module Admin
       # Update each setting
       params[:settings]&.each do |key, value|
         # Allow clearing API key; skip blank for other fields
-        next if value.blank? && key != 'gemini_api_key'
+        next if value.blank? && key != 'groq_api_key'
 
         type = key.include?('date') ? 'date' : 'string'
         SiteSetting.set(key, value, type)
