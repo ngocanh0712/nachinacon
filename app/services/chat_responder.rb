@@ -1,174 +1,142 @@
 # frozen_string_literal: true
 
-# Stateless chatbot that answers questions about baby using app data.
-# Matches Vietnamese keywords in user message and queries DB for answers.
+require 'net/http'
+require 'json'
+
+# AI chatbot using Google Gemini Flash API.
+# Builds system prompt with baby data from DB, sends user message to Gemini.
+# Falls back to simple keyword matching if API key missing or API error.
 class ChatResponder
-  # Vietnamese keywords with non-diacritic variants for flexible matching
-  GREETING_KEYWORDS = %w[chào chao hello hey alo xin chào].freeze
-  AGE_KEYWORDS = %w[tuổi tuoi tháng thang age old].freeze
-  MILESTONE_KEYWORDS = %w[milestone mốc moc first biết biet].freeze
-  PHOTO_KEYWORDS = %w[ảnh anh hình hinh photo memory kỷ niệm ky niem].freeze
-  JOURNAL_KEYWORDS = %w[hôm nay hom nay today nhật ký nhat ky journal mood].freeze
-  ALBUM_KEYWORDS = %w[album].freeze
-  GROWTH_KEYWORDS = %w[cân nặng can nang chiều cao chieu cao growth].freeze
-  HEALTH_KEYWORDS = %w[sức khỏe suc khoe sức khoẻ health].freeze
-  RECIPE_KEYWORDS = %w[món ăn mon an recipe ẩm thực am thuc nấu nau dinh dưỡng].freeze
-  HELP_KEYWORDS = %w[giúp giup help hướng dẫn huong dan].freeze
+  GEMINI_MODEL = 'gemini-2.0-flash'
+  GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/#{GEMINI_MODEL}:generateContent"
 
   def initialize(message)
-    @message = message.to_s.downcase.strip
+    @message = message.to_s.strip
   end
 
   def respond
-    # Check specific topics first, greeting last (to avoid false positives)
-    return age_response if matches?(AGE_KEYWORDS)
-    return journal_response if matches?(JOURNAL_KEYWORDS)
-    return milestone_response if matches?(MILESTONE_KEYWORDS)
-    return photo_response if matches?(PHOTO_KEYWORDS)
-    return album_response if matches?(ALBUM_KEYWORDS)
-    return growth_response if matches?(GROWTH_KEYWORDS)
-    return health_response if matches?(HEALTH_KEYWORDS)
-    return recipe_response if matches?(RECIPE_KEYWORDS)
-    return help_response if matches?(HELP_KEYWORDS)
-    return greeting_response if matches?(GREETING_KEYWORDS)
-
-    fallback_response
+    if api_key.present?
+      ai_response
+    else
+      fallback_response
+    end
   end
 
   private
 
-  def matches?(keywords)
-    msg = @message.encode('UTF-8', invalid: :replace, undef: :replace)
-    keywords.any? { |kw| msg.include?(kw.encode('UTF-8')) }
+  def api_key
+    @api_key ||= ENV['GEMINI_API_KEY'].presence || SiteSetting.get('gemini_api_key').presence
   end
 
   def baby_name
     @baby_name ||= SiteSetting.get('baby_nickname') || 'Bé'
   end
 
-  def greeting_response
-    {
-      text: "Xin chào! Mình là trợ lý của #{baby_name} 👶 Bạn muốn biết gì về bé nào?",
-      suggestions: ['Bé bao nhiêu tuổi?', 'Hôm nay bé thế nào?', 'Milestone gần nhất?']
-    }
+  # Build system prompt with current baby data context
+  def system_prompt
+    parts = []
+    parts << "Bạn là trợ lý AI dễ thương của #{baby_name}, một em bé Việt Nam."
+    parts << "Trả lời bằng tiếng Việt, ngắn gọn, dễ thương, dùng emoji phù hợp."
+    parts << "Chỉ trả lời về bé và các chủ đề liên quan (sức khoẻ, dinh dưỡng, phát triển, kỷ niệm)."
+    parts << "Nếu câu hỏi không liên quan đến bé, nhẹ nhàng chuyển hướng về bé."
+    parts << ""
+    parts << "=== THÔNG TIN BÉ ==="
+    parts << baby_info
+    parts << milestone_info
+    parts << journal_info
+    parts << memory_info
+    parts << growth_info
+    parts.compact.join("\n")
   end
 
-  def age_response
+  def baby_info
     birth_date = SiteSetting.baby_birth_date
     days = (Date.today - birth_date).to_i
     months = SiteSetting.baby_age_in_months
     years = months / 12
-    remaining_months = months % 12
+    remaining = months % 12
+    age = years > 0 ? "#{years} tuổi #{remaining} tháng" : "#{months} tháng"
 
-    age_text = if years > 0
-                 "#{years} tuổi #{remaining_months} tháng"
-               else
-                 "#{months} tháng"
-               end
-
-    {
-      text: "#{baby_name} sinh ngày #{birth_date.strftime('%d/%m/%Y')}, hiện được #{age_text} (#{days} ngày) rồi! 🎂",
-      suggestions: ['Milestone gần nhất?', 'Bé có bao nhiêu ảnh?']
-    }
+    "Tên: #{baby_name}, Sinh: #{birth_date.strftime('%d/%m/%Y')}, Tuổi: #{age} (#{days} ngày)"
   end
 
-  def journal_response
-    journal = DailyJournal.where(date: Date.today).first
+  def milestone_info
+    recent = Milestone.achieved.order(achieved_at: :desc).limit(5)
+    return nil unless recent.any?
 
-    if journal
-      parts = ["Hôm nay #{baby_name} #{journal.mood_emoji} #{journal.mood_label}."]
-      parts << "Ngủ #{journal.sleep_hours} giờ." if journal.sleep_hours.present?
-      parts << "Ăn: #{journal.eat_note}" if journal.eat_note.present?
-      parts << "Hoạt động: #{journal.activity_note}" if journal.activity_note.present?
-      parts << journal.note if journal.note.present?
-
-      { text: parts.join(' '), suggestions: ['Bé bao nhiêu tuổi?', 'Milestone gần nhất?'] }
-    else
-      { text: "Hôm nay chưa có nhật ký cho #{baby_name}. Ba mẹ chưa ghi chép gì hôm nay 📝", suggestions: ['Bé bao nhiêu tuổi?', 'Bé có bao nhiêu ảnh?'] }
-    end
+    lines = recent.map { |m| "- #{m.name} (#{m.achieved_at.strftime('%d/%m/%Y')})" }
+    "Milestone đã đạt:\n#{lines.join("\n")}"
   end
 
-  def milestone_response
-    recent = Milestone.achieved.order(achieved_at: :desc).limit(3)
-    pending = Milestone.pending.limit(3)
+  def journal_info
+    journal = DailyJournal.order(date: :desc).first
+    return nil unless journal
 
-    if recent.any?
-      lines = recent.map { |m| "⭐ #{m.name} (#{m.achieved_at.strftime('%d/%m/%Y')})" }
-      text = "Những mốc gần nhất của #{baby_name}:\n#{lines.join("\n")}"
-      text += "\n\nĐang chờ: #{pending.map(&:name).join(', ')}" if pending.any?
-      { text: text, suggestions: ['Bé bao nhiêu tuổi?', 'Bé có bao nhiêu ảnh?'] }
-    else
-      { text: "#{baby_name} chưa có milestone nào được ghi nhận.", suggestions: ['Bé bao nhiêu tuổi?'] }
-    end
+    parts = ["Nhật ký gần nhất (#{journal.date.strftime('%d/%m/%Y')}): Tâm trạng #{journal.mood_label}"]
+    parts << "Ngủ #{journal.sleep_hours}h" if journal.sleep_hours.present?
+    parts << "Ăn: #{journal.eat_note}" if journal.eat_note.present?
+    parts << "Hoạt động: #{journal.activity_note}" if journal.activity_note.present?
+    parts << "Ghi chú: #{journal.note}" if journal.note.present?
+    parts.join(', ')
   end
 
-  def photo_response
+  def memory_info
     total = Memory.count
     photos = Memory.photos.count
     videos = Memory.videos.count
     albums = Album.count
+    "Kỷ niệm: #{total} (#{photos} ảnh, #{videos} video), #{albums} album"
+  end
 
-    {
-      text: "#{baby_name} có tổng cộng #{total} kỷ niệm (#{photos} ảnh, #{videos} video) trong #{albums} album 📸",
-      suggestions: ['Milestone gần nhất?', 'Hôm nay bé thế nào?']
+  def growth_info
+    return nil unless defined?(GrowthRecord)
+
+    record = GrowthRecord.order(recorded_on: :desc).first
+    return nil unless record
+
+    parts = ["Số đo gần nhất (#{record.recorded_on.strftime('%d/%m/%Y')}):"]
+    parts << "#{record.weight_kg}kg" if record.weight_kg.present?
+    parts << "#{record.height_cm}cm" if record.height_cm.present?
+    parts.join(' ')
+  end
+
+  # Call Gemini Flash API
+  def ai_response
+    uri = URI("#{GEMINI_URL}?key=#{api_key}")
+    body = {
+      system_instruction: { parts: [{ text: system_prompt }] },
+      contents: [{ parts: [{ text: @message }] }],
+      generationConfig: {
+        temperature: 0.7,
+        maxOutputTokens: 300
+      }
     }
-  end
 
-  def album_response
-    albums = Album.with_memories.recent.limit(5)
-    if albums.any?
-      lines = albums.map { |a| "📁 #{a.name} (#{a.memories.count} ảnh)" }
-      { text: "Albums của #{baby_name}:\n#{lines.join("\n")}", suggestions: ['Bé có bao nhiêu ảnh?'] }
+    response = Net::HTTP.post(uri, body.to_json, 'Content-Type' => 'application/json')
+    data = JSON.parse(response.body)
+
+    text = data.dig('candidates', 0, 'content', 'parts', 0, 'text')
+
+    if text.present?
+      { text: text, suggestions: ai_suggestions }
     else
-      { text: "Chưa có album nào.", suggestions: ['Bé bao nhiêu tuổi?'] }
+      # API returned empty/error, use fallback
+      Rails.logger.warn("Gemini API error: #{data}")
+      fallback_response
     end
+  rescue StandardError => e
+    Rails.logger.error("ChatResponder AI error: #{e.message}")
+    fallback_response
   end
 
-  def growth_response
-    record = GrowthRecord.order(recorded_on: :desc).first if defined?(GrowthRecord)
-
-    if record
-      parts = ["Số đo gần nhất của #{baby_name} (#{record.recorded_on.strftime('%d/%m/%Y')}):"]
-      parts << "Cân nặng: #{record.weight_kg} kg" if record.weight_kg.present?
-      parts << "Chiều cao: #{record.height_cm} cm" if record.height_cm.present?
-      parts << "Vòng đầu: #{record.head_cm} cm" if record.head_cm.present?
-      { text: parts.join("\n"), suggestions: ['Bé bao nhiêu tuổi?', 'Milestone gần nhất?'] }
-    else
-      { text: "Chưa có dữ liệu tăng trưởng cho #{baby_name}.", suggestions: ['Bé bao nhiêu tuổi?'] }
-    end
-  end
-
-  def health_response
-    tips = HealthTip.published.ordered.limit(3)
-    if tips.any?
-      lines = tips.map { |t| "#{t.category_icon} #{t.title}" }
-      { text: "Bài viết sức khoẻ mới nhất:\n#{lines.join("\n")}", suggestions: ['Món ăn cho bé?', 'Bé bao nhiêu tuổi?'] }
-    else
-      { text: "Chưa có bài viết sức khoẻ nào.", suggestions: ['Bé bao nhiêu tuổi?'] }
-    end
-  end
-
-  def recipe_response
-    recipes = Recipe.published.ordered.limit(3)
-    if recipes.any?
-      lines = recipes.map { |r| "🍽️ #{r.title}" }
-      { text: "Công thức ẩm thực mới nhất:\n#{lines.join("\n")}", suggestions: ['Sức khoẻ bé?', 'Bé bao nhiêu tuổi?'] }
-    else
-      { text: "Chưa có công thức ẩm thực nào.", suggestions: ['Bé bao nhiêu tuổi?'] }
-    end
-  end
-
-  def help_response
-    {
-      text: "Bạn có thể hỏi mình về:\n• Bé bao nhiêu tuổi?\n• Hôm nay bé thế nào?\n• Milestone gần nhất?\n• Bé có bao nhiêu ảnh?\n• Albums của bé?\n• Cân nặng chiều cao?\n• Sức khoẻ mẹ và bé?\n• Món ăn cho bé?",
-      suggestions: ['Bé bao nhiêu tuổi?', 'Hôm nay bé thế nào?', 'Milestone gần nhất?']
-    }
+  def ai_suggestions
+    ['Bé bao nhiêu tuổi?', 'Hôm nay bé thế nào?', 'Milestone gần nhất?']
   end
 
   def fallback_response
     {
-      text: "Mình chưa hiểu câu hỏi này 😅 Thử hỏi về tuổi, milestone, ảnh, nhật ký, hoặc gõ \"giúp\" để xem danh sách câu hỏi nhé!",
-      suggestions: ['Giúp mình', 'Bé bao nhiêu tuổi?', 'Hôm nay bé thế nào?']
+      text: "Xin chào! Mình là trợ lý của #{baby_name} 👶 Hiện tại chưa kết nối AI. Vui lòng cấu hình Gemini API key trong Admin > Settings.",
+      suggestions: ['Bé bao nhiêu tuổi?', 'Hôm nay bé thế nào?']
     }
   end
 end
