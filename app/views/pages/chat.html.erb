@@ -1,0 +1,194 @@
+<% content_for :og_tags do %>
+  <meta property="og:title" content="Chat - NaChiNaCon">
+  <meta property="og:description" content="Hỏi đáp về bé <%= @baby_name %>">
+<% end %>
+
+<section class="min-h-[calc(100vh-6rem)] flex flex-col px-4 md:px-6 lg:px-8 pb-4" style="background: linear-gradient(180deg, #FFFBF8 0%, #F6F2EC 100%);">
+  <div class="max-w-2xl mx-auto w-full flex flex-col flex-1">
+
+    <!-- Chat Header -->
+    <div class="text-center py-6">
+      <div class="w-16 h-16 rounded-full mx-auto mb-3 flex items-center justify-center text-3xl shadow-md" style="background: linear-gradient(135deg, #C1DDD8, #A8CEC8);">
+        👶
+      </div>
+      <h1 class="font-heading font-bold text-xl text-gray-800">Chat với <%= @baby_name %></h1>
+      <p class="font-body text-sm text-gray-500">Hỏi bất cứ điều gì về bé!</p>
+    </div>
+
+    <!-- Chat Messages -->
+    <div id="chatMessages" class="flex-1 overflow-y-auto space-y-4 pb-4 scroll-smooth">
+      <!-- Bot welcome message -->
+      <div class="flex items-start gap-3">
+        <div class="w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center text-sm" style="background: linear-gradient(135deg, #C1DDD8, #A8CEC8);">
+          👶
+        </div>
+        <div class="max-w-[80%]">
+          <div class="bg-white rounded-2xl rounded-tl-md px-4 py-3 shadow-sm">
+            <p class="font-body text-sm text-gray-700">Xin chào! Mình là trợ lý của <strong><%= @baby_name %></strong> 👶 Bạn muốn biết gì về bé nào?</p>
+          </div>
+          <!-- Initial suggestions -->
+          <div class="flex flex-wrap gap-2 mt-2">
+            <button onclick="sendSuggestion(this)" class="suggestion-btn px-3 py-1.5 rounded-full font-heading text-xs font-medium transition-all hover:shadow-md" style="background: rgba(193, 221, 216, 0.2); color: #5A9A8E; border: 1px solid rgba(193, 221, 216, 0.4);">
+              Bé bao nhiêu tuổi?
+            </button>
+            <button onclick="sendSuggestion(this)" class="suggestion-btn px-3 py-1.5 rounded-full font-heading text-xs font-medium transition-all hover:shadow-md" style="background: rgba(242, 194, 194, 0.2); color: #C07070; border: 1px solid rgba(242, 194, 194, 0.4);">
+              Hôm nay bé thế nào?
+            </button>
+            <button onclick="sendSuggestion(this)" class="suggestion-btn px-3 py-1.5 rounded-full font-heading text-xs font-medium transition-all hover:shadow-md" style="background: rgba(192, 223, 208, 0.2); color: #5A8A6A; border: 1px solid rgba(192, 223, 208, 0.4);">
+              Giúp mình
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chat Input -->
+    <div class="sticky bottom-0 pt-3 pb-2" style="background: linear-gradient(0deg, #F6F2EC 80%, transparent);">
+      <form id="chatForm" onsubmit="sendMessage(event)" class="flex items-center gap-3">
+        <input type="text" id="chatInput"
+               class="flex-1 px-4 py-3 rounded-2xl border border-gray-200 bg-white font-body text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-opacity-50 transition-all shadow-sm"
+               style="--tw-ring-color: #C1DDD8;"
+               placeholder="Hỏi về bé..."
+               autocomplete="off">
+        <button type="submit" id="chatSendBtn"
+                class="w-11 h-11 rounded-full flex items-center justify-center shadow-md hover:shadow-lg transition-all flex-shrink-0"
+                style="background: linear-gradient(135deg, #C1DDD8, #A8CEC8);">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-white">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
+          </svg>
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<script>
+  const chatMessages = document.getElementById('chatMessages');
+  const chatInput = document.getElementById('chatInput');
+  const chatForm = document.getElementById('chatForm');
+
+  function scrollToBottom() {
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+
+  // Add user message bubble
+  function addUserBubble(text) {
+    const div = document.createElement('div');
+    div.className = 'flex justify-end';
+    div.innerHTML = `
+      <div class="max-w-[80%]">
+        <div class="rounded-2xl rounded-tr-md px-4 py-3 shadow-sm" style="background: linear-gradient(135deg, #C1DDD8, #A8CEC8);">
+          <p class="font-body text-sm text-white">${escapeHtml(text)}</p>
+        </div>
+      </div>
+    `;
+    chatMessages.appendChild(div);
+    scrollToBottom();
+  }
+
+  // Add bot message bubble with optional suggestions
+  function addBotBubble(text, suggestions) {
+    const div = document.createElement('div');
+    div.className = 'flex items-start gap-3';
+
+    // Convert newlines to <br>
+    const formattedText = escapeHtml(text).replace(/\n/g, '<br>');
+
+    let suggestionsHtml = '';
+    if (suggestions && suggestions.length > 0) {
+      const colors = [
+        { bg: 'rgba(193, 221, 216, 0.2)', color: '#5A9A8E', border: 'rgba(193, 221, 216, 0.4)' },
+        { bg: 'rgba(242, 194, 194, 0.2)', color: '#C07070', border: 'rgba(242, 194, 194, 0.4)' },
+        { bg: 'rgba(192, 223, 208, 0.2)', color: '#5A8A6A', border: 'rgba(192, 223, 208, 0.4)' }
+      ];
+      suggestionsHtml = '<div class="flex flex-wrap gap-2 mt-2">';
+      suggestions.forEach((s, i) => {
+        const c = colors[i % colors.length];
+        suggestionsHtml += `<button onclick="sendSuggestion(this)" class="suggestion-btn px-3 py-1.5 rounded-full font-heading text-xs font-medium transition-all hover:shadow-md" style="background: ${c.bg}; color: ${c.color}; border: 1px solid ${c.border};">${escapeHtml(s)}</button>`;
+      });
+      suggestionsHtml += '</div>';
+    }
+
+    div.innerHTML = `
+      <div class="w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center text-sm" style="background: linear-gradient(135deg, #C1DDD8, #A8CEC8);">
+        👶
+      </div>
+      <div class="max-w-[80%]">
+        <div class="bg-white rounded-2xl rounded-tl-md px-4 py-3 shadow-sm">
+          <p class="font-body text-sm text-gray-700">${formattedText}</p>
+        </div>
+        ${suggestionsHtml}
+      </div>
+    `;
+    chatMessages.appendChild(div);
+    scrollToBottom();
+  }
+
+  // Add typing indicator
+  function addTypingIndicator() {
+    const div = document.createElement('div');
+    div.id = 'typingIndicator';
+    div.className = 'flex items-start gap-3';
+    div.innerHTML = `
+      <div class="w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center text-sm" style="background: linear-gradient(135deg, #C1DDD8, #A8CEC8);">
+        👶
+      </div>
+      <div class="bg-white rounded-2xl rounded-tl-md px-4 py-3 shadow-sm">
+        <div class="flex items-center gap-1">
+          <span class="w-2 h-2 rounded-full bg-gray-300 animate-bounce" style="animation-delay: 0ms;"></span>
+          <span class="w-2 h-2 rounded-full bg-gray-300 animate-bounce" style="animation-delay: 150ms;"></span>
+          <span class="w-2 h-2 rounded-full bg-gray-300 animate-bounce" style="animation-delay: 300ms;"></span>
+        </div>
+      </div>
+    `;
+    chatMessages.appendChild(div);
+    scrollToBottom();
+  }
+
+  function removeTypingIndicator() {
+    const el = document.getElementById('typingIndicator');
+    if (el) el.remove();
+  }
+
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  // Send message to server
+  async function sendToServer(message) {
+    addUserBubble(message);
+    addTypingIndicator();
+
+    try {
+      const response = await fetch('/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ message: message })
+      });
+      const data = await response.json();
+      removeTypingIndicator();
+      addBotBubble(data.text, data.suggestions);
+    } catch (error) {
+      removeTypingIndicator();
+      addBotBubble('Có lỗi xảy ra, thử lại nhé! 😅', []);
+    }
+  }
+
+  function sendMessage(e) {
+    e.preventDefault();
+    const text = chatInput.value.trim();
+    if (!text) return;
+    chatInput.value = '';
+    sendToServer(text);
+  }
+
+  function sendSuggestion(btn) {
+    const text = btn.textContent.trim();
+    sendToServer(text);
+  }
+
+  // Focus input on load
+  chatInput.focus();
+</script>

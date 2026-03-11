@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class PagesController < ApplicationController
-  skip_before_action :verify_authenticity_token, only: [:spin]
+  skip_before_action :verify_authenticity_token, only: %i[spin chat_message]
 
   def home
     @recent_memories = Memory.includes(:tags, :reactions).recent.limit(8)
@@ -199,6 +199,20 @@ class PagesController < ApplicationController
 
     # Recent entries
     @recent_journals = DailyJournal.recent
+  end
+
+  def chat
+    @baby_name = SiteSetting.get('baby_nickname') || 'Bé'
+  end
+
+  def chat_message
+    message = params[:message].to_s.strip
+    if message.blank?
+      render json: { text: 'Bạn chưa nhập gì cả!', suggestions: [] }
+    else
+      result = ChatResponder.new(message).respond
+      render json: result
+    end
   end
 
   def search

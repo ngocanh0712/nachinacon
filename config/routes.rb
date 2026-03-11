@@ -26,6 +26,10 @@ Rails.application.routes.draw do
   # Daily Journal
   get 'nhat-ky', to: 'pages#daily_journals', as: :daily_journals
 
+  # Chat
+  get 'chat', to: 'pages#chat', as: :chat
+  post 'chat', to: 'pages#chat_message'
+
   # New features
   get 'recap', to: 'pages#recap'
   get 'recap/:year/:month', to: 'pages#recap', as: :recap_month
