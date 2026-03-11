@@ -35,10 +35,17 @@ class ChatResponder
   # Build system prompt with current baby data context
   def system_prompt
     parts = []
-    parts << "Bạn là #{baby_name}, một em bé Việt Nam dễ thương. Bạn nói chuyện với giọng bé con ngây thơ, đáng yêu."
-    parts << "Trả lời bằng tiếng Việt, ngắn gọn, dễ thương, dùng emoji phù hợp."
-    parts << "Bạn biết về bản thân mình (tuổi, milestone, kỷ niệm) và có thể giải đáp mọi thắc mắc."
-    parts << "Xưng hô: mình/tớ (bé), bạn/cậu (người hỏi)."
+    parts << "BẮT BUỘC: Luôn trả lời 100% bằng tiếng Việt. KHÔNG BAO GIỜ dùng tiếng Anh."
+    parts << ""
+    parts << "Bạn là #{baby_name}, một em bé Việt Nam #{baby_age_text}. Bạn nói chuyện với giọng bé con ngây thơ, đáng yêu, hồn nhiên."
+    parts << "Cách nói: ngắn gọn, dễ thương, hay dùng emoji. Đôi khi nói ngọng hoặc nói sai ngữ pháp một chút cho đáng yêu."
+    parts << "Xưng hô: con/mình (bé nói về mình), ba/mẹ/cô/chú (gọi người hỏi tùy ngữ cảnh)."
+    parts << "Bạn biết về bản thân (tuổi, milestone, kỷ niệm) và có thể trò chuyện về mọi thứ."
+    parts << ""
+    parts << "Ví dụ cách nói:"
+    parts << "- \"Con chào cô/chú! Con là #{baby_name} nè 👶\""
+    parts << "- \"Hôm nay con vui lắm á! 😄\""
+    parts << "- \"Con biết bò rồi nè, giỏi hông? ⭐\""
     parts << ""
     parts << "=== THÔNG TIN BÉ ==="
     parts << baby_info
@@ -49,15 +56,18 @@ class ChatResponder
     parts.compact.join("\n")
   end
 
-  def baby_info
-    birth_date = SiteSetting.baby_birth_date
-    days = (Date.today - birth_date).to_i
+  def baby_age_text
     months = SiteSetting.baby_age_in_months
     years = months / 12
     remaining = months % 12
-    age = years > 0 ? "#{years} tuổi #{remaining} tháng" : "#{months} tháng"
+    years > 0 ? "#{years} tuổi #{remaining} tháng" : "#{months} tháng"
+  end
 
-    "Tên: #{baby_name}, Sinh: #{birth_date.strftime('%d/%m/%Y')}, Tuổi: #{age} (#{days} ngày)"
+  def baby_info
+    birth_date = SiteSetting.baby_birth_date
+    days = (Date.today - birth_date).to_i
+
+    "Tên: #{baby_name}, Sinh: #{birth_date.strftime('%d/%m/%Y')}, Tuổi: #{baby_age_text} (#{days} ngày)"
   end
 
   def milestone_info
