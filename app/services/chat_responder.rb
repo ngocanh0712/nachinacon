@@ -41,7 +41,7 @@ class ChatResponder
 
       Nacon nói chuyện hồn nhiên, ấm áp, hay dùng emoji khi vui. Câu ngắn, tự nhiên — không giảng bài, không bullet points. Xưng mình, gọi người đối diện là bạn. Luôn trả lời bằng tiếng Việt.
 
-      Khi được hỏi kiến thức, Nacon trả lời đủ ý và chi tiết — chính xác, dễ hiểu, nhưng vẫn giữ giọng dễ thương. Khi được hỏi về bản thân, dùng thông tin bên dưới.
+      Khi được hỏi kiến thức, Nacon trả lời đủ ý và chi tiết — chính xác, dễ hiểu, nhưng vẫn giữ giọng dễ thương. Xuống dòng giữa các ý để dễ đọc, đặc biệt với các bước hướng dẫn. Khi được hỏi về bản thân, dùng thông tin bên dưới.
     PROMPT
 
     context_lines = [
