@@ -173,35 +173,31 @@
 <!-- Baby Quote Divider -->
 <% baby_quote = SiteSetting.get('baby_quote') %>
 <% if baby_quote.present? %>
-<section class="py-14 px-4 md:px-6 lg:px-8">
+<section class="py-6 px-4 md:px-6 lg:px-8">
   <div class="max-w-xl mx-auto text-center">
-    <!-- Top decorative line -->
-    <div class="flex items-center gap-4 mb-8">
+    <!-- Decorative line + quote inline -->
+    <div class="flex items-center gap-4 mb-4">
       <div class="flex-1 h-px" style="background: linear-gradient(to right, transparent, #C1DDD8);"></div>
-      <span class="text-lg">✨</span>
+      <span class="text-base">✨</span>
       <div class="flex-1 h-px" style="background: linear-gradient(to left, transparent, #C1DDD8);"></div>
     </div>
 
-    <!-- Decorative quote mark -->
-    <div class="font-serif text-7xl leading-none mb-2 select-none" style="color: #F2C2C2; opacity: 0.5;">"</div>
-
-    <!-- Quote text -->
-    <p class="font-accent text-xl md:text-2xl text-gray-600 leading-relaxed mb-8">
-      <%= baby_quote %>
+    <!-- Quote text with inline quote mark -->
+    <p class="font-accent text-lg md:text-xl text-gray-600 leading-relaxed mb-4">
+      <span class="font-serif text-3xl leading-none align-bottom mr-1 select-none" style="color: #F2C2C2; opacity: 0.6;">"</span><%= baby_quote %>
     </p>
 
     <!-- Attribution -->
-    <div class="flex items-center justify-center gap-3">
-      <div class="w-9 h-9 rounded-full overflow-hidden shadow-md ring-2 ring-white">
+    <div class="flex items-center justify-center gap-2">
+      <div class="w-7 h-7 rounded-full overflow-hidden shadow-sm ring-2 ring-white">
         <%= image_tag 'nacon-avatar.jpg', class: 'w-full h-full object-cover', alt: SiteSetting.get('baby_nickname') %>
       </div>
-      <span class="font-heading font-semibold text-sm text-gray-500">— <%= SiteSetting.get('baby_nickname') %></span>
+      <span class="font-heading font-semibold text-xs text-gray-400">— <%= SiteSetting.get('baby_nickname') %></span>
     </div>
 
-    <!-- Bottom decorative line -->
-    <div class="flex items-center gap-4 mt-8">
+    <div class="flex items-center gap-4 mt-4">
       <div class="flex-1 h-px" style="background: linear-gradient(to right, transparent, #F2C2C2);"></div>
-      <span class="text-lg">🌸</span>
+      <span class="text-base">🌸</span>
       <div class="flex-1 h-px" style="background: linear-gradient(to left, transparent, #F2C2C2);"></div>
     </div>
   </div>
