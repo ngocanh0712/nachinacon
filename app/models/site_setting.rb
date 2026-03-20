@@ -10,7 +10,8 @@ class SiteSetting < ApplicationRecord
     'baby_birth_date' => '2024-09-14',
     'site_title' => 'NaChiNaCon - Baby Memory Keepsake',
     'hero_title' => 'Nhật ký của',
-    'hero_subtitle' => 'Chào mừng đến với'
+    'hero_subtitle' => 'Chào mừng đến với',
+    'baby_quote' => 'Mỗi ngày với con là một điều kỳ diệu mới 🌟'
   }.freeze
 
   # Get setting value by key, returns default if not found

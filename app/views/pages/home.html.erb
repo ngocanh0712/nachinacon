@@ -170,61 +170,43 @@
   </div>
 </section>
 
-<!-- Stats & Search Section -->
-<section class="py-10 px-4 md:px-6 lg:px-8 -mt-12 relative z-20">
-  <div class="max-w-6xl mx-auto">
-    <div class="rounded-3xl p-6 md:p-8 shadow-2xl relative overflow-hidden" style="background: linear-gradient(135deg, #FDFBF9 0%, #F8FDFC 50%, #FFFBF8 100%);">
-      <!-- Decorative elements -->
-      <div class="absolute top-0 right-0 w-32 h-32 rounded-full blur-3xl opacity-20" style="background: #C1DDD8;"></div>
-      <div class="absolute bottom-0 left-0 w-24 h-24 rounded-full blur-3xl opacity-20" style="background: #F2C2C2;"></div>
+<!-- Baby Quote Divider -->
+<% baby_quote = SiteSetting.get('baby_quote') %>
+<% if baby_quote.present? %>
+<section class="py-14 px-4 md:px-6 lg:px-8">
+  <div class="max-w-xl mx-auto text-center">
+    <!-- Top decorative line -->
+    <div class="flex items-center gap-4 mb-8">
+      <div class="flex-1 h-px" style="background: linear-gradient(to right, transparent, #C1DDD8);"></div>
+      <span class="text-lg">✨</span>
+      <div class="flex-1 h-px" style="background: linear-gradient(to left, transparent, #C1DDD8);"></div>
+    </div>
 
-      <!-- Search Bar -->
-      <%= form_with url: search_path, method: :get, class: "mb-8 relative z-10" do %>
-        <div class="relative rounded-2xl overflow-hidden shadow-lg" style="background: linear-gradient(135deg, rgba(193, 221, 216, 0.08), rgba(242, 194, 194, 0.08));">
-          <div class="flex gap-2 p-1.5">
-            <%= text_field_tag :q, params[:q],
-                placeholder: "Tìm kiếm kỷ niệm của bé...",
-                class: "flex-1 px-5 py-3.5 rounded-xl font-body text-gray-700 placeholder-gray-400 transition-all duration-200 focus:outline-none bg-white border-0 focus:shadow-md",
-                style: "box-shadow: 0 1px 3px rgba(193, 221, 216, 0.1);" %>
-            <%= button_tag type: "submit", class: "px-6 py-3.5 rounded-xl font-heading font-semibold text-white transition-all duration-200 hover:shadow-xl hover:scale-105 shadow-lg", style: "background: linear-gradient(135deg, #C1DDD8 0%, #A8CEC8 50%, #9FC4BC 100%);" do %>
-              <span class="flex items-center gap-2">
-                <span class="text-lg">🔍</span>
-                <span class="hidden sm:inline">Tìm kiếm</span>
-              </span>
-            <% end %>
-          </div>
-        </div>
-      <% end %>
+    <!-- Decorative quote mark -->
+    <div class="font-serif text-7xl leading-none mb-2 select-none" style="color: #F2C2C2; opacity: 0.5;">"</div>
 
-      <!-- Stats Grid -->
-      <div class="grid grid-cols-3 gap-3 md:gap-6 relative z-10">
-        <div class="group relative rounded-2xl p-4 md:p-6 text-center transition-all duration-300 hover:scale-105" style="background: linear-gradient(135deg, rgba(193, 221, 216, 0.15), rgba(168, 206, 200, 0.1));">
-          <div class="inline-flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-xl mb-2 md:mb-3 text-2xl md:text-3xl shadow-lg transition-transform group-hover:rotate-12" style="background: linear-gradient(135deg, #C1DDD8, #A8CEC8);">
-            <span class="filter drop-shadow-sm">📸</span>
-          </div>
-          <p class="font-heading font-bold text-2xl md:text-3xl text-gray-800 mb-1"><%= @memory_count %></p>
-          <p class="font-body text-xs md:text-sm text-gray-600">Kỷ niệm</p>
-        </div>
+    <!-- Quote text -->
+    <p class="font-accent text-xl md:text-2xl text-gray-600 leading-relaxed mb-8">
+      <%= baby_quote %>
+    </p>
 
-        <div class="group relative rounded-2xl p-4 md:p-6 text-center transition-all duration-300 hover:scale-105" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(5, 150, 105, 0.1));">
-          <div class="inline-flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-xl mb-2 md:mb-3 text-2xl md:text-3xl shadow-lg transition-transform group-hover:rotate-12" style="background: linear-gradient(135deg, #10B981, #059669);">
-            <span class="filter drop-shadow-sm">🏆</span>
-          </div>
-          <p class="font-heading font-bold text-2xl md:text-3xl text-gray-800 mb-1"><%= @milestone_count %></p>
-          <p class="font-body text-xs md:text-sm text-gray-600">Milestones</p>
-        </div>
-
-        <div class="group relative rounded-2xl p-4 md:p-6 text-center transition-all duration-300 hover:scale-105" style="background: linear-gradient(135deg, rgba(242, 194, 194, 0.15), rgba(232, 176, 176, 0.1));">
-          <div class="inline-flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-xl mb-2 md:mb-3 text-2xl md:text-3xl shadow-lg transition-transform group-hover:rotate-12" style="background: linear-gradient(135deg, #F2C2C2, #E8B0B0);">
-            <span class="filter drop-shadow-sm">🎂</span>
-          </div>
-          <p class="font-heading font-bold text-2xl md:text-3xl text-gray-800 mb-1"><%= @days_old %></p>
-          <p class="font-body text-xs md:text-sm text-gray-600">Ngày tuổi</p>
-        </div>
+    <!-- Attribution -->
+    <div class="flex items-center justify-center gap-3">
+      <div class="w-9 h-9 rounded-full overflow-hidden shadow-md ring-2 ring-white">
+        <%= image_tag 'nacon-avatar.jpg', class: 'w-full h-full object-cover', alt: SiteSetting.get('baby_nickname') %>
       </div>
+      <span class="font-heading font-semibold text-sm text-gray-500">— <%= SiteSetting.get('baby_nickname') %></span>
+    </div>
+
+    <!-- Bottom decorative line -->
+    <div class="flex items-center gap-4 mt-8">
+      <div class="flex-1 h-px" style="background: linear-gradient(to right, transparent, #F2C2C2);"></div>
+      <span class="text-lg">🌸</span>
+      <div class="flex-1 h-px" style="background: linear-gradient(to left, transparent, #F2C2C2);"></div>
     </div>
   </div>
 </section>
+<% end %>
 
 <!-- Featured Memory of the Day -->
 <% if @featured_memory %>
