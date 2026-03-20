@@ -42,10 +42,11 @@
 </head>
 
 <body class="min-h-screen font-body text-gray-800 bg-background">
-  <!-- Navigation - Floating Pill -->
-  <nav data-controller="mobile-menu" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] max-w-6xl">
+  <!-- Navigation - Full-width top bar, cream background matching hero -->
+  <nav data-controller="mobile-menu" class="fixed top-0 left-0 right-0 z-50" style="background: rgba(255,251,248,0.95); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(193,221,216,0.2);">
+    <div class="max-w-6xl mx-auto px-4 md:px-6 lg:px-8">
     <!-- Pill bar -->
-    <div class="rounded-2xl px-5 h-14 flex items-center justify-between" style="background: rgba(255,255,255,0.92); backdrop-filter: blur(16px); border: 1px solid rgba(193,221,216,0.3); box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+    <div class="px-0 h-14 flex items-center justify-between">
       <!-- Logo -->
       <%= link_to root_path, class: "flex items-center gap-2.5 group flex-shrink-0" do %>
         <div class="w-8 h-8 rounded-lg flex items-center justify-center shadow-sm group-hover:shadow-md transition-shadow" style="background: linear-gradient(135deg, #C1DDD8 0%, #A8CEC8 100%);">
@@ -152,6 +153,7 @@
 
         </div>
       </div>
+    </div>
     </div>
   </nav>
 
