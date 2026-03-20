@@ -7,14 +7,9 @@ export default class extends Controller {
   connect() {
     // Ensure menu is closed on initial load
     this.close()
-
-    // Close menu on window resize to desktop
-    this.resizeHandler = this.handleResize.bind(this)
-    window.addEventListener("resize", this.resizeHandler)
   }
 
   disconnect() {
-    window.removeEventListener("resize", this.resizeHandler)
   }
 
   toggle() {
@@ -40,9 +35,4 @@ export default class extends Controller {
     this.iconCloseTarget.classList.add("hidden")
   }
 
-  handleResize() {
-    if (window.innerWidth >= 768) {
-      this.close()
-    }
-  }
 }
