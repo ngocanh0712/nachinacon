@@ -66,7 +66,7 @@ class ChatResponder
     birth_date = SiteSetting.baby_birth_date
     days = (Date.today - birth_date).to_i
 
-    "Tên: #{baby_name}, Sinh: #{birth_date.strftime('%d/%m/%Y')}, Tuổi: #{baby_age_text} (#{days} ngày)"
+    "Tên: #{baby_name}, Sinh: #{birth_date.strftime('%d/%m/%Y')}, Tuổi: #{baby_age_text} (#{days} ngày). Bố: Na meow, Mẹ: Chi meow"
   end
 
   def milestone_info
