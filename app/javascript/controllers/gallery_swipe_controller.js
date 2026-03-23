@@ -85,12 +85,18 @@ export default class extends Controller {
         if (typeof openMemoryModal === "function") {
           openMemoryModal(memory)
         }
-        // Slide in from opposite side
+        // Position at opposite side without transition, then animate in
         const inOffset = direction === "left" ? "20px" : "-20px"
+        img.style.transition = "none"
         img.style.transform = `translateX(${inOffset})`
+        img.style.opacity = "0.5"
+        // Double rAF ensures paint flush before re-enabling transition
         requestAnimationFrame(() => {
-          img.style.transform = "translateX(0)"
-          img.style.opacity = "1"
+          requestAnimationFrame(() => {
+            img.style.transition = "transform 0.15s ease-out, opacity 0.15s ease-out"
+            img.style.transform = "translateX(0)"
+            img.style.opacity = "1"
+          })
         })
       }, 150)
     } else {
@@ -150,7 +156,8 @@ export default class extends Controller {
 
   // Inject navigation buttons and counter into modal
   injectNavElements() {
-    const imageSection = this.element.querySelector(".relative.bg-gray-100")
+    const imageSection = this.element.querySelector("[data-gallery-image-section]") ||
+                         this.element.querySelector(".relative.bg-gray-100")
     if (!imageSection) return
 
     // Only inject once
