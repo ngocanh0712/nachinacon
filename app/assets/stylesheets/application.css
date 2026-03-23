@@ -157,7 +157,7 @@ footer {
   contain-intrinsic-size: auto 500px;
 }
 
-/* Gallery navigation arrows in modal */
+/* Gallery navigation arrows in modal - hidden on mobile, visible on md+ */
 .gallery-nav-btn {
   position: absolute;
   top: 50%;
@@ -168,7 +168,7 @@ footer {
   background: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(8px);
   border: 1px solid rgba(193, 221, 216, 0.3);
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   cursor: pointer;
@@ -176,6 +176,10 @@ footer {
   z-index: 10;
   color: #4B5563;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+@media (min-width: 768px) {
+  .gallery-nav-btn { display: flex; }
 }
 
 .gallery-nav-btn:hover {
