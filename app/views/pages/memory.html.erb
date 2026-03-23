@@ -38,9 +38,9 @@
       <% if @memory.has_image? %>
         <div class="relative w-full flex items-center justify-center bg-gray-50">
           <% if @memory.image_path.present? %>
-            <%= image_tag @memory.image_path, class: "w-full max-h-[600px] object-contain", alt: @memory.title %>
+            <%= image_tag @memory.image_path, class: "w-full max-h-[600px] object-contain", alt: @memory.title, loading: "eager", decoding: "async" %>
           <% elsif @memory.media.attached? %>
-            <%= image_tag @memory.media, class: "w-full max-h-[600px] object-contain", alt: @memory.title %>
+            <%= image_tag @memory.media, class: "w-full max-h-[600px] object-contain", alt: @memory.title, loading: "eager", decoding: "async" %>
           <% end %>
         </div>
       <% end %>

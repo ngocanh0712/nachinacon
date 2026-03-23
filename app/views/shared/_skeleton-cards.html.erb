@@ -1,0 +1,15 @@
+<%# Skeleton loading placeholder for memory card grids
+    Usage: render 'shared/skeleton-cards', count: 4 %>
+<% count ||= 4 %>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" data-skeleton-loader>
+  <% count.times do |i| %>
+    <div class="skeleton-card" style="animation-delay: <%= i * 100 %>ms;">
+      <div class="skeleton-image"></div>
+      <div style="padding: 1rem;">
+        <div class="skeleton skeleton-text skeleton-text-short" style="height: 0.75rem; margin-bottom: 0.5rem;"></div>
+        <div class="skeleton skeleton-text skeleton-text-long" style="height: 1rem; margin-bottom: 0.375rem;"></div>
+        <div class="skeleton skeleton-text" style="height: 0.75rem; width: 70%;"></div>
+      </div>
+    </div>
+  <% end %>
+</div>

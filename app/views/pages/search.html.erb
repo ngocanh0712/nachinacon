@@ -129,7 +129,7 @@
             <!-- Image -->
             <div class="relative aspect-square overflow-hidden">
               <% if memory.image_path.present? %>
-                <%= image_tag memory.image_path, class: "w-full h-full object-cover group-hover:scale-110 transition-transform duration-500", alt: memory.title %>
+                <%= image_tag memory.image_path, class: "w-full h-full object-cover group-hover:scale-110 transition-transform duration-500", alt: memory.title, loading: "lazy", decoding: "async" %>
               <% elsif memory.media.attached? %>
                 <%= optimized_image_tag(memory.media, :thumbnail, class: "w-full h-full object-cover group-hover:scale-110 transition-transform duration-500", alt: memory.title) %>
               <% else %>

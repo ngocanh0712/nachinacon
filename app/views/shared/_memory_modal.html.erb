@@ -1,5 +1,5 @@
 <!-- Memory Detail Modal -->
-<div id="memoryModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+<div id="memoryModal" class="fixed inset-0 z-50 hidden overflow-y-auto" data-controller="gallery-swipe">
   <!-- Backdrop -->
   <div id="modalBackdrop" class="fixed inset-0 bg-black/60 transition-opacity duration-200 opacity-0" onclick="closeMemoryModal()"></div>
 
@@ -244,6 +244,12 @@
           shareDiv.setAttribute('data-share-title-value', shareTitle);
         }
       }
+    }
+
+    // Initialize gallery swipe navigation (arrow keys + swipe)
+    if (window.Stimulus && data.memoryId) {
+      const ctrl = window.Stimulus.getControllerForElementAndIdentifier(modal, 'gallery-swipe');
+      if (ctrl) ctrl.setCurrentMemory(data.memoryId);
     }
 
     // Show modal with animation

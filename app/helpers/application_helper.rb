@@ -1,45 +1,58 @@
 module ApplicationHelper
   include Pagy::Frontend
-  # Lazy load images for better performance
-  # Automatically adds loading="lazy" and decoding="async" attributes
+
+  # Lazy load images - adds loading="lazy" and decoding="async"
+  # Set eager: true for above-the-fold images
   def lazy_image_tag(source, options = {})
-    # Don't lazy load images above the fold (first few images)
-    # Set eager: true to skip lazy loading for hero images
     unless options.delete(:eager)
       options[:loading] ||= "lazy"
       options[:decoding] ||= "async"
     end
-
     image_tag(source, options)
   end
 
   # Optimized image tag for Active Storage attachments
-  # Uses original image for best quality, CSS handles sizing
-  # Set use_original: false to use variants (smaller file size but may be blurry)
+  # Uses original image by default, CSS handles sizing
   def optimized_image_tag(attachment, variant_name = :medium, options = {})
     return unless attachment.attached?
-
-    # Extract use_original option (default: true for better quality)
     use_original = options.delete(:use_original) != false
-
-    # Use lazy loading by default
     options[:loading] ||= "lazy"
     options[:decoding] ||= "async"
 
     if use_original
-      # Use original image - best quality, CSS handles sizing via object-fit
       image_tag(attachment, options)
     else
-      # Use variants - smaller file size but may lose quality
       variant = case variant_name
       when :thumbnail then { resize_to_limit: [200, 200], quality: 90 }
       when :medium then { resize_to_limit: [400, 400], quality: 90 }
       when :large then { resize_to_limit: [800, 800], quality: 90 }
       else { resize_to_limit: [400, 400], quality: 90 }
       end
-
       image_tag(attachment.variant(variant), options)
     end
+  end
+
+  # Transform Cloudinary URLs with width/quality/format optimization
+  # Returns original URL if not a Cloudinary URL
+  def cloudinary_url(url, width: nil)
+    return url if url.blank?
+    return url unless url.include?('cloudinary.com') || url.include?('res.cloudinary')
+
+    # Insert transforms before /upload/ or after existing transforms
+    transforms = "f_auto,q_auto"
+    transforms += ",w_#{width}" if width
+    url.sub(%r{/upload/(?:v\d+/)?}, "/upload/#{transforms}/")
+  end
+
+  # Cloudinary-optimized image tag for URL-based images
+  # Adds lazy loading + Cloudinary transforms automatically
+  def cloudinary_image_tag(url, options = {})
+    width = options.delete(:cloudinary_width)
+    unless options.delete(:eager)
+      options[:loading] ||= "lazy"
+      options[:decoding] ||= "async"
+    end
+    image_tag(cloudinary_url(url, width: width), options)
   end
 
   def calculate_age_at(birth_date, target_date)

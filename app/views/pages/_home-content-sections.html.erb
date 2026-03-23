@@ -1,0 +1,140 @@
+<!-- Health Tips Section -->
+<% if @health_tips.any? %>
+<section class="lazy-section py-16 px-4 md:px-6 lg:px-8 relative overflow-hidden" style="background: linear-gradient(180deg, #FFFBF8 0%, #FDF5F5 50%, #FFFBF8 100%);">
+  <div class="absolute inset-0 overflow-hidden pointer-events-none">
+    <div class="absolute top-10 left-10 w-48 h-48 rounded-full blur-3xl opacity-30" style="background: #F2C2C2;"></div>
+    <div class="absolute bottom-10 right-10 w-40 h-40 rounded-full blur-3xl opacity-30" style="background: #C1DDD8;"></div>
+  </div>
+
+  <div class="max-w-6xl mx-auto relative z-10">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-10" data-controller="scroll-animate">
+      <div>
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-3" style="background: rgba(242, 194, 194, 0.2);">
+          <span style="color: #E8B0B0;">🏥</span>
+          <span class="font-heading font-semibold text-xs" style="color: #D4A0A0;">Kiến thức hữu ích</span>
+        </div>
+        <p class="font-accent text-xl md:text-2xl mb-2" style="color: #E8B0B0;">Chăm sóc</p>
+        <h2 class="font-accent italic text-3xl md:text-4xl" style="color: #C1DDD8;">Sức Khoẻ Mẹ & Bé</h2>
+      </div>
+      <%= link_to health_tips_path, class: "group mt-4 md:mt-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-heading font-semibold text-sm transition-all duration-300 hover:shadow-lg", style: "background: rgba(242, 194, 194, 0.2); color: #D4A0A0;" do %>
+        <span>Xem tất cả</span>
+        <span class="group-hover:translate-x-1 transition-transform">→</span>
+      <% end %>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6" data-controller="scroll-animate" data-scroll-animate-delay-value="150">
+      <% @health_tips.each do |tip| %>
+        <%= link_to health_tip_detail_path(tip), class: "group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 border border-gray-100" do %>
+          <div class="aspect-video overflow-hidden relative" style="background: linear-gradient(135deg, <%= tip.category_color %>15, <%= tip.category_color %>05);">
+            <% if tip.image_url.present? %>
+              <img src="<%= tip.image_url %>" alt="<%= tip.title %>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" decoding="async">
+            <% else %>
+              <div class="w-full h-full flex items-center justify-center">
+                <span class="text-6xl opacity-30"><%= tip.category_icon %></span>
+              </div>
+            <% end %>
+            <div class="absolute top-3 left-3">
+              <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-heading font-semibold text-white shadow-lg" style="background: <%= tip.category_color %>;">
+                <span><%= tip.category_icon %></span>
+                <span><%= tip.category_label %></span>
+              </span>
+            </div>
+          </div>
+          <div class="p-5">
+            <h3 class="font-heading font-bold text-lg text-gray-800 mb-2 line-clamp-2 group-hover:text-gray-900"><%= tip.title %></h3>
+            <p class="font-body text-sm text-gray-500 line-clamp-2 leading-relaxed"><%= truncate(strip_tags(tip.content), length: 120) %></p>
+            <div class="flex items-center gap-1 mt-3 font-heading font-semibold text-xs group-hover:translate-x-1 transition-transform" style="color: <%= tip.category_color %>;">
+              <span>Đọc thêm</span><span>→</span>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</section>
+<% end %>
+
+<!-- Recipes Section -->
+<% if @recipes.any? %>
+<section class="lazy-section py-16 px-4 md:px-6 lg:px-8 relative overflow-hidden" style="background: linear-gradient(180deg, #FFFBF0 0%, #FFF8ED 50%, #FFFBF8 100%);">
+  <div class="absolute inset-0 overflow-hidden pointer-events-none">
+    <div class="absolute top-10 left-10 w-48 h-48 rounded-full blur-3xl opacity-20" style="background: #F97316;"></div>
+    <div class="absolute bottom-10 right-10 w-40 h-40 rounded-full blur-3xl opacity-20" style="background: #DC2626;"></div>
+  </div>
+
+  <div class="max-w-6xl mx-auto relative z-10">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-10">
+      <div>
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-3" style="background: rgba(249, 115, 22, 0.12);">
+          <span>🍽️</span>
+          <span class="font-heading font-semibold text-xs" style="color: #F97316;">Công thức nấu ăn</span>
+        </div>
+        <p class="font-accent text-xl md:text-2xl mb-2" style="color: #F97316;">Vào bếp nào</p>
+        <h2 class="font-accent italic text-3xl md:text-4xl" style="color: #DC2626;">Ẩm Thực Ngon</h2>
+      </div>
+      <%= link_to recipes_path, class: "group mt-4 md:mt-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-heading font-semibold text-sm transition-all duration-300 hover:shadow-lg", style: "background: rgba(249, 115, 22, 0.12); color: #F97316;" do %>
+        <span>Xem tất cả</span>
+        <span class="group-hover:translate-x-1 transition-transform">→</span>
+      <% end %>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <% @recipes.each do |recipe| %>
+        <%= link_to recipe_detail_path(recipe), class: "group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 border border-gray-100" do %>
+          <div class="aspect-video overflow-hidden relative" style="background: linear-gradient(135deg, <%= recipe.category_color %>15, <%= recipe.category_color %>05);">
+            <% if recipe.image_url.present? %>
+              <img src="<%= recipe.image_url %>" alt="<%= recipe.title %>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" decoding="async">
+            <% else %>
+              <div class="w-full h-full flex items-center justify-center">
+                <span class="text-6xl opacity-30"><%= recipe.category_icon %></span>
+              </div>
+            <% end %>
+            <div class="absolute top-3 left-3">
+              <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-heading font-semibold text-white shadow-lg" style="background: <%= recipe.category_color %>;">
+                <span><%= recipe.category_icon %></span>
+                <span><%= recipe.category_label %></span>
+              </span>
+            </div>
+          </div>
+          <div class="p-5">
+            <h3 class="font-heading font-bold text-lg text-gray-800 mb-2 line-clamp-2 group-hover:text-gray-900"><%= recipe.title %></h3>
+            <p class="font-body text-sm text-gray-500 line-clamp-2 leading-relaxed"><%= truncate(strip_tags(recipe.content), length: 120) %></p>
+            <div class="flex items-center gap-1 mt-3 font-heading font-semibold text-xs group-hover:translate-x-1 transition-transform" style="color: <%= recipe.category_color %>;">
+              <span>Xem công thức</span><span>→</span>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</section>
+<% end %>
+
+<!-- Popular Tags Cloud -->
+<% if @popular_tags.any? %>
+<section class="py-16 px-4 md:px-6 lg:px-8 bg-white">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-12" data-controller="scroll-animate">
+      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-4" style="background: rgba(242, 194, 194, 0.2);">
+        <span class="text-lg" style="color: #E8B0B0;">🏷️</span>
+        <span class="font-heading font-semibold text-sm" style="color: #D4A0A0;">Chủ đề phổ biến</span>
+      </div>
+      <h2 class="font-accent italic text-3xl md:text-4xl" style="color: #C1DDD8;">Tags</h2>
+    </div>
+
+    <div class="flex flex-wrap justify-center gap-2 md:gap-3">
+      <% @popular_tags.each do |tag| %>
+        <% border_style = "border-color: #{tag.color}40; background-color: #{tag.color}10;" %>
+        <% badge_style = "background: #{tag.color}30; color: #{tag.color};" %>
+        <%= link_to timeline_path(tag: tag.id), class: "group inline-flex items-center gap-2 md:gap-3 px-3 py-2 md:px-6 md:py-3 rounded-xl md:rounded-2xl border-2 transition-all duration-300 hover:shadow-lg hover:scale-105", style: border_style do %>
+          <span class="w-2 h-2 md:w-3 md:h-3 rounded-full flex-shrink-0" style="background: <%= tag.color %>;"></span>
+          <span class="font-heading font-semibold text-xs md:text-sm text-gray-800"><%= tag.name %></span>
+          <span class="px-1.5 md:px-2 py-0.5 rounded-full text-xs font-body font-medium" style="<%= badge_style %>">
+            <%= tag.memory_count %>
+          </span>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</section>
+<% end %>

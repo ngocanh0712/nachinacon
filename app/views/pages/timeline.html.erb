@@ -120,7 +120,7 @@
                onclick="openMemoryModalFromData(this)">
             <div class="aspect-square overflow-hidden relative">
               <% if memory.image_path.present? %>
-                <%= image_tag memory.image_path, class: "w-full h-full object-cover", alt: memory.title || "Memory photo" %>
+                <%= image_tag memory.image_path, class: "w-full h-full object-cover", alt: memory.title || "Memory photo", loading: "lazy", decoding: "async" %>
               <% elsif memory.media.attached? %>
                 <%= optimized_image_tag(memory.media, :medium, class: "w-full h-full object-cover", alt: memory.title || "Memory photo") %>
               <% else %>

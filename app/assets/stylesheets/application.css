@@ -13,3 +13,198 @@
  *= require_tree .
  *= require_self
  */
+
+/* ============================================
+   View Transitions API - smooth page transitions
+   ============================================ */
+
+/* Default cross-fade for page content */
+::view-transition-old(root) {
+  animation: fade-out 150ms ease-out;
+}
+::view-transition-new(root) {
+  animation: fade-in 200ms ease-in;
+}
+
+@keyframes fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Keep navbar stable during transitions */
+nav {
+  view-transition-name: navbar;
+}
+::view-transition-old(navbar),
+::view-transition-new(navbar) {
+  animation: none;
+}
+
+/* Keep footer stable during transitions */
+footer {
+  view-transition-name: footer;
+}
+::view-transition-old(footer),
+::view-transition-new(footer) {
+  animation: none;
+}
+
+/* Respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
+}
+
+/* ============================================
+   Skeleton loading placeholders
+   ============================================ */
+
+/* Base skeleton shimmer animation */
+.skeleton {
+  background: linear-gradient(90deg,
+    rgba(193, 221, 216, 0.15) 0%,
+    rgba(242, 194, 194, 0.2) 50%,
+    rgba(193, 221, 216, 0.15) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+  border-radius: 0.75rem;
+}
+
+@keyframes skeleton-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Skeleton card placeholder - matches memory card layout */
+.skeleton-card {
+  background: white;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.skeleton-card .skeleton-image {
+  aspect-ratio: 1;
+  background: linear-gradient(90deg,
+    rgba(193, 221, 216, 0.15) 0%,
+    rgba(242, 194, 194, 0.2) 50%,
+    rgba(193, 221, 216, 0.15) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+}
+
+.skeleton-card .skeleton-text {
+  height: 0.875rem;
+  margin: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  background: linear-gradient(90deg,
+    rgba(193, 221, 216, 0.15) 0%,
+    rgba(242, 194, 194, 0.2) 50%,
+    rgba(193, 221, 216, 0.15) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+}
+
+.skeleton-card .skeleton-text-short {
+  width: 60%;
+}
+
+.skeleton-card .skeleton-text-long {
+  width: 85%;
+}
+
+/* Skeleton stat card */
+.skeleton-stat {
+  border-radius: 1rem;
+  padding: 1.25rem;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+}
+
+.skeleton-stat .skeleton-icon {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 1rem;
+  margin: 0 auto 0.75rem;
+}
+
+.skeleton-stat .skeleton-number {
+  width: 3rem;
+  height: 1.75rem;
+  margin: 0 auto 0.5rem;
+  border-radius: 0.375rem;
+}
+
+.skeleton-stat .skeleton-label {
+  width: 4rem;
+  height: 0.75rem;
+  margin: 0 auto;
+  border-radius: 0.375rem;
+}
+
+/* Content visibility optimization for off-screen sections */
+.lazy-section {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 500px;
+}
+
+/* Gallery navigation arrows in modal */
+.gallery-nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(193, 221, 216, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 10;
+  color: #4B5563;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.gallery-nav-btn:hover {
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  background: white;
+}
+
+.gallery-nav-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+  transform: translateY(-50%);
+}
+
+.gallery-nav-btn.gallery-prev { left: 12px; }
+.gallery-nav-btn.gallery-next { right: 12px; }
+
+/* Gallery position counter */
+.gallery-counter {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 4px 12px;
+  border-radius: 20px;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  backdrop-filter: blur(4px);
+  z-index: 10;
+}

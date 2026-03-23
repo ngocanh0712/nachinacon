@@ -48,9 +48,9 @@
             <div class="aspect-square overflow-hidden">
               <% if memory.image_path.present? || memory.media.attached? %>
                 <% if memory.image_path.present? %>
-                  <%= image_tag memory.image_path, class: "w-full h-full object-cover img-hover" %>
+                  <%= image_tag memory.image_path, class: "w-full h-full object-cover img-hover", loading: "lazy", decoding: "async" %>
                 <% elsif memory.media.attached? %>
-                  <%= image_tag memory.media, class: "w-full h-full object-cover img-hover" %>
+                  <%= image_tag memory.media, class: "w-full h-full object-cover img-hover", loading: "lazy", decoding: "async" %>
                 <% end %>
               <% else %>
                 <div class="w-full h-full flex items-center justify-center" style="background: linear-gradient(135deg, rgba(193, 221, 216, 0.3) 0%, rgba(242, 194, 194, 0.3) 100%);">

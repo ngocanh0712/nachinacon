@@ -1,0 +1,110 @@
+<!-- Recent Memories Preview -->
+<section class="py-16 px-4 md:px-6 lg:px-8 relative overflow-hidden" style="background: linear-gradient(180deg, #F8FAF9 0%, #FDFBF9 100%);">
+  <div class="absolute top-20 right-10 w-32 h-32 rounded-full blur-2xl opacity-40" style="background: #C0DFD0;"></div>
+  <div class="absolute bottom-20 left-10 w-24 h-24 rounded-full blur-2xl opacity-40" style="background: #F2C2C2;"></div>
+
+  <div class="max-w-6xl mx-auto relative z-10">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-10" data-controller="scroll-animate">
+      <div>
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-3" style="background: rgba(193, 221, 216, 0.2);">
+          <div class="w-1.5 h-1.5 rounded-full" style="background: #A8CEC8;"></div>
+          <span class="font-heading font-semibold text-xs" style="color: #7BB4AA;">Mới cập nhật</span>
+        </div>
+        <p class="font-accent text-xl md:text-2xl mb-2" style="color: #E8B0B0;">Mới nhất</p>
+        <h2 class="font-accent font-bold text-3xl md:text-4xl text-gray-800 mb-2">Kỷ Niệm Gần Đây</h2>
+      </div>
+      <%= link_to timeline_path, class: "group mt-4 md:mt-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-heading font-semibold text-sm transition-all duration-300 hover:shadow-lg", style: "background: rgba(193, 221, 216, 0.2); color: #5A9A8E;" do %>
+        <span>Xem tất cả</span>
+        <span class="group-hover:translate-x-1 transition-transform">→</span>
+      <% end %>
+    </div>
+
+    <% if @recent_memories.any? %>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <% memory_colors = [
+          ['#FCE7F3', '#EC4899'],
+          ['#D1FAE5', '#22C55E'],
+          ['#DBEAFE', '#3B82F6'],
+          ['#FEF3C7', '#F59E0B']
+        ] %>
+        <% @recent_memories.each_with_index do |memory, index| %>
+          <% colors = memory_colors[index % memory_colors.length] %>
+          <% age_label = Memory::AGE_GROUPS.find { |_, v| v == memory.age_group }&.first || memory.age_group %>
+          <% image_url = if memory.image_path.present?
+               memory.image_path
+             elsif memory.media.attached?
+               url_for(memory.media)
+             else
+               ''
+             end %>
+          <div class="memory-card group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl cursor-pointer border border-gray-100 transition-all duration-300"
+               data-turbo="false"
+               data-memory-id="<%= memory.id %>"
+               data-memory-title="<%= memory.title %>"
+               data-memory-date="<%= memory.taken_at.strftime("%d/%m/%Y") %>"
+               data-memory-caption="<%= memory.caption %>"
+               data-memory-image="<%= image_url %>"
+               data-memory-age-group="<%= age_label %>"
+               data-memory-age-color="<%= colors.join(';') %>"
+               onclick="openMemoryModalFromData(this)">
+            <div class="aspect-square flex items-center justify-center relative overflow-hidden" style="background: <%= colors[0] %>;">
+              <% if memory.image_path.present? %>
+                <%= image_tag memory.image_path, class: "w-full h-full object-cover", alt: memory.title || "Memory photo", loading: "lazy", decoding: "async" %>
+              <% elsif memory.media.attached? %>
+                <%= optimized_image_tag(memory.media, :medium, class: "w-full h-full object-cover", alt: memory.title || "Memory photo") %>
+              <% else %>
+                <div class="text-6xl opacity-30" style="color: <%= colors[1] %>;">📷</div>
+              <% end %>
+              <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                <div class="text-white font-heading font-semibold text-sm transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                  Xem chi tiết
+                </div>
+              </div>
+            </div>
+            <div class="p-4">
+              <div class="flex items-center gap-2 mb-2">
+                <span class="text-lg">📅</span>
+                <p class="font-body text-xs text-gray-500"><%= memory.taken_at.strftime("%d/%m/%Y") %></p>
+              </div>
+              <h3 class="font-heading font-bold text-gray-800 mb-1 line-clamp-1"><%= memory.title %></h3>
+              <% if memory.caption.present? %>
+                <p class="font-body text-sm text-gray-500 line-clamp-2 mb-2"><%= memory.caption %></p>
+              <% end %>
+              <% if memory.tags.any? %>
+                <div class="flex flex-wrap gap-1 mt-2">
+                  <% memory.tags.first(2).each do |tag| %>
+                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-body font-medium" style="background-color: <%= tag.color %>20; color: <%= tag.color %>;">
+                      <%= tag.name %>
+                    </span>
+                  <% end %>
+                  <% if memory.tags.count > 2 %>
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-body font-medium text-gray-500" style="background-color: rgba(156, 163, 175, 0.15);">
+                      +<%= memory.tags.count - 2 %>
+                    </span>
+                  <% end %>
+                </div>
+              <% end %>
+              <% top_reactions = memory.reactions.select { |r| r.count > 0 }.sort_by { |r| -r.count }.first(3) %>
+              <div class="card-reactions flex items-center gap-1 mt-2" data-card-memory-id="<%= memory.id %>">
+                <% top_reactions.each do |reaction| %>
+                  <span class="inline-flex items-center gap-0.5 text-xs" style="color:#6B7280;">
+                    <span><%= reaction.emoji %></span>
+                    <span class="font-heading font-semibold" style="font-size:10px;"><%= reaction.count %></span>
+                  </span>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="text-center py-16 glass-card rounded-3xl shadow-xl">
+        <div class="w-24 h-24 rounded-full mx-auto mb-6 flex items-center justify-center floating" style="background: linear-gradient(135deg, #E0EEEB, #C1DDD8);">
+          <div class="text-6xl">📸</div>
+        </div>
+        <h3 class="font-heading font-bold text-xl text-gray-700 mb-2">Chưa có kỷ niệm nào</h3>
+        <p class="font-body text-gray-500">Hãy thêm những khoảnh khắc đáng yêu của bé!</p>
+      </div>
+    <% end %>
+  </div>
+</section>

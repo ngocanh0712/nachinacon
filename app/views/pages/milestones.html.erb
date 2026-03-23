@@ -96,9 +96,9 @@
             <div class="relative aspect-[4/3] overflow-hidden rounded-t-3xl" style="background: linear-gradient(135deg, <%= gradient[0] %> 0%, <%= gradient[1] %> 100%); border-radius: 1.5rem 1.5rem 0 0;">
               <% if milestone.image_path.present? || milestone.photo.attached? %>
                 <% if milestone.image_path.present? %>
-                  <%= image_tag milestone.image_path, class: "milestone-image w-full h-full object-cover", alt: milestone.name %>
+                  <%= image_tag milestone.image_path, class: "milestone-image w-full h-full object-cover", alt: milestone.name, loading: "lazy", decoding: "async" %>
                 <% elsif milestone.photo.attached? %>
-                  <%= image_tag milestone.photo, class: "milestone-image w-full h-full object-cover", alt: milestone.name %>
+                  <%= image_tag milestone.photo, class: "milestone-image w-full h-full object-cover", alt: milestone.name, loading: "lazy", decoding: "async" %>
                 <% end %>
               <% else %>
                 <div class="w-full h-full flex items-center justify-center">

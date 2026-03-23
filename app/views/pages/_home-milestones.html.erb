@@ -1,0 +1,112 @@
+<!-- Achieved Milestones -->
+<section class="py-16 px-4 md:px-6 lg:px-8 bg-white relative overflow-hidden">
+  <div class="absolute top-0 left-1/4 w-48 h-48 rounded-full blur-3xl opacity-20" style="background: #F2C2C2;"></div>
+  <div class="absolute bottom-0 right-1/4 w-40 h-40 rounded-full blur-3xl opacity-20" style="background: #C1DDD8;"></div>
+
+  <div class="max-w-6xl mx-auto relative z-10">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-12" data-controller="scroll-animate">
+      <div>
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-3" style="background: rgba(16, 185, 129, 0.1);">
+          <span style="color: #10B981;">✓</span>
+          <span class="font-heading font-semibold text-xs" style="color: #059669;">Đã đạt được</span>
+        </div>
+        <p class="font-accent text-xl md:text-2xl mb-2" style="color: #E8B0B0;">Thành tựu</p>
+        <h2 class="font-accent italic text-3xl md:text-4xl" style="color: #C1DDD8;">Milestones Đã Đạt</h2>
+      </div>
+      <%= link_to milestones_path, class: "group mt-4 md:mt-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-heading font-semibold text-sm transition-all duration-300 hover:shadow-lg", style: "background: rgba(242, 194, 194, 0.2); color: #D4A0A0;" do %>
+        <span>Xem tất cả</span>
+        <span class="group-hover:translate-x-1 transition-transform">→</span>
+      <% end %>
+    </div>
+
+    <% if @achieved_milestones.any? %>
+      <% pill_colors = [
+        ['#FCE7F3', '#EC4899', '#BE185D'],
+        ['#DBEAFE', '#3B82F6', '#1D4ED8'],
+        ['#D1FAE5', '#22C55E', '#16A34A'],
+        ['#FEF3C7', '#F59E0B', '#B45309'],
+        ['#EDE9FE', '#A855F7', '#7C3AED'],
+        ['#FFEDD5', '#F97316', '#C2410C'],
+        ['#CFFAFE', '#06B6D4', '#0E7490'],
+        ['#F5D0FE', '#D946EF', '#A21CAF']
+      ] %>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <% @achieved_milestones.each_with_index do |milestone, index| %>
+          <% colors = pill_colors[index % pill_colors.length] %>
+          <div class="milestone-pill flex items-center gap-3 px-5 py-4 rounded-2xl cursor-pointer shadow-lg border-2 transition-all duration-300" style="background: <%= colors[0] %>; border-color: <%= colors[1] %>30;">
+            <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 text-xl" style="background: <%= colors[1] %>20;">
+              <span style="color: <%= colors[1] %>;">⭐</span>
+            </div>
+            <span class="font-heading font-semibold text-sm line-clamp-2" style="color: <%= colors[2] %>;"><%= milestone.name %></span>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="glass-card rounded-3xl p-12 text-center shadow-xl">
+        <div class="w-20 h-20 rounded-full mx-auto mb-6 flex items-center justify-center floating text-4xl" style="background: linear-gradient(135deg, #D1FAE5, #10B981);">
+          <span class="text-white">⭐</span>
+        </div>
+        <h3 class="font-heading font-bold text-xl text-gray-700 mb-2">Chưa có milestone nào</h3>
+        <p class="font-body text-gray-500">Những bước tiến của bé sẽ được ghi lại ở đây.</p>
+      </div>
+    <% end %>
+  </div>
+</section>
+
+<!-- Quick Links Section -->
+<section class="hidden md:block py-16 px-4 md:px-6 lg:px-8 bg-white relative overflow-hidden">
+  <div class="absolute top-0 right-0 w-64 h-64 rounded-full blur-3xl opacity-30" style="background: #C1DDD8;"></div>
+  <div class="absolute bottom-0 left-0 w-48 h-48 rounded-full blur-3xl opacity-30" style="background: #F2C2C2;"></div>
+
+  <div class="max-w-6xl mx-auto relative z-10">
+    <div class="text-center mb-12" data-controller="scroll-animate">
+      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-4" style="background: rgba(242, 194, 194, 0.2);">
+        <span style="color: #E8B0B0;">✨</span>
+        <span class="font-heading font-semibold text-sm" style="color: #D4A0A0;">Khám phá</span>
+      </div>
+      <h2 class="font-accent italic text-3xl md:text-4xl mb-3" style="color: #C1DDD8;">Những Khoảnh Khắc</h2>
+      <p class="font-heading font-bold text-2xl md:text-3xl text-gray-800">Quý Giá Của Nacon</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6" data-controller="scroll-animate" data-scroll-animate-delay-value="150">
+      <%= link_to timeline_path, class: "group card-3d glass-card rounded-3xl p-8 shadow-xl cursor-pointer border border-white/50" do %>
+        <div class="w-18 h-18 rounded-2xl flex items-center justify-center mb-6 shadow-lg relative overflow-hidden" style="background: linear-gradient(135deg, #E0EEEB, #C1DDD8);">
+          <div class="absolute inset-0 bg-white/20 group-hover:bg-white/30 transition-colors"></div>
+          <div class="text-5xl relative z-10">🕐</div>
+        </div>
+        <h3 class="font-heading font-bold text-xl text-gray-800 mb-3">Timeline</h3>
+        <p class="font-body text-gray-600 mb-4 leading-relaxed">Hành trình từng khoảnh khắc, được sắp xếp theo từng giai đoạn tuổi.</p>
+        <div class="flex items-center gap-2 font-heading font-semibold text-sm" style="color: #A8CEC8;">
+          <span>Xem Timeline</span>
+          <span class="group-hover:translate-x-2 transition-transform duration-300">→</span>
+        </div>
+      <% end %>
+
+      <%= link_to milestones_path, class: "group card-3d glass-card rounded-3xl p-8 shadow-xl cursor-pointer border border-white/50" do %>
+        <div class="w-18 h-18 rounded-2xl flex items-center justify-center mb-6 shadow-lg relative overflow-hidden" style="background: linear-gradient(135deg, #F8D8D8, #F2C2C2);">
+          <div class="absolute inset-0 bg-white/20 group-hover:bg-white/30 transition-colors"></div>
+          <div class="text-5xl relative z-10">⭐</div>
+        </div>
+        <h3 class="font-heading font-bold text-xl text-gray-800 mb-3">Milestones</h3>
+        <p class="font-body text-gray-600 mb-4 leading-relaxed">Những mốc quan trọng - nụ cười đầu tiên, từ đầu tiên, bước đi đầu tiên.</p>
+        <div class="flex items-center gap-2 font-heading font-semibold text-sm" style="color: #E8B0B0;">
+          <span>Xem Milestones</span>
+          <span class="group-hover:translate-x-2 transition-transform duration-300">→</span>
+        </div>
+      <% end %>
+
+      <%= link_to albums_path, class: "group card-3d glass-card rounded-3xl p-8 shadow-xl cursor-pointer border border-white/50" do %>
+        <div class="w-18 h-18 rounded-2xl flex items-center justify-center mb-6 shadow-lg relative overflow-hidden" style="background: linear-gradient(135deg, rgba(192, 223, 208, 0.9), #C0DFD0);">
+          <div class="absolute inset-0 bg-white/20 group-hover:bg-white/30 transition-colors"></div>
+          <div class="text-5xl relative z-10 text-white">📁</div>
+        </div>
+        <h3 class="font-heading font-bold text-xl text-gray-800 mb-3">Albums</h3>
+        <p class="font-body text-gray-600 mb-4 leading-relaxed">Xem tất cả ảnh và video trong bộ sưu tập kỷ niệm đẹp.</p>
+        <div class="flex items-center gap-2 font-heading font-semibold text-sm" style="color: #A8D1BD;">
+          <span>Xem Albums</span>
+          <span class="group-hover:translate-x-2 transition-transform duration-300">→</span>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>

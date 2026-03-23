@@ -227,9 +227,9 @@
               <div class="aspect-video overflow-hidden relative" style="background: linear-gradient(135deg, <%= colors[0] %>, white); border-radius: 1.5rem 1.5rem 0 0;">
                 <% if album.cover_image_path.present? || album.cover_photo.attached? %>
                   <% if album.cover_image_path.present? %>
-                    <%= image_tag album.cover_image_path, class: "w-full h-full object-cover" %>
+                    <%= image_tag album.cover_image_path, class: "w-full h-full object-cover", loading: "lazy", decoding: "async" %>
                   <% elsif album.cover_photo.attached? %>
-                    <%= image_tag album.cover_photo, class: "w-full h-full object-cover" %>
+                    <%= image_tag album.cover_photo, class: "w-full h-full object-cover", loading: "lazy", decoding: "async" %>
                   <% end %>
                 <% else %>
                   <div class="w-full h-full flex items-center justify-center">
