@@ -18,7 +18,9 @@ ENV RAILS_ENV="production" \
 FROM base as build
 
 # Install packages needed to build gems
-RUN apt-get update -qq && \
+# Retry apt to tolerate transient Debian mirror errors (e.g. 502 Gateway Error)
+RUN echo 'Acquire::Retries "5";' > /etc/apt/apt.conf.d/80-retries && \
+    for i in 1 2 3 4 5; do apt-get update -qq && break || sleep 10; done && \
     apt-get install --no-install-recommends -y build-essential default-libmysqlclient-dev git imagemagick pkg-config
 
 # Install application gems
@@ -41,7 +43,9 @@ RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
 FROM base
 
 # Install packages needed for deployment
-RUN apt-get update -qq && \
+# Retry apt to tolerate transient Debian mirror errors (e.g. 502 Gateway Error)
+RUN echo 'Acquire::Retries "5";' > /etc/apt/apt.conf.d/80-retries && \
+    for i in 1 2 3 4 5; do apt-get update -qq && break || sleep 10; done && \
     apt-get install --no-install-recommends -y curl default-mysql-client imagemagick && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
